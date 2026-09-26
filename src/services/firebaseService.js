@@ -152,14 +152,29 @@ export const initializeLocalStore = () => {
   if (!existingContent) {
     setLocal('content', INITIAL_CONTENT);
   } else {
-    const updatedContent = existingContent.map(item => ({
-      ...item,
-      author: item.author ? "Dr Wazir Ahmed" : item.author
-    }));
+    const existingIds = new Set(existingContent.map(item => item.id));
+    const missingItems = INITIAL_CONTENT.filter(item => !existingIds.has(item.id));
+    const updatedContent = [
+      ...existingContent.map(item => ({
+        ...item,
+        author: item.author ? "Dr Wazir Ahmed" : item.author
+      })),
+      ...missingItems
+    ];
     setLocal('content', updatedContent);
   }
 
-  if (!getLocal('categories', null)) setLocal('categories', INITIAL_CATEGORIES);
+  const existingCategories = getLocal('categories', null);
+  if (!existingCategories) {
+    setLocal('categories', INITIAL_CATEGORIES);
+  } else {
+    // ensure new category options exist
+    const mergedContentCats = Array.from(new Set([...(existingCategories.content || []), ...(INITIAL_CATEGORIES.content || [])]));
+    setLocal('categories', {
+      ...existingCategories,
+      content: mergedContentCats
+    });
+  }
   const existingUsers = getLocal('users', null);
   if (!existingUsers) {
     setLocal('users', [

@@ -15,6 +15,8 @@ import { getContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
+import { IslamiatVocabViewer } from '../../components/common/IslamiatVocabViewer';
+import { FBISE_ISLAMIAT_9_VOCAB } from '../../data/fbiseIslamiatVocab';
 
 export const ContentHub = () => {
   const { isPremium } = useAuth();
@@ -141,8 +143,11 @@ export const ContentHub = () => {
                 <div className="absolute top-3 left-3">
                   <Badge type={item.membership} size="xs" />
                 </div>
-                <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider">
-                  {item.contentType}
+                <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                  <span>{item.contentType}</span>
+                  {item.category === 'Islamiat' && (
+                    <span className="text-amber-300 font-bold">• 80 Words</span>
+                  )}
                 </div>
               </div>
 
@@ -153,7 +158,7 @@ export const ContentHub = () => {
                   <span>{item.publishDate}</span>
                 </div>
 
-                <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
+                <h3 className={`font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition ${item.category === 'Islamiat' ? 'font-serif' : ''}`}>
                   {item.title}
                 </h3>
 
@@ -196,17 +201,28 @@ export const ContentHub = () => {
 
       {/* Reading Modal */}
       {activeReadingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className={`relative w-full ${
+            activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab'
+              ? 'max-w-5xl' 
+              : 'max-w-3xl'
+          } max-h-[92vh] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden`}>
             
             {/* Header */}
-            <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Badge type={activeReadingItem.membership} size="xs" />
-                  <span className="text-xs text-slate-400 font-semibold">{activeReadingItem.contentType} • {activeReadingItem.category}</span>
+                  <span className="text-xs text-slate-400 font-semibold">
+                    {activeReadingItem.contentType} • {activeReadingItem.category}
+                  </span>
+                  {(activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab') && (
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                      80 Words • FBISE 9th
+                    </span>
+                  )}
                 </div>
-                <h2 className="text-xl font-black text-slate-900 dark:text-white">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                   {activeReadingItem.title}
                 </h2>
               </div>
@@ -219,16 +235,25 @@ export const ContentHub = () => {
             </div>
 
             {/* Reading Body */}
-            <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4">
-              <div className="flex items-center justify-between text-xs text-slate-400 pb-4 border-b border-slate-100 dark:border-slate-800">
-                <span>Author: <strong className="text-slate-700 dark:text-slate-300">{activeReadingItem.author}</strong></span>
-                <span>Published: {activeReadingItem.publishDate}</span>
+            {activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab' ? (
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                <IslamiatVocabViewer 
+                  vocabList={activeReadingItem.vocabData || FBISE_ISLAMIAT_9_VOCAB}
+                  onPrint={() => window.print()}
+                />
               </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4">
+                <div className="flex items-center justify-between text-xs text-slate-400 pb-4 border-b border-slate-100 dark:border-slate-800">
+                  <span>Author: <strong className="text-slate-700 dark:text-slate-300">{activeReadingItem.author}</strong></span>
+                  <span>Published: {activeReadingItem.publishDate}</span>
+                </div>
 
-              <div className="prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 text-sm sm:text-base whitespace-pre-line leading-relaxed">
-                {activeReadingItem.body || activeReadingItem.description}
+                <div className="prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 text-sm sm:text-base whitespace-pre-line leading-relaxed">
+                  {activeReadingItem.body || activeReadingItem.description}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Footer */}
             <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -236,7 +261,7 @@ export const ContentHub = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => window.print()}
-                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 hover:bg-white"
+                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 hover:bg-white dark:hover:bg-slate-800"
                 >
                   <Printer className="w-3.5 h-3.5" /> Print
                 </button>

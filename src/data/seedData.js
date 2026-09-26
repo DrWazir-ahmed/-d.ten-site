@@ -5,6 +5,7 @@ import {
 } from './aiCourseData';
 import { TENSES_COURSE_DATA } from './tensesCourseData';
 import { ACTIVE_PASSIVE_COURSE_DATA } from './activePassiveCourseData';
+import { FBISE_ISLAMIAT_ITEM } from './fbiseIslamiatVocab';
 
 export const INITIAL_CATEGORIES = {
   courses: [
@@ -43,7 +44,8 @@ export const INITIAL_CATEGORIES = {
     "Videos",
     "Tutorials",
     "Exam Resources",
-    "Educational Guides"
+    "Educational Guides",
+    "Vocabulary Guides"
   ]
 };
 
@@ -1131,5 +1133,6 @@ Adaptive learning algorithms can identify exactly where a learner encounters fri
 - Week 3: Deep conceptual review with Feynman technique and summary flashcards.
 - Week 2: Timed past-paper simulations under strict exam conditions.
 - Week 1: Highlighting weak spots, reviewing formula sheets, and enforcing 8-hour sleep cycles.`
-  }
+  },
+  FBISE_ISLAMIAT_ITEM
 ];
