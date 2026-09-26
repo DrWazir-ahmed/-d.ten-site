@@ -9,7 +9,8 @@ import {
   User, 
   X, 
   Eye, 
-  Printer 
+  Printer,
+  Edit3
 } from 'lucide-react';
 import { getContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
@@ -17,6 +18,7 @@ import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { IslamiatVocabViewer } from '../../components/common/IslamiatVocabViewer';
 import { EnglishPdfViewer } from '../../components/common/EnglishPdfViewer';
+import { EnglishWorksheetViewer } from '../../components/common/EnglishWorksheetViewer';
 import { FBISE_ISLAMIAT_9_VOCAB } from '../../data/fbiseIslamiatVocab';
 
 export const ContentHub = () => {
@@ -175,7 +177,10 @@ export const ContentHub = () => {
                   {item.category === 'Islamiat' && (
                     <span className="text-amber-300 font-bold">• 80 Words</span>
                   )}
-                  {(item.isEnglishPdf || item.contentType === 'PDFs') && (
+                  {item.isWorksheet && (
+                    <span className="text-amber-300 font-bold">• A4 Fillable Worksheet</span>
+                  )}
+                  {(item.isEnglishPdf || item.contentType === 'PDFs') && !item.isWorksheet && (
                     <span className="text-amber-300 font-bold">• A4 Printable Chart</span>
                   )}
                 </div>
@@ -217,6 +222,11 @@ export const ContentHub = () => {
                     <Sparkles className="w-3.5 h-3.5 fill-white" />
                     <span>Unlock Guide</span>
                   </>
+                ) : item.isWorksheet ? (
+                  <>
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Practice & Print Worksheet</span>
+                  </>
                 ) : item.isEnglishPdf || item.contentType === 'PDFs' ? (
                   <>
                     <Printer className="w-3.5 h-3.5" />
@@ -238,6 +248,8 @@ export const ContentHub = () => {
       {activeReadingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
           <div className={`relative w-full ${
+            activeReadingItem.isWorksheet ||
+            activeReadingItem.worksheetType ||
             activeReadingItem.isEnglishPdf || 
             activeReadingItem.contentType === 'PDFs' || 
             activeReadingItem.pdfType ||
@@ -255,7 +267,12 @@ export const ContentHub = () => {
                   <span className="text-xs text-slate-400 font-semibold">
                     {activeReadingItem.contentType} • {activeReadingItem.category}
                   </span>
-                  {(activeReadingItem.isEnglishPdf || activeReadingItem.contentType === 'PDFs') && (
+                  {activeReadingItem.isWorksheet && (
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                      A4 Fillable Worksheet • 2 Pages • Free
+                    </span>
+                  )}
+                  {(activeReadingItem.isEnglishPdf || activeReadingItem.contentType === 'PDFs') && !activeReadingItem.isWorksheet && (
                     <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">
                       A4 Printable PDF • 2 Pages • Free
                     </span>
@@ -279,7 +296,14 @@ export const ContentHub = () => {
             </div>
 
             {/* Reading Body */}
-            {activeReadingItem.isEnglishPdf || activeReadingItem.contentType === 'PDFs' || activeReadingItem.pdfType ? (
+            {activeReadingItem.isWorksheet || activeReadingItem.worksheetType ? (
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 dark:bg-slate-950/60">
+                <EnglishWorksheetViewer 
+                  worksheetType={activeReadingItem.worksheetType || 'active-passive'}
+                  onPrint={() => window.print()}
+                />
+              </div>
+            ) : activeReadingItem.isEnglishPdf || activeReadingItem.contentType === 'PDFs' || activeReadingItem.pdfType ? (
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 dark:bg-slate-950/60">
                 <EnglishPdfViewer 
                   pdfType={activeReadingItem.pdfType || 'active-passive'}
