@@ -7,7 +7,10 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   onAuthStateChanged,
-  deleteUser
+  deleteUser,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -80,6 +83,9 @@ export {
   updateProfile,
   onAuthStateChanged,
   deleteUser,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
 
   // Firestore helpers
   collection,

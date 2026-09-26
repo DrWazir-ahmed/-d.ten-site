@@ -10,6 +10,9 @@ import {
   sendPasswordResetEmail as firebaseSendPasswordReset,
   updateProfile as firebaseUpdateProfile,
   onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   doc,
   getDoc,
   setDoc,
@@ -175,7 +178,7 @@ export const AuthProvider = ({ children }) => {
 
 
   // ── Login ──────────────────────────────────────────────────────────────
-  const login = async (email, password) => {
+  const login = async (email, password, rememberMe = true) => {
     setError(null);
 
     if (!isFirebaseConfigured) {
@@ -183,6 +186,17 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
+      if (auth) {
+        try {
+          await setPersistence(
+            auth, 
+            rememberMe ? browserLocalPersistence : browserSessionPersistence
+          );
+        } catch (persistErr) {
+          console.warn('Could not set auth persistence:', persistErr);
+        }
+      }
+
       const { user }  = await signInWithEmailAndPassword(auth, email, password);
       const profile   = await fetchUserProfile(user.uid, {
         name:  user.displayName,
