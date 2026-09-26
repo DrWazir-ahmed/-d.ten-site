@@ -1,0 +1,119 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && 
+        (request.auth.token.role == 'admin' || getUserData().role == 'admin');
+    }
+
+    function isPremium() {
+      return isSignedIn() && 
+        (getUserData().membership == 'premium' || isAdmin());
+    }
+
+    // ==========================================
+    // USERS COLLECTION
+    // ==========================================
+    match /users/{userId} {
+      // Users can read their own profile, admins can read any user profile
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // User can create their own document upon registration
+      allow create: if isOwner(userId) 
+        && request.resource.data.role == 'user'
+        && request.resource.data.membership == 'free';
+
+      // Users can update their basic profile, but only admins can change role or status
+      allow update: if (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']))
+        || isAdmin();
+
+      // Only admins can delete user records
+      allow delete: if isAdmin();
+    }
+
+    // ==========================================
+    // COURSES & LESSONS
+    // ==========================================
+    match /courses/{courseId} {
+      // Anyone can browse course overviews
+      allow read: if resource.data.status == 'published' || isAdmin();
+      
+      // Only admins can create, modify, or delete courses
+      allow write: if isAdmin();
+      
+      match /lessons/{lessonId} {
+        // Enrolled or public preview
+        allow read: if resource.data.membership != 'premium' || isPremium() || isAdmin();
+        allow write: if isAdmin();
+      }
+    }
+
+    // ==========================================
+    // APPS, TOOLS & CONTENT
+    // ==========================================
+    match /apps/{appId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /tools/{toolId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /content/{contentId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ==========================================
+    // ENROLLMENTS, PROGRESS & QUIZZES
+    // ==========================================
+    match /enrollments/{enrollmentId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /quizResults/{resultId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /certificates/{certId} {
+      allow read: if true; // Public verification by certificate ID
+      allow create: if isSignedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /notifications/{notifId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+  }
+}
