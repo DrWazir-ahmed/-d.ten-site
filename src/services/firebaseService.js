@@ -700,7 +700,15 @@ export const getContent = async () => {
       console.warn("Firestore getContent failed, using local store:", err);
     }
   }
-  return getLocal('content', INITIAL_CONTENT);
+  const localItems = getLocal('content', INITIAL_CONTENT);
+  const localIds = new Set(localItems.map(item => item.id));
+  const missing = INITIAL_CONTENT.filter(item => !localIds.has(item.id));
+  if (missing.length > 0) {
+    const merged = [...localItems, ...missing];
+    setLocal('content', merged);
+    return merged;
+  }
+  return localItems;
 };
 
 export const createContent = async (itemData) => {

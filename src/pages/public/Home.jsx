@@ -45,7 +45,8 @@ export const Home = () => {
       setCourses(c.slice(0, 6));
       setApps(a.slice(0, 4));
       setTools(t.slice(0, 4));
-      setContent(cnt.slice(0, 4));
+      const sortedContent = [...cnt].sort((a, b) => new Date(b.publishDate || 0) - new Date(a.publishDate || 0));
+      setContent(sortedContent.slice(0, 4));
     };
     fetchData();
   }, []);

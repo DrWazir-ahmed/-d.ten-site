@@ -6,6 +6,8 @@ import {
 import { TENSES_COURSE_DATA } from './tensesCourseData';
 import { ACTIVE_PASSIVE_COURSE_DATA } from './activePassiveCourseData';
 import { FBISE_ISLAMIAT_ITEM } from './fbiseIslamiatVocab';
+import { ACTIVE_PASSIVE_PDF_ITEM } from './activePassivePdfData';
+import { TENSES_PDF_ITEM } from './tensesPdfData';
 
 export const INITIAL_CATEGORIES = {
   courses: [
@@ -1134,5 +1136,7 @@ Adaptive learning algorithms can identify exactly where a learner encounters fri
 - Week 2: Timed past-paper simulations under strict exam conditions.
 - Week 1: Highlighting weak spots, reviewing formula sheets, and enforcing 8-hour sleep cycles.`
   },
-  FBISE_ISLAMIAT_ITEM
+  FBISE_ISLAMIAT_ITEM,
+  ACTIVE_PASSIVE_PDF_ITEM,
+  TENSES_PDF_ITEM
 ];

@@ -16,6 +16,7 @@ import { Badge } from '../../components/common/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { IslamiatVocabViewer } from '../../components/common/IslamiatVocabViewer';
+import { EnglishPdfViewer } from '../../components/common/EnglishPdfViewer';
 import { FBISE_ISLAMIAT_9_VOCAB } from '../../data/fbiseIslamiatVocab';
 
 export const ContentHub = () => {
@@ -23,6 +24,7 @@ export const ContentHub = () => {
   const [content, setContent] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [membershipFilter, setMembershipFilter] = useState('all');
 
   const [activeReadingItem, setActiveReadingItem] = useState(null);
@@ -32,13 +34,19 @@ export const ContentHub = () => {
   useEffect(() => {
     const load = async () => {
       const data = await getContent();
-      setContent(data);
+      const sorted = [...data].sort((a, b) => new Date(b.publishDate || 0) - new Date(a.publishDate || 0));
+      setContent(sorted);
     };
     load();
   }, []);
 
   const types = useMemo(() => {
     const set = new Set(content.map(c => c.contentType).filter(Boolean));
+    return ['All', ...Array.from(set)];
+  }, [content]);
+
+  const categories = useMemo(() => {
+    const set = new Set(content.map(c => c.category).filter(Boolean));
     return ['All', ...Array.from(set)];
   }, [content]);
 
@@ -49,10 +57,11 @@ export const ContentHub = () => {
         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.category.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = selectedType === 'All' || item.contentType === selectedType;
+      const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
       const matchesMem = membershipFilter === 'all' || item.membership === membershipFilter;
-      return matchesSearch && matchesType && matchesMem;
+      return matchesSearch && matchesType && matchesCategory && matchesMem;
     });
-  }, [content, searchTerm, selectedType, membershipFilter]);
+  }, [content, searchTerm, selectedType, selectedCategory, membershipFilter]);
 
   const handleRead = (item) => {
     if (item.membership === 'premium' && !isPremium) {
@@ -106,6 +115,24 @@ export const ContentHub = () => {
           </div>
         </div>
 
+        {/* Category Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs border-b border-slate-100 dark:border-slate-800/80">
+          <span className="text-slate-400 font-semibold mr-1">Category:</span>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 rounded-xl font-semibold whitespace-nowrap transition ${
+                selectedCategory === cat
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm'
+                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         {/* Content Type Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
           <span className="text-slate-400 font-semibold mr-1">Type:</span>
@@ -148,6 +175,9 @@ export const ContentHub = () => {
                   {item.category === 'Islamiat' && (
                     <span className="text-amber-300 font-bold">• 80 Words</span>
                   )}
+                  {(item.isEnglishPdf || item.contentType === 'PDFs') && (
+                    <span className="text-amber-300 font-bold">• A4 Printable Chart</span>
+                  )}
                 </div>
               </div>
 
@@ -187,6 +217,11 @@ export const ContentHub = () => {
                     <Sparkles className="w-3.5 h-3.5 fill-white" />
                     <span>Unlock Guide</span>
                   </>
+                ) : item.isEnglishPdf || item.contentType === 'PDFs' ? (
+                  <>
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>View & Print PDF Chart</span>
+                  </>
                 ) : (
                   <>
                     <Eye className="w-3.5 h-3.5" />
@@ -203,7 +238,11 @@ export const ContentHub = () => {
       {activeReadingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
           <div className={`relative w-full ${
-            activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab'
+            activeReadingItem.isEnglishPdf || 
+            activeReadingItem.contentType === 'PDFs' || 
+            activeReadingItem.pdfType ||
+            activeReadingItem.isVocabGuide || 
+            activeReadingItem.id === 'content-fbise-islamiat-9-vocab'
               ? 'max-w-5xl' 
               : 'max-w-3xl'
           } max-h-[92vh] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden`}>
@@ -216,6 +255,11 @@ export const ContentHub = () => {
                   <span className="text-xs text-slate-400 font-semibold">
                     {activeReadingItem.contentType} • {activeReadingItem.category}
                   </span>
+                  {(activeReadingItem.isEnglishPdf || activeReadingItem.contentType === 'PDFs') && (
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">
+                      A4 Printable PDF • 2 Pages • Free
+                    </span>
+                  )}
                   {(activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab') && (
                     <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
                       80 Words • FBISE 9th
@@ -235,7 +279,14 @@ export const ContentHub = () => {
             </div>
 
             {/* Reading Body */}
-            {activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab' ? (
+            {activeReadingItem.isEnglishPdf || activeReadingItem.contentType === 'PDFs' || activeReadingItem.pdfType ? (
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 dark:bg-slate-950/60">
+                <EnglishPdfViewer 
+                  pdfType={activeReadingItem.pdfType || 'active-passive'}
+                  onPrint={() => window.print()}
+                />
+              </div>
+            ) : activeReadingItem.isVocabGuide || activeReadingItem.id === 'content-fbise-islamiat-9-vocab' ? (
               <div className="flex-1 overflow-y-auto p-4 sm:p-6">
                 <IslamiatVocabViewer 
                   vocabList={activeReadingItem.vocabData || FBISE_ISLAMIAT_9_VOCAB}
