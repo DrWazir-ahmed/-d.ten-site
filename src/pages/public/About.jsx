@@ -20,13 +20,13 @@ export const About = () => {
       name: 'Dr. Wazir Ahmed',
       badge: 'Founder & CEO • D.TEN',
       title: 'Ph.D. Educational Psychology • Training Manager & Qualitative Researcher',
-      location: 'Karachi, Pakistan',
-      avatar: 'https://drwazir.deesu.org/dr-wazir-ahmed.jpg',
+      location: 'Islamabad / Rawalpindi, Pakistan',
+      avatar: '/dr-wazir-ahmed.jpg',
       accentGradient: 'from-sky-500 via-indigo-500 to-purple-600',
       stats: [
         { label: 'Academic Level', value: 'Ph.D. Education' },
         { label: 'Leadership', value: '12+ Yrs Exp.' },
-        { label: 'Key Domain', value: 'Aviation Safety' }
+        { label: 'Key Domain', value: 'Education & Training' }
       ],
       quote: 'Building better learning systems through education, educational psychology, training, research and technology.',
       bio: 'Accomplished educational psychologist, educator, and training manager with extensive experience in aviation safety training, curriculum architecture, procedural SOP development, and qualitative educational research. Former Training Manager & Evaluator at the Aviation Training Department (Karachi).',
