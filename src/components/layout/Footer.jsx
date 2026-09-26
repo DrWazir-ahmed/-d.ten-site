@@ -11,13 +11,16 @@ export const Footer = () => {
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-purple flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-                <GraduationCap className="w-6 h-6" />
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="D.TEN Logo" 
+                className="w-10 h-10 object-contain" 
+              />
               <span className="font-extrabold text-2xl tracking-tight text-slate-900 dark:text-white">
                 D.TEN <span className="text-brand-600 dark:text-brand-400">Academy</span>
               </span>
             </Link>
+
             <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm leading-relaxed">
               Empowering global learners through modern interactive LMS courses, practical calculators, gamified learning apps, and comprehensive study materials.
             </p>

@@ -72,13 +72,16 @@ export const Navbar = ({ onOpenSearch }) => {
         
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-purple flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-            <GraduationCap className="w-6 h-6" />
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="D.TEN Logo" 
+            className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" 
+          />
           <div>
             <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 via-brand-700 to-purple dark:from-white dark:via-brand-400 dark:to-purple-300 bg-clip-text text-transparent">
               D.TEN
             </span>
+
             <span className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 block -mt-1">
               Academy
             </span>

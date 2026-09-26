@@ -151,13 +151,16 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
         {/* Sidebar Brand Header */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-purple flex items-center justify-center text-white shadow-sm">
-              <GraduationCap className="w-5 h-5" />
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="D.TEN Logo" 
+              className="w-8 h-8 object-contain" 
+            />
             <span className="font-black text-lg tracking-tight text-slate-900 dark:text-white">
               D.TEN
             </span>
           </Link>
+
           {isAdmin ? (
             <Badge type="admin" size="xs">Admin</Badge>
           ) : isPremium ? (
