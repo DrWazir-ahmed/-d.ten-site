@@ -209,11 +209,18 @@ export const Courses = () => {
                 <div>
                   {/* Thumbnail & Badges */}
                   <div className="relative aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800">
-                    <img
-                      src={course.thumbnail}
-                      alt={course.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {course.thumbnail ? (
+                      <img
+                        src={course.thumbnail}
+                        alt={course.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-indigo-50 to-blue-100 dark:from-brand-950/40 dark:via-indigo-950/40 dark:to-blue-950/40 flex items-center justify-center">
+                        <BookOpen className="w-10 h-10 text-brand-300 dark:text-brand-700" />
+                      </div>
+                    )}
                     <div className="absolute top-3 left-3">
                       <Badge type={course.membership} />
                     </div>

@@ -164,11 +164,20 @@ export const ContentHub = () => {
             <div>
               {/* Thumbnail */}
               <div className="relative aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800">
-                <img
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                {item.thumbnail ? (
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling?.classList.remove('hidden'); }}
+                  />
+                ) : null}
+                {/* Gradient fallback shown when no thumbnail or img fails */}
+                {!item.thumbnail && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 dark:from-emerald-950/40 dark:via-teal-950/40 dark:to-cyan-950/40 flex items-center justify-center">
+                    <FileText className="w-10 h-10 text-emerald-300 dark:text-emerald-700" />
+                  </div>
+                )}
                 <div className="absolute top-3 left-3">
                   <Badge type={item.membership} size="xs" />
                 </div>

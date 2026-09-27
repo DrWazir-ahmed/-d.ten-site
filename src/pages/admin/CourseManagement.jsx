@@ -30,6 +30,7 @@ import {
 } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { RichTextarea } from '../../components/common/RichTextarea';
+import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
 
 export const CourseManagement = () => {
   const [courses, setCourses] = useState([]);
@@ -814,16 +815,14 @@ export const CourseManagement = () => {
                       </div>
                     </div>
 
-                    <div>
-                      <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">Cover Thumbnail URL</label>
-                      <input
-                        type="url"
-                        required
-                        value={formData.thumbnail}
-                        onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-mono"
-                      />
-                    </div>
+                    <ThumbnailUpload
+                      label="Course Cover Thumbnail"
+                      value={formData.thumbnail}
+                      onChange={(val) => setFormData({ ...formData, thumbnail: val })}
+                      placeholder="https://images.unsplash.com/photo-..."
+                      aspectRatio="16/9"
+                      maxSizeMB={2}
+                    />
                   </div>
                 )}
 

@@ -141,53 +141,72 @@ export const Apps = () => {
         {filteredApps.map((app) => (
           <div
             key={app.id}
-            className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-xl hover:border-purple/40 transition-all flex flex-col justify-between"
+            className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-purple/40 transition-all flex flex-col overflow-hidden"
           >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-purple/10 text-purple flex items-center justify-center font-bold group-hover:scale-105 transition-transform shadow-sm">
+            {/* Thumbnail or Icon header */}
+            {app.thumbnail ? (
+              <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
+                <img
+                  src={app.thumbnail}
+                  alt={app.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+                <div className="absolute top-2 right-2">
+                  <Badge type={app.membership} size="xs" />
+                </div>
+              </div>
+            ) : (
+              <div className="w-full aspect-video bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950/40 dark:to-violet-950/40 flex items-center justify-center relative">
+                <div className="w-14 h-14 rounded-2xl bg-purple/10 text-purple flex items-center justify-center font-bold shadow-sm">
                   {getIcon(app.icon)}
                 </div>
-                <Badge type={app.membership} size="xs" />
+                <div className="absolute top-2 right-2">
+                  <Badge type={app.membership} size="xs" />
+                </div>
+              </div>
+            )}
+
+            <div className="p-5 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-purple transition">
+                  {app.name}
+                </h3>
+
+                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
+                  {app.description}
+                </p>
+
+                <div className="flex items-center gap-2 text-[11px] text-slate-400 mb-4">
+                  <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-medium">
+                    {app.platform || "Web / Mobile"}
+                  </span>
+                  <span>•</span>
+                  <span className="font-semibold text-slate-500">{app.category}</span>
+                </div>
               </div>
 
-              <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-purple transition">
-                {app.name}
-              </h3>
-
-              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
-                {app.description}
-              </p>
-
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 mb-4">
-                <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-medium">
-                  {app.platform || "Web / Mobile"}
-                </span>
-                <span>•</span>
-                <span className="font-semibold text-slate-500">{app.category}</span>
-              </div>
+              <button
+                onClick={() => handleLaunch(app)}
+                className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm ${
+                  app.membership === 'premium' && !isPremium
+                    ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                    : 'bg-purple hover:bg-purple/90 text-white'
+                }`}
+              >
+                {app.membership === 'premium' && !isPremium ? (
+                  <>
+                    <Sparkles className="w-4 h-4 fill-white" />
+                    <span>Unlock App</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-white" />
+                    <span>Launch Application</span>
+                  </>
+                )}
+              </button>
             </div>
-
-            <button
-              onClick={() => handleLaunch(app)}
-              className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm ${
-                app.membership === 'premium' && !isPremium
-                  ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                  : 'bg-purple hover:bg-purple/90 text-white'
-              }`}
-            >
-              {app.membership === 'premium' && !isPremium ? (
-                <>
-                  <Sparkles className="w-4 h-4 fill-white" />
-                  <span>Unlock App</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-white" />
-                  <span>Launch Application</span>
-                </>
-              )}
-            </button>
           </div>
         ))}
       </div>

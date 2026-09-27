@@ -682,6 +682,7 @@ export const INITIAL_APPS = [
     url: "/apps/grammar-gamified",
     membership: "free",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=600&q=80"
@@ -697,6 +698,7 @@ export const INITIAL_APPS = [
     url: "/apps/english-math",
     membership: "free",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80"
     ]
@@ -711,6 +713,7 @@ export const INITIAL_APPS = [
     url: "/apps/safety-247",
     membership: "free",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80"
     ]
@@ -725,6 +728,7 @@ export const INITIAL_APPS = [
     url: "/apps/crossmath",
     membership: "premium",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"
     ]
@@ -739,6 +743,7 @@ export const INITIAL_APPS = [
     url: "/apps/vocab-trainer",
     membership: "free",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=600&q=80"
     ]
@@ -753,6 +758,7 @@ export const INITIAL_APPS = [
     url: "/apps/math-puzzles",
     membership: "premium",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80"
     ]
@@ -767,6 +773,7 @@ export const INITIAL_APPS = [
     url: "/apps/traffic-signs",
     membership: "free",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=600&q=80"
     ]
@@ -781,6 +788,7 @@ export const INITIAL_APPS = [
     url: "/apps/ai-hub",
     membership: "premium",
     status: "published",
+    thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
     screenshots: [
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80"
     ]
@@ -796,6 +804,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/percentage-calculator",
     status: "published",
+    thumbnail: "",
     component: "PercentageCalculator"
   },
   {
@@ -806,6 +815,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/grade-calculator",
     status: "published",
+    thumbnail: "",
     component: "GradeCalculator"
   },
   {
@@ -816,6 +826,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/gpa-calculator",
     status: "published",
+    thumbnail: "",
     component: "GpaCalculator"
   },
   {
@@ -826,6 +837,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/scientific-calculator",
     status: "published",
+    thumbnail: "",
     component: "ScientificCalculator"
   },
   {
@@ -836,6 +848,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/unit-converter",
     status: "published",
+    thumbnail: "",
     component: "UnitConverter"
   },
   {
@@ -846,6 +859,7 @@ export const INITIAL_TOOLS = [
     membership: "premium",
     url: "/tools/quiz-generator",
     status: "published",
+    thumbnail: "",
     component: "QuizGeneratorTool"
   },
   {
@@ -856,6 +870,7 @@ export const INITIAL_TOOLS = [
     membership: "premium",
     url: "/tools/mcq-generator",
     status: "published",
+    thumbnail: "",
     component: "McqGeneratorTool"
   },
   {
@@ -866,6 +881,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/study-planner",
     status: "published",
+    thumbnail: "",
     component: "StudyPlanner"
   },
   {
@@ -876,6 +892,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/word-counter",
     status: "published",
+    thumbnail: "",
     component: "WordCounter"
   },
   {
@@ -886,6 +903,7 @@ export const INITIAL_TOOLS = [
     membership: "free",
     url: "/tools/progress-calculator",
     status: "published",
+    thumbnail: "",
     component: "LearningProgressCalculator"
   }
 ];

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Plus, Search, Edit2, Trash2, X, Save, CheckCircle2 } from 'lucide-react';
+import { FileText, Plus, Search, Edit2, Trash2, X, Save, CheckCircle2, ImageIcon } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { getContent, createContent, updateContent, deleteContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { RichTextarea } from '../../components/common/RichTextarea';
+import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
 
 export const ContentManagement = () => {
   const [content, setContent] = useState([]);
@@ -12,13 +13,15 @@ export const ContentManagement = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [notice, setNotice] = useState('');
 
+  const defaultThumbnail = '';
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     contentType: 'Study Notes',
     category: 'English',
     author: 'Dr Wazir Ahmed',
-    thumbnail: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80',
+    thumbnail: defaultThumbnail,
     membership: 'free',
     status: 'published',
     body: ''
@@ -41,7 +44,7 @@ export const ContentManagement = () => {
       contentType: 'Study Notes',
       category: 'English',
       author: 'Dr Wazir Ahmed',
-      thumbnail: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80',
+      thumbnail: defaultThumbnail,
       membership: 'free',
       status: 'published',
       body: ''
@@ -88,14 +91,14 @@ export const ContentManagement = () => {
     }
   };
 
-  const filteredContent = content.filter(c => 
+  const filteredContent = content.filter(c =>
     c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <DashboardLayout 
-      title="Educational Content Management" 
+    <DashboardLayout
+      title="Educational Content Management"
       subtitle="Author, categorize, edit, and publish articles, study notes, worksheets, and PDFs."
     >
       <div className="space-y-6">
@@ -128,30 +131,48 @@ export const ContentManagement = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredContent.map(item => (
-            <div key={item.id} className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Badge type={item.membership} size="xs" />
-                  <span className="text-[10px] text-slate-400 font-bold uppercase">{item.contentType}</span>
+            <div key={item.id} className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col overflow-hidden">
+              {/* Thumbnail */}
+              {item.thumbnail ? (
+                <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
                 </div>
-                <h4 className="font-bold text-base text-slate-900 dark:text-white mb-1">{item.title}</h4>
-                <p className="text-xs text-slate-500 line-clamp-2">{item.description}</p>
-                <div className="text-[11px] text-slate-400 mt-2">{item.category} • {item.author}</div>
-              </div>
+              ) : (
+                <div className="w-full aspect-video bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-950/40 dark:to-orange-950/40 flex items-center justify-center">
+                  <ImageIcon className="w-8 h-8 text-amber-300 dark:text-amber-700" />
+                </div>
+              )}
 
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2">
-                <button
-                  onClick={() => handleOpenEdit(item)}
-                  className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-xs"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => handleDelete(item.id, item.title)}
-                  className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+              <div className="p-5 flex flex-col flex-1 justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge type={item.membership} size="xs" />
+                    <span className="text-[10px] text-slate-400 font-bold uppercase">{item.contentType}</span>
+                  </div>
+                  <h4 className="font-bold text-base text-slate-900 dark:text-white mb-1">{item.title}</h4>
+                  <p className="text-xs text-slate-500 line-clamp-2">{item.description}</p>
+                  <div className="text-[11px] text-slate-400 mt-2">{item.category} • {item.author}</div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2">
+                  <button
+                    onClick={() => handleOpenEdit(item)}
+                    className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-xs"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id, item.title)}
+                    className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -160,12 +181,12 @@ export const ContentManagement = () => {
         {/* Modal */}
         {modalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-            <div className="w-full max-w-2xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xl flex flex-col overflow-hidden">
+            <div className="w-full max-w-2xl max-h-[92vh] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xl flex flex-col overflow-hidden">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-bold text-lg">{editingItem ? 'Edit Resource' : 'Add New Content'}</h3>
                 <button onClick={() => setModalOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
               </div>
-              <form onSubmit={handleSave} className="flex-1 overflow-y-auto space-y-3 text-xs sm:text-sm">
+              <form onSubmit={handleSave} className="flex-1 overflow-y-auto space-y-4 text-xs sm:text-sm">
                 <div>
                   <label className="font-semibold block mb-1">Title</label>
                   <input
@@ -215,6 +236,17 @@ export const ContentManagement = () => {
                     </select>
                   </div>
                 </div>
+
+                {/* Thumbnail Upload */}
+                <ThumbnailUpload
+                  label="Thumbnail Image"
+                  value={formData.thumbnail}
+                  onChange={(val) => setFormData({ ...formData, thumbnail: val })}
+                  placeholder="https://example.com/image.jpg"
+                  aspectRatio="16/9"
+                  maxSizeMB={2}
+                />
+
                 <RichTextarea
                   label="Body Text / Study Material"
                   rows={6}

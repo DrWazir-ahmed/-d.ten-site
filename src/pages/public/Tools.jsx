@@ -139,28 +139,48 @@ export const Tools = () => {
             <div
               key={tool.id}
               onClick={() => handleToolClick(tool)}
-              className={`p-4 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between ${
+              className={`rounded-2xl border cursor-pointer transition-all flex flex-col overflow-hidden ${
                 isSelected
                   ? 'bg-brand-50/80 dark:bg-brand-950/60 border-brand-600 ring-2 ring-brand-500/20 shadow-md'
                   : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm'
               }`}
             >
-              <div>
-                <div className="flex items-center justify-between mb-2">
+              {/* Thumbnail or fallback */}
+              {tool.thumbnail ? (
+                <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                  <img
+                    src={tool.thumbnail}
+                    alt={tool.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                </div>
+              ) : (
+                <div className={`w-full aspect-video flex items-center justify-center ${
+                  isSelected
+                    ? 'bg-brand-100 dark:bg-brand-950'
+                    : 'bg-slate-50 dark:bg-slate-800'
+                }`}>
+                  <Wrench className={`w-6 h-6 ${isSelected ? 'text-brand-600 dark:text-brand-400' : 'text-slate-300 dark:text-slate-600'}`} />
+                </div>
+              )}
+
+              <div className="p-3 flex flex-col flex-1">
+                <div className="flex items-center justify-between mb-1">
                   <Badge type={tool.membership} size="xs" />
                   {isSelected && <span className="w-2 h-2 rounded-full bg-brand-600" />}
                 </div>
                 <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white mb-1 line-clamp-1">
                   {tool.name}
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 flex-1">
                   {tool.description}
                 </p>
-              </div>
 
-              <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] font-bold text-brand-600 dark:text-brand-400 flex items-center justify-between">
-                <span>{tool.category}</span>
-                <span>Select →</span>
+                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] font-bold text-brand-600 dark:text-brand-400 flex items-center justify-between">
+                  <span>{tool.category}</span>
+                  <span>Select →</span>
+                </div>
               </div>
             </div>
           );
