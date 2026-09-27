@@ -155,7 +155,7 @@ const AppContent = () => {
           <Route 
             path="/settings" 
             element={
-              <ProtectedRoute>
+              <ProtectedRoute blockCourseCreator={true}>
                 <Settings />
               </ProtectedRoute>
             } 
@@ -189,7 +189,7 @@ const AppContent = () => {
           <Route 
             path="/admin/courses" 
             element={
-              <ProtectedRoute requireAdmin={true}>
+              <ProtectedRoute requireCourseCreatorOrAdmin={true}>
                 <CourseManagement />
               </ProtectedRoute>
             } 
@@ -213,7 +213,7 @@ const AppContent = () => {
           <Route 
             path="/admin/content" 
             element={
-              <ProtectedRoute requireAdmin={true}>
+              <ProtectedRoute requireCourseCreatorOrAdmin={true}>
                 <ContentManagement />
               </ProtectedRoute>
             } 

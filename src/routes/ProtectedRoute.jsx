@@ -15,8 +15,10 @@ export const ProtectedRoute = ({
   requireSuperAdmin = false,
   requireAdmin      = false,
   requirePremium    = false,
+  requireCourseCreatorOrAdmin = false,
+  blockCourseCreator = false,
 }) => {
-  const { currentUser, userProfile, loading, isAdmin, isSuperAdmin, isPremium } = useAuth();
+  const { currentUser, userProfile, loading, isAdmin, isSuperAdmin, isPremium, isCourseCreator } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -39,7 +41,18 @@ export const ProtectedRoute = ({
 
   // ── Admin gate (admin OR super_admin) ──────────────────────────────────
   if (requireAdmin && !isAdmin) {
+    if (isCourseCreator) return <Navigate to="/admin/courses" replace />;
     return <Navigate to="/dashboard/free" replace />;
+  }
+
+  // ── Course Creator OR Admin gate (Course & Content management) ─────────
+  if (requireCourseCreatorOrAdmin && !isAdmin && !isCourseCreator) {
+    return <Navigate to="/dashboard/free" replace />;
+  }
+
+  // ── Block Course Creator from changing other settings ──────────────────
+  if (blockCourseCreator && isCourseCreator && !isAdmin) {
+    return <Navigate to="/admin/courses" replace />;
   }
 
   // ── Premium gate ───────────────────────────────────────────────────────

@@ -18,7 +18,8 @@ import {
   HelpCircle,
   ChevronDown,
   ChevronUp,
-  AlertCircle
+  AlertCircle,
+  Check
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { 
@@ -26,13 +27,17 @@ import {
   createCourse, 
   updateCourse, 
   deleteCourse, 
-  getCategories 
+  getCategories,
+  approveCourse
 } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { RichTextarea } from '../../components/common/RichTextarea';
 import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
+import { useAuth } from '../../context/AuthContext';
 
 export const CourseManagement = () => {
+  const { currentUser, userProfile, isAdmin, isSuperAdmin, isCourseCreator } = useAuth();
+
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -74,6 +79,16 @@ export const CourseManagement = () => {
     loadCourses();
   }, []);
 
+  const isOwner = (course) => {
+    if (!course) return false;
+    if (isAdmin) return true;
+    return (
+      course.creatorId === currentUser?.uid ||
+      course.creatorEmail === userProfile?.email ||
+      (userProfile?.name && course.instructor?.toLowerCase() === userProfile?.name?.toLowerCase())
+    );
+  };
+
   const handleOpenAdd = () => {
     setEditingCourse(null);
     setModalTab('general');
@@ -84,11 +99,11 @@ export const CourseManagement = () => {
       category: 'English',
       level: 'Beginner',
       membership: 'free',
-      instructor: 'Dr Wazir Ahmed',
+      instructor: isCourseCreator && !isAdmin ? (userProfile?.name || 'Course Creator') : 'Dr Wazir Ahmed',
       duration: '4 hours',
       lessonCount: 2,
-      thumbnail: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80',
-      status: 'published',
+      thumbnail: '',
+      status: isCourseCreator && !isAdmin ? 'pending_approval' : 'published',
       modules: [
         {
           id: defaultModId,
@@ -122,6 +137,11 @@ export const CourseManagement = () => {
   };
 
   const handleOpenEdit = (course) => {
+    if (isCourseCreator && !isAdmin && !isOwner(course)) {
+      setNotice('Access Denied: You can only edit courses you authored.');
+      setTimeout(() => setNotice(''), 3000);
+      return;
+    }
     setEditingCourse(course);
     setModalTab('general');
 
@@ -474,8 +494,17 @@ export const CourseManagement = () => {
       0
     );
 
+    let finalStatus = formData.status || 'published';
+    if (isCourseCreator && !isAdmin) {
+      finalStatus = 'pending_approval'; // Always wait for admin approval on create/edit
+    }
+
     const payload = {
       ...formData,
+      status: finalStatus,
+      creatorId: editingCourse?.creatorId || currentUser?.uid,
+      creatorEmail: editingCourse?.creatorEmail || userProfile?.email,
+      instructor: isCourseCreator && !isAdmin ? (userProfile?.name || formData.instructor) : formData.instructor,
       modules: formData.modules,
       lessons: flattenedLessons,
       lessonCount: totalTopicsCount || formData.lessonCount || 1
@@ -483,18 +512,36 @@ export const CourseManagement = () => {
 
     if (editingCourse) {
       await updateCourse(editingCourse.id, payload);
-      setNotice(`Course "${formData.title}" updated (${formData.modules.length} modules, ${totalSubmodulesCount} sub-modules, ${totalTopicsCount} topics).`);
+      setNotice(isCourseCreator && !isAdmin 
+        ? `Course "${formData.title}" saved and submitted for Admin & Super Admin approval before launching.`
+        : `Course "${formData.title}" updated (${formData.modules.length} modules, ${totalSubmodulesCount} sub-modules, ${totalTopicsCount} topics).`
+      );
     } else {
       await createCourse(payload);
-      setNotice(`New course "${formData.title}" created with ${formData.modules.length} modules.`);
+      setNotice(isCourseCreator && !isAdmin
+        ? `New course "${formData.title}" submitted for Admin & Super Admin review. Waiting for approval to launch on site.`
+        : `New course "${formData.title}" created with ${formData.modules.length} modules.`
+      );
     }
 
     setModalOpen(false);
     await loadCourses();
+    setTimeout(() => setNotice(''), 4500);
+  };
+
+  const handleApproveAndLaunch = async (course) => {
+    await approveCourse(course.id);
+    setCourses(courses.map(c => c.id === course.id ? { ...c, status: 'published' } : c));
+    setNotice(`Course "${course.title}" approved and launched live on site!`);
     setTimeout(() => setNotice(''), 4000);
   };
 
-  const handleDelete = async (courseId, title) => {
+  const handleDelete = async (courseId, title, courseObj) => {
+    if (isCourseCreator && !isAdmin && !isOwner(courseObj)) {
+      setNotice('Cannot delete courses authored by other instructors.');
+      setTimeout(() => setNotice(''), 3000);
+      return;
+    }
     if (window.confirm(`Are you sure you want to delete course "${title}"?`)) {
       await deleteCourse(courseId);
       setCourses(courses.filter(c => c.id !== courseId));
@@ -504,12 +551,17 @@ export const CourseManagement = () => {
   };
 
   const handleTogglePublish = async (course) => {
+    if (isCourseCreator && !isAdmin) return; // Course creator cannot bypass admin approval
     const newStatus = course.status === 'published' ? 'draft' : 'published';
     await updateCourse(course.id, { status: newStatus });
     setCourses(courses.map(c => c.id === course.id ? { ...c, status: newStatus } : c));
   };
 
   const filteredCourses = courses.filter(c => {
+    // Role isolation: Course Creators can ONLY view and edit their own courses
+    if (isCourseCreator && !isAdmin && !isOwner(c)) {
+      return false;
+    }
     const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.instructor.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCat = selectedCategory === 'All' || c.category === selectedCategory;
@@ -527,10 +579,15 @@ export const CourseManagement = () => {
     0
   );
 
+  const pendingCourses = courses.filter(c => c.status === 'pending_approval');
+
   return (
     <DashboardLayout 
-      title="Course Management" 
-      subtitle="Create, edit, publish/unpublish, and configure free and premium academic curricula."
+      title={isCourseCreator && !isAdmin ? "My Course Authoring Studio" : "Course Management"} 
+      subtitle={isCourseCreator && !isAdmin 
+        ? "Create and manage your academic curricula. Submissions wait for Admin & Super Admin approval before launching." 
+        : "Create, edit, publish/unpublish, approve creator courses, and configure academic curricula."
+      }
     >
       <div className="space-y-6">
         
@@ -538,6 +595,54 @@ export const CourseManagement = () => {
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 flex items-center gap-3 text-xs sm:text-sm font-semibold animate-fadeIn">
             <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
             <span>{notice}</span>
+          </div>
+        )}
+
+        {/* Creator Studio Mode Notice */}
+        {isCourseCreator && !isAdmin && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 flex items-start gap-3 shadow-xs">
+            <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-sm">Course Creator Studio</p>
+              <p className="text-xs text-indigo-700/80 dark:text-indigo-300/80 mt-0.5">
+                You have author privileges to create new academic courses and edit your own curricula. Any new or edited course will wait for Admin &amp; Super Admin approval before launching live on site.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Pending Courses Approval Alert for Admins */}
+        {isAdmin && pendingCourses.length > 0 && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-300 dark:border-amber-800/60 shadow-sm space-y-3">
+            <div className="flex items-center gap-2.5 text-amber-900 dark:text-amber-200">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center font-bold">
+                <Clock className="w-4 h-4" />
+              </div>
+              <div>
+                <h4 className="font-black text-sm">
+                  {pendingCourses.length} Course{pendingCourses.length > 1 ? 's' : ''} Awaiting Launch Approval
+                </h4>
+                <p className="text-[11px] text-amber-700/80 dark:text-amber-300/80">
+                  Course creators have submitted or edited curricula. Review and approve them to launch live on site.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1">
+              {pendingCourses.map(pc => (
+                <div key={pc.id} className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800/50 flex items-center justify-between gap-2 shadow-2xs">
+                  <div className="min-w-0">
+                    <p className="font-bold text-xs text-slate-900 dark:text-white truncate">{pc.title}</p>
+                    <p className="text-[10px] text-slate-400 truncate">By {pc.instructor}</p>
+                  </div>
+                  <button
+                    onClick={() => handleApproveAndLaunch(pc)}
+                    className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] shadow-xs transition flex items-center gap-1 shrink-0"
+                  >
+                    <Check className="w-3 h-3" /> Approve &amp; Launch
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -626,16 +731,35 @@ export const CourseManagement = () => {
                       <Badge type={c.membership || 'free'} size="xs" />
                     </td>
                     <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleTogglePublish(c)}
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition ${
-                          c.status === 'published'
-                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
-                            : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800'
-                        }`}
-                      >
-                        {c.status || 'published'}
-                      </button>
+                      {c.status === 'pending_approval' ? (
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
+                            <Clock className="w-2.5 h-2.5 animate-pulse text-amber-600" />
+                            Pending Review
+                          </span>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleApproveAndLaunch(c)}
+                              className="px-2 py-0.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold transition flex items-center gap-1 shadow-xs"
+                              title="Approve & Launch live on site"
+                            >
+                              <Check className="w-2.5 h-2.5" /> Approve &amp; Launch
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleTogglePublish(c)}
+                          disabled={isCourseCreator && !isAdmin}
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition ${
+                            c.status === 'published'
+                              ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                          } ${isCourseCreator && !isAdmin ? 'cursor-default' : 'hover:opacity-80'}`}
+                        >
+                          {c.status || 'published'}
+                        </button>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
@@ -656,7 +780,7 @@ export const CourseManagement = () => {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDelete(c.id, c.title)}
+                          onClick={() => handleDelete(c.id, c.title, c)}
                           title="Delete course"
                           className="p-2 text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition"
                         >
@@ -823,6 +947,32 @@ export const CourseManagement = () => {
                       aspectRatio="16/9"
                       maxSizeMB={2}
                     />
+
+                    {/* Status & Approval info */}
+                    {isCourseCreator && !isAdmin ? (
+                      <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2.5">
+                        <Clock className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                        <div>
+                          <p className="font-bold">Admin &amp; Super Admin Approval Required</p>
+                          <p className="text-[11px] text-amber-700/80 dark:text-amber-300/80 mt-0.5">
+                            Saving this course will place it in 'Pending Approval'. It will launch on the site once verified and approved by the platform administrators.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">Publishing Status</label>
+                        <select
+                          value={formData.status}
+                          onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-semibold"
+                        >
+                          <option value="published">Published (Live on site)</option>
+                          <option value="pending_approval">Pending Approval (Under review)</option>
+                          <option value="draft">Draft (Hidden)</option>
+                        </select>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1336,11 +1486,23 @@ export const CourseManagement = () => {
                     >
                       Cancel
                     </button>
+                    {isAdmin && editingCourse?.status === 'pending_approval' && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await handleApproveAndLaunch(editingCourse);
+                          setModalOpen(false);
+                        }}
+                        className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5"
+                      >
+                        <Check className="w-4 h-4" /> Approve &amp; Launch Live
+                      </button>
+                    )}
                     <button
                       type="submit"
                       className="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5"
                     >
-                      <Save className="w-4 h-4" /> Save Course & Curriculum
+                      <Save className="w-4 h-4" /> Save Course &amp; Curriculum
                     </button>
                   </div>
                 </div>

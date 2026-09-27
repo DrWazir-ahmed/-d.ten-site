@@ -61,6 +61,10 @@ export const Courses = () => {
   const filteredCourses = useMemo(() => {
     return courses
       .filter(c => {
+        // Only show published courses on public catalog (courses awaiting approval are hidden)
+        const isPublished = c.status === 'published' || !c.status;
+        if (!isPublished) return false;
+
         const matchesSearch = 
           c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           c.description.toLowerCase().includes(searchTerm.toLowerCase()) ||

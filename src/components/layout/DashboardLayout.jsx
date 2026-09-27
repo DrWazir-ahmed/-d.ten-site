@@ -31,7 +31,7 @@ import { Badge } from '../common/Badge';
 export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userProfile, isPremium, isAdmin, logout } = useAuth();
+  const { userProfile, isPremium, isAdmin, isCourseCreator, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -67,6 +67,35 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
           items: [
             { label: "Admin Profile", path: "/profile", icon: User },
             { label: "Settings", path: "/settings", icon: Settings }
+          ]
+        }
+      ];
+    }
+
+    if (isCourseCreator) {
+      return [
+        {
+          title: "Course Creator Studio",
+          items: [
+            { label: "My Created Courses", path: "/admin/courses", icon: BookOpen },
+            { label: "My Created Content", path: "/admin/content", icon: FileText }
+          ]
+        },
+        {
+          title: "Student View Portal",
+          items: [
+            { label: "Free Member Portal", path: "/dashboard/free", icon: LayoutDashboard },
+            { label: "My Enrolled Courses", path: "/dashboard/my-courses", icon: BookOpen },
+            { label: "Explore Courses", path: "/courses", icon: BookOpen },
+            { label: "Interactive Tools", path: "/tools", icon: Wrench },
+            { label: "Learning Apps", path: "/apps", icon: Layers }
+          ]
+        },
+        {
+          title: "Account",
+          items: [
+            { label: "Creator Profile", path: "/profile", icon: User },
+            { label: "Notifications", path: "/notifications", icon: Bell }
           ]
         }
       ];
@@ -216,7 +245,7 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
           ))}
 
           {/* Upgrade prompt in sidebar for free members */}
-          {!isPremium && !isAdmin && (
+          {!isPremium && !isAdmin && !isCourseCreator && (
             <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 text-center">
               <Sparkles className="w-6 h-6 text-amber-500 mx-auto mb-2" />
               <h6 className="font-bold text-xs text-slate-900 dark:text-white mb-1">Upgrade to Premium</h6>

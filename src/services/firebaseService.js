@@ -1233,17 +1233,72 @@ export const getAllUsers = async () => {
 };
 
 export const updateUserRole = async (userId, role) => {
+  const updates = { role };
+  if (role === 'course_creator') {
+    updates.creatorApprovalStatus = 'approved';
+  }
   if (isFirebaseConfigured && db) {
     try {
-      await updateDoc(doc(db, "users", userId), { role });
+      await updateDoc(doc(db, "users", userId), updates);
     } catch (err) {
       console.warn("Firestore updateUserRole error:", err);
     }
   }
   const users = getLocal('users', []);
-  const updated = users.map(u => u.uid === userId ? { ...u, role } : u);
+  const updated = users.map(u => u.uid === userId ? { ...u, ...updates } : u);
   setLocal('users', updated);
   return true;
+};
+
+export const approveCourseCreator = async (userId) => {
+  const updates = {
+    role: 'course_creator',
+    creatorApprovalStatus: 'approved',
+    creatorApprovedAt: new Date().toISOString()
+  };
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, "users", userId), updates);
+    } catch (err) {
+      console.warn("Firestore approveCourseCreator error:", err);
+    }
+  }
+  const users = getLocal('users', []);
+  const updated = users.map(u => u.uid === userId ? { ...u, ...updates } : u);
+  setLocal('users', updated);
+  return true;
+};
+
+export const rejectCourseCreator = async (userId) => {
+  const updates = {
+    creatorApprovalStatus: 'rejected',
+    creatorRejectedAt: new Date().toISOString()
+  };
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, "users", userId), updates);
+    } catch (err) {
+      console.warn("Firestore rejectCourseCreator error:", err);
+    }
+  }
+  const users = getLocal('users', []);
+  const updated = users.map(u => u.uid === userId ? { ...u, ...updates } : u);
+  setLocal('users', updated);
+  return true;
+};
+
+export const approveCourse = async (courseId) => {
+  return await updateCourse(courseId, { 
+    status: 'published',
+    approvedAt: new Date().toISOString() 
+  });
+};
+
+export const approveContent = async (contentId) => {
+  return await updateContent(contentId, { 
+    status: 'published',
+    approvedAt: new Date().toISOString() 
+  });
 };
 
 export const updateUserMembership = async (userId, membership) => {

@@ -23,7 +23,7 @@ import { Badge } from '../common/Badge';
 export const Navbar = ({ onOpenSearch }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser, userProfile, isGuest, isFree, isPremium, isAdmin, logout, loginAsDemoUser } = useAuth();
+  const { currentUser, userProfile, isGuest, isFree, isPremium, isAdmin, isCourseCreator, logout, loginAsDemoUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,6 +48,7 @@ export const Navbar = ({ onOpenSearch }) => {
 
   const getDashboardPath = () => {
     if (isAdmin) return '/admin';
+    if (isCourseCreator) return '/admin/courses';
     if (isPremium) return '/dashboard/premium';
     return '/dashboard/free';
   };
@@ -62,6 +63,7 @@ export const Navbar = ({ onOpenSearch }) => {
     loginAsDemoUser(type);
     setDemoMenuOpen(false);
     if (type === 'admin') navigate('/admin');
+    else if (type === 'creator') navigate('/admin/courses');
     else if (type === 'premium') navigate('/dashboard/premium');
     else navigate('/dashboard/free');
   };
@@ -155,6 +157,20 @@ export const Navbar = ({ onOpenSearch }) => {
                   <Badge type="free" size="xs" />
                 </button>
                 <button
+                  onClick={() => handleDemoSwitch('creator')}
+                  className="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between"
+                >
+                  <span className="font-semibold text-indigo-600 dark:text-indigo-400">Course Creator (Prof. Tariq)</span>
+                  <Badge type="creator" size="xs" />
+                </button>
+                <button
+                  onClick={() => handleDemoSwitch('pending_creator')}
+                  className="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between"
+                >
+                  <span className="font-semibold text-amber-600 dark:text-amber-400">Pending Creator (Zainab)</span>
+                  <Badge type="pending" size="xs" />
+                </button>
+                <button
                   onClick={() => handleDemoSwitch('premium')}
                   className="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between"
                 >
@@ -203,7 +219,7 @@ export const Navbar = ({ onOpenSearch }) => {
                     {userProfile?.name || 'Student'}
                   </div>
                   <div className="text-[10px] text-slate-500 capitalize">
-                    {isAdmin ? 'Admin' : isPremium ? 'Premium' : 'Free Member'}
+                    {isAdmin ? 'Admin' : isCourseCreator ? 'Course Creator' : isPremium ? 'Premium' : 'Free Member'}
                   </div>
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
@@ -219,12 +235,24 @@ export const Navbar = ({ onOpenSearch }) => {
                     <p className="text-slate-500 truncate">{userProfile?.email}</p>
                     <div className="mt-2">
                       {isAdmin ? <Badge type="admin" size="xs">Platform Admin</Badge> :
+                       isCourseCreator ? <Badge type="creator" size="xs">Course Creator</Badge> :
                        isPremium ? <Badge type="premium" size="xs">Premium Member</Badge> :
                        <Badge type="free" size="xs">Free Member</Badge>}
                     </div>
                   </div>
 
                   <div className="py-1">
+                    {isCourseCreator && (
+                      <Link
+                        to="/admin/courses"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 font-bold"
+                      >
+                        <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                        Course Creator Studio
+                      </Link>
+                    )}
+
                     <Link
                       to={getDashboardPath()}
                       onClick={() => setUserDropdownOpen(false)}
@@ -249,7 +277,7 @@ export const Navbar = ({ onOpenSearch }) => {
                       className="flex items-center gap-2.5 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold"
                     >
                       <User className="w-4 h-4 text-slate-500" />
-                      Profile & Settings
+                      Profile
                     </Link>
 
                     <Link
@@ -260,6 +288,17 @@ export const Navbar = ({ onOpenSearch }) => {
                       <Bell className="w-4 h-4 text-slate-500" />
                       Notifications
                     </Link>
+
+                    {!isCourseCreator && (
+                      <Link
+                        to="/settings"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold"
+                      >
+                        <Settings className="w-4 h-4 text-slate-500" />
+                        Settings
+                      </Link>
+                    )}
 
                     {isAdmin && (
                       <Link

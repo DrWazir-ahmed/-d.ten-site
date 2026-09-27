@@ -78,6 +78,26 @@ export const FreeDashboard = () => {
     >
       <div className="space-y-8">
         
+        {/* Course Creator Pending Approval Banner */}
+        {userProfile?.requestedRole === 'course_creator' && userProfile?.creatorApprovalStatus === 'pending' && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center flex-shrink-0 font-bold">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-bold text-sm">Course Creator Application Pending Review</p>
+                <p className="text-xs text-amber-700/80 dark:text-amber-300/80 mt-0.5">
+                  Your request for Course Creator privileges is currently under review by our Admin & Super Admin team. You have full free membership access while you wait.
+                </p>
+              </div>
+            </div>
+            <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-200 text-xs font-bold whitespace-nowrap self-end sm:self-auto">
+              Pending Approval
+            </span>
+          </div>
+        )}
+        
         {/* Metric Progress Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">

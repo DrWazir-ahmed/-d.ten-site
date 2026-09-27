@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // ── Register ───────────────────────────────────────────────────────────
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, requestedRole = 'student') => {
     setError(null);
 
     if (!isFirebaseConfigured) {
@@ -136,11 +136,14 @@ export const AuthProvider = ({ children }) => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await firebaseUpdateProfile(user, { displayName: name });
 
-      // Determine role — super_admin > admin invite > student
+      // Determine role — super_admin > admin invite > requestedRole
       const emailLower    = email.toLowerCase();
       const isSuperAdmin  = emailLower === SUPER_ADMIN_EMAIL.toLowerCase();
+      
       let assignedRole    = isSuperAdmin ? 'super_admin' : 'student';
       let assignedMem     = isSuperAdmin ? 'premium'     : 'free';
+      let reqRole         = requestedRole === 'course_creator' ? 'course_creator' : 'student';
+      let creatorStatus   = isSuperAdmin ? 'approved' : (requestedRole === 'course_creator' ? 'pending' : 'none');
 
       if (!isSuperAdmin && db) {
         try {
@@ -149,6 +152,8 @@ export const AuthProvider = ({ children }) => {
           if (inviteSnap.exists()) {
             assignedRole = 'admin';
             assignedMem  = 'premium';
+            reqRole      = 'admin';
+            creatorStatus = 'approved';
             await deleteDoc(inviteRef);
           }
         } catch (_) {}
@@ -159,8 +164,10 @@ export const AuthProvider = ({ children }) => {
         name,
         email:      emailLower,
         photoURL:   '',
-        role:       assignedRole,
-        membership: assignedMem,
+        role:       assignedRole, // Will be 'student' (free member) until admin approves if requested 'course_creator'
+        membership: assignedMem,  // Free member until approved
+        requestedRole: reqRole,
+        creatorApprovalStatus: creatorStatus,
         status:     'active',
         createdAt:  new Date().toISOString(),
         lastLogin:  new Date().toISOString(),
@@ -313,13 +320,130 @@ export const AuthProvider = ({ children }) => {
 
 
   // ── Derived role helpers ───────────────────────────────────────────────
-  const isSuperAdmin = Boolean(userProfile?.role === 'super_admin');
-  const isAdmin      = Boolean(userProfile?.role === 'admin' || userProfile?.role === 'super_admin');
-  const isStudent    = Boolean(userProfile && !isAdmin);
-  const isPremium    = Boolean(userProfile && (userProfile.membership === 'premium' || isAdmin));
-  const isFree       = Boolean(userProfile && userProfile.membership === 'free' && !isAdmin);
-  const isGuest      = !currentUser && !userProfile;
+  const isSuperAdmin          = Boolean(userProfile?.role === 'super_admin');
+  const isAdmin               = Boolean(userProfile?.role === 'admin' || userProfile?.role === 'super_admin');
+  const isCourseCreator       = Boolean(userProfile?.role === 'course_creator');
+  const isPendingCourseCreator= Boolean(userProfile?.requestedRole === 'course_creator' && userProfile?.creatorApprovalStatus === 'pending');
+  const canManageContent      = Boolean(isAdmin || isCourseCreator);
+  const isStudent             = Boolean(userProfile && !isAdmin && !isCourseCreator);
+  const isPremium             = Boolean(userProfile && (userProfile.membership === 'premium' || isAdmin));
+  const isFree                = Boolean(userProfile && userProfile.membership === 'free' && !isAdmin);
+  const isGuest               = !currentUser && !userProfile;
 
+  // ── Instant demo user switcher (for testing & live evaluation) ──────────
+  const loginAsDemoUser = (type) => {
+    let mockUser = {
+      uid: 'demo-user-1',
+      email: 'student@dten.edu',
+      displayName: 'Ahmed Khan',
+    };
+    let mockProfile = {
+      uid: 'demo-user-1',
+      name: 'Ahmed Khan',
+      email: 'student@dten.edu',
+      photoURL: '',
+      role: 'student',
+      membership: 'free',
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString()
+    };
+
+    if (type === 'creator') {
+      mockUser = {
+        uid: 'demo-creator-1',
+        email: 'creator@dten.edu',
+        displayName: 'Prof. Tariq Mahmood',
+      };
+      mockProfile = {
+        uid: 'demo-creator-1',
+        name: 'Prof. Tariq Mahmood',
+        email: 'creator@dten.edu',
+        photoURL: '',
+        role: 'course_creator',
+        requestedRole: 'course_creator',
+        creatorApprovalStatus: 'approved',
+        membership: 'free',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+      };
+    } else if (type === 'pending_creator') {
+      mockUser = {
+        uid: 'demo-pending-1',
+        email: 'applicant@dten.edu',
+        displayName: 'Zainab Bibi',
+      };
+      mockProfile = {
+        uid: 'demo-pending-1',
+        name: 'Zainab Bibi',
+        email: 'applicant@dten.edu',
+        photoURL: '',
+        role: 'student',
+        requestedRole: 'course_creator',
+        creatorApprovalStatus: 'pending',
+        membership: 'free',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+      };
+    } else if (type === 'premium') {
+      mockUser = {
+        uid: 'demo-premium-1',
+        email: 'elena@dten.edu',
+        displayName: 'Elena Rostova',
+      };
+      mockProfile = {
+        uid: 'demo-premium-1',
+        name: 'Elena Rostova',
+        email: 'elena@dten.edu',
+        photoURL: '',
+        role: 'student',
+        membership: 'premium',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+      };
+    } else if (type === 'admin') {
+      mockUser = {
+        uid: 'demo-admin-1',
+        email: 'admin@dten.edu',
+        displayName: 'Dr Wazir Ahmed',
+      };
+      mockProfile = {
+        uid: 'demo-admin-1',
+        name: 'Dr Wazir Ahmed',
+        email: 'admin@dten.edu',
+        photoURL: '',
+        role: 'admin',
+        membership: 'premium',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+      };
+    } else if (type === 'super_admin') {
+      mockUser = {
+        uid: 'demo-superadmin-1',
+        email: SUPER_ADMIN_EMAIL,
+        displayName: 'Super Administrator',
+      };
+      mockProfile = {
+        uid: 'demo-superadmin-1',
+        name: 'Super Administrator',
+        email: SUPER_ADMIN_EMAIL,
+        photoURL: '',
+        role: 'super_admin',
+        membership: 'premium',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+      };
+    }
+
+    setCurrentUser(mockUser);
+    setUserProfile(mockProfile);
+    return mockProfile;
+  };
 
   const value = {
     currentUser,
@@ -333,11 +457,15 @@ export const AuthProvider = ({ children }) => {
     resetPassword,
     updateUserData,
     activatePremium,
+    loginAsDemoUser,
     isGuest,
     isFree,
     isPremium,
     isAdmin,
     isSuperAdmin,
+    isCourseCreator,
+    isPendingCourseCreator,
+    canManageContent,
     isStudent,
     isFirebaseConfigured,
     SUPER_ADMIN_EMAIL,

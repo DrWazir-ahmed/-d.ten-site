@@ -54,6 +54,10 @@ export const ContentHub = () => {
 
   const filteredContent = useMemo(() => {
     return content.filter(item => {
+      // Only show published educational content on public hub (pending items await admin approval)
+      const isPublished = item.status === 'published' || !item.status;
+      if (!isPublished) return false;
+
       const matchesSearch = 
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||

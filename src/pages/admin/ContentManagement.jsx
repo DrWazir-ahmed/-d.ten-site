@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Plus, Search, Edit2, Trash2, X, Save, CheckCircle2, ImageIcon } from 'lucide-react';
+import { FileText, Plus, Search, Edit2, Trash2, X, Save, CheckCircle2, ImageIcon, Sparkles, AlertCircle, Check } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
-import { getContent, createContent, updateContent, deleteContent } from '../../services/firebaseService';
+import { getContent, createContent, updateContent, deleteContent, approveContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { RichTextarea } from '../../components/common/RichTextarea';
 import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
+import { useAuth } from '../../context/AuthContext';
 
 export const ContentManagement = () => {
+  const { currentUser, userProfile, isAdmin, isSuperAdmin, isCourseCreator } = useAuth();
+
   const [content, setContent] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,6 +39,16 @@ export const ContentManagement = () => {
     load();
   }, []);
 
+  const isOwner = (item) => {
+    if (!item) return false;
+    if (isAdmin) return true;
+    return (
+      item.creatorId === currentUser?.uid ||
+      item.creatorEmail === userProfile?.email ||
+      (userProfile?.name && item.author?.toLowerCase() === userProfile?.name?.toLowerCase())
+    );
+  };
+
   const handleOpenAdd = () => {
     setEditingItem(null);
     setFormData({
@@ -43,23 +56,28 @@ export const ContentManagement = () => {
       description: '',
       contentType: 'Study Notes',
       category: 'English',
-      author: 'Dr Wazir Ahmed',
+      author: isCourseCreator && !isAdmin ? (userProfile?.name || 'Course Creator') : 'Dr Wazir Ahmed',
       thumbnail: defaultThumbnail,
       membership: 'free',
-      status: 'published',
+      status: isCourseCreator && !isAdmin ? 'pending_approval' : 'published',
       body: ''
     });
     setModalOpen(true);
   };
 
   const handleOpenEdit = (item) => {
+    if (isCourseCreator && !isAdmin && !isOwner(item)) {
+      setNotice('Access Denied: You can only edit content you authored.');
+      setTimeout(() => setNotice(''), 3000);
+      return;
+    }
     setEditingItem(item);
     setFormData({
       title: item.title || '',
       description: item.description || '',
       contentType: item.contentType || 'Study Notes',
       category: item.category || 'English',
-      author: item.author || '',
+      author: item.author || (isCourseCreator && !isAdmin ? (userProfile?.name || '') : 'Dr Wazir Ahmed'),
       thumbnail: item.thumbnail || '',
       membership: item.membership || 'free',
       status: item.status || 'published',
@@ -70,19 +88,51 @@ export const ContentManagement = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+
+    let finalStatus = formData.status || 'published';
+    if (isCourseCreator && !isAdmin) {
+      finalStatus = 'pending_approval'; // Always wait for admin approval on create/edit
+    }
+
+    const payload = {
+      ...formData,
+      status: finalStatus,
+      creatorId: editingItem?.creatorId || currentUser?.uid,
+      creatorEmail: editingItem?.creatorEmail || userProfile?.email,
+      author: isCourseCreator && !isAdmin ? (userProfile?.name || formData.author) : formData.author
+    };
+
     if (editingItem) {
-      await updateContent(editingItem.id, formData);
-      setNotice(`Resource "${formData.title}" updated.`);
+      await updateContent(editingItem.id, payload);
+      setNotice(isCourseCreator && !isAdmin
+        ? `Content "${formData.title}" saved and submitted for Admin approval before updating on site.`
+        : `Resource "${formData.title}" updated.`
+      );
     } else {
-      await createContent(formData);
-      setNotice(`New resource "${formData.title}" published.`);
+      await createContent(payload);
+      setNotice(isCourseCreator && !isAdmin
+        ? `New content "${formData.title}" submitted for Admin review. Waiting for approval to launch on site.`
+        : `New resource "${formData.title}" published.`
+      );
     }
     setModalOpen(false);
     await load();
-    setTimeout(() => setNotice(''), 3000);
+    setTimeout(() => setNotice(''), 4500);
   };
 
-  const handleDelete = async (id, title) => {
+  const handleApproveAndLaunch = async (item) => {
+    await approveContent(item.id);
+    setContent(content.map(c => c.id === item.id ? { ...c, status: 'published' } : c));
+    setNotice(`Content "${item.title}" approved and published live on site!`);
+    setTimeout(() => setNotice(''), 4000);
+  };
+
+  const handleDelete = async (id, title, itemObj) => {
+    if (isCourseCreator && !isAdmin && !isOwner(itemObj)) {
+      setNotice('Access Denied: You cannot delete content authored by other users.');
+      setTimeout(() => setNotice(''), 3000);
+      return;
+    }
     if (window.confirm(`Delete content "${title}"?`)) {
       await deleteContent(id);
       setContent(content.filter(c => c.id !== id));
@@ -91,21 +141,62 @@ export const ContentManagement = () => {
     }
   };
 
-  const filteredContent = content.filter(c =>
-    c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredContent = content.filter(c => {
+    // Role isolation: Course Creators can ONLY view and edit their own authored content
+    if (isCourseCreator && !isAdmin && !isOwner(c)) {
+      return false;
+    }
+    return (
+      c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.author && c.author.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  });
+
+  const pendingContent = content.filter(c => c.status === 'pending_approval');
 
   return (
     <DashboardLayout
-      title="Educational Content Management"
-      subtitle="Author, categorize, edit, and publish articles, study notes, worksheets, and PDFs."
+      title={isCourseCreator && !isAdmin ? "My Authored Educational Content" : "Educational Content Management"}
+      subtitle={isCourseCreator && !isAdmin 
+        ? "Create, edit, and organize study notes, worksheets, and resources. Submissions wait for Admin approval before launching." 
+        : "Author, categorize, edit, review creator submissions, and publish articles, study notes, and worksheets."
+      }
     >
       <div className="space-y-6">
         {notice && (
-          <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 text-xs font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+          <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 text-xs font-bold flex items-center gap-2 animate-fadeIn">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
             <span>{notice}</span>
+          </div>
+        )}
+
+        {/* Creator Studio Info Banner */}
+        {isCourseCreator && !isAdmin && (
+          <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+            <div className="text-xs sm:text-sm">
+              <div className="font-bold text-indigo-950 dark:text-indigo-100 mb-0.5">Course Creator Content Studio</div>
+              <p className="text-indigo-700 dark:text-indigo-300">
+                You have full authoring privileges to write and edit your own educational articles, notes, and study resources.
+                All newly created or edited items enter <span className="font-bold underline">Pending Review</span> status and will be published live on site once approved by an Admin or Super Admin.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Admin Pending Approvals Alert Banner */}
+        {isAdmin && pendingContent.length > 0 && (
+          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+              <div className="text-xs sm:text-sm">
+                <span className="font-bold">{pendingContent.length} pending educational resource{pendingContent.length > 1 ? 's' : ''}</span> waiting for your verification & launch approval.
+              </div>
+            </div>
+            <div className="text-xs font-bold px-3 py-1 rounded-full bg-amber-200 dark:bg-amber-800/60 text-amber-900 dark:text-amber-100 shrink-0">
+              Action Required
+            </div>
           </div>
         )}
 
@@ -134,24 +225,41 @@ export const ContentManagement = () => {
             <div key={item.id} className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col overflow-hidden">
               {/* Thumbnail */}
               {item.thumbnail ? (
-                <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
                   <img
                     src={item.thumbnail}
                     alt={item.title}
                     className="w-full h-full object-cover"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
+                  {item.status === 'pending_approval' && (
+                    <div className="absolute top-2 right-2">
+                      <Badge type="pending" label="Pending Review" size="xs" />
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="w-full aspect-video bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-950/40 dark:to-orange-950/40 flex items-center justify-center">
+                <div className="w-full aspect-video bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-950/40 dark:to-orange-950/40 flex items-center justify-center relative">
                   <ImageIcon className="w-8 h-8 text-amber-300 dark:text-amber-700" />
+                  {item.status === 'pending_approval' && (
+                    <div className="absolute top-2 right-2">
+                      <Badge type="pending" label="Pending Review" size="xs" />
+                    </div>
+                  )}
                 </div>
               )}
 
               <div className="p-5 flex flex-col flex-1 justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <Badge type={item.membership} size="xs" />
+                    <div className="flex items-center gap-1.5">
+                      <Badge type={item.membership} size="xs" />
+                      {item.status === 'pending_approval' && (
+                        <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-full">
+                          Pending Approval
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[10px] text-slate-400 font-bold uppercase">{item.contentType}</span>
                   </div>
                   <h4 className="font-bold text-base text-slate-900 dark:text-white mb-1">{item.title}</h4>
@@ -159,19 +267,34 @@ export const ContentManagement = () => {
                   <div className="text-[11px] text-slate-400 mt-2">{item.category} • {item.author}</div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2">
-                  <button
-                    onClick={() => handleOpenEdit(item)}
-                    className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-xs"
-                  >
-                    <Edit2 className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item.id, item.title)}
-                    className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                  <div>
+                    {isAdmin && item.status === 'pending_approval' && (
+                      <button
+                        onClick={() => handleApproveAndLaunch(item)}
+                        className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm transition"
+                        title="Approve & Launch live on site"
+                      >
+                        <Check className="w-3.5 h-3.5" /> Approve
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleOpenEdit(item)}
+                      className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-xs"
+                      title="Edit"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id, item.title, item)}
+                      className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -186,6 +309,14 @@ export const ContentManagement = () => {
                 <h3 className="font-bold text-lg">{editingItem ? 'Edit Resource' : 'Add New Content'}</h3>
                 <button onClick={() => setModalOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
               </div>
+
+              {isCourseCreator && !isAdmin && (
+                <div className="mb-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+                  <span>Notice: Saving this resource will submit it to Admin & Super Admin for review before launching publicly on site.</span>
+                </div>
+              )}
+
               <form onSubmit={handleSave} className="flex-1 overflow-y-auto space-y-4 text-xs sm:text-sm">
                 <div>
                   <label className="font-semibold block mb-1">Title</label>
@@ -205,7 +336,7 @@ export const ContentManagement = () => {
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Summary overview of the resource..."
                 />
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="font-semibold block mb-1">Content Type</label>
                     <input
@@ -237,6 +368,32 @@ export const ContentManagement = () => {
                   </div>
                 </div>
 
+                {isAdmin && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-semibold block mb-1">Author Name</label>
+                      <input
+                        type="text"
+                        value={formData.author}
+                        onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold block mb-1">Status</label>
+                      <select
+                        value={formData.status}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+                      >
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                        <option value="pending_approval">Pending Approval</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
                 {/* Thumbnail Upload */}
                 <ThumbnailUpload
                   label="Thumbnail Image"
@@ -256,7 +413,9 @@ export const ContentManagement = () => {
                 />
                 <div className="flex justify-end gap-2 pt-3">
                   <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button>
-                  <button type="submit" className="px-5 py-2 bg-amber-500 text-white font-bold rounded-xl">Save Content</button>
+                  <button type="submit" className="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-md transition">
+                    {isCourseCreator && !isAdmin ? 'Submit for Review' : 'Save Content'}
+                  </button>
                 </div>
               </form>
             </div>

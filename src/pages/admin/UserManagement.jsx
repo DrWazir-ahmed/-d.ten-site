@@ -3,7 +3,7 @@ import {
   Users, Search, Shield, ShieldCheck, ShieldAlert, Sparkles,
   Trash2, UserCheck, UserX, CheckCircle2, AlertCircle,
   Eye, X, UserPlus, ChevronDown, Lock, Crown, GraduationCap,
-  RefreshCw, BookOpen
+  RefreshCw, BookOpen, Clock, Check
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import {
@@ -14,6 +14,8 @@ import {
   deleteUserRecord,
   getUserEnrollments,
   inviteAdmin,
+  approveCourseCreator,
+  rejectCourseCreator
 } from '../../services/firebaseService';
 import { useAuth } from '../../context/AuthContext';
 import { Badge } from '../../components/common/Badge';
@@ -21,9 +23,10 @@ import { Badge } from '../../components/common/Badge';
 // ── Role badge helper ────────────────────────────────────────────────────────
 const RoleBadge = ({ role }) => {
   const map = {
-    super_admin: { label: 'Super Admin', icon: Crown,       cls: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 border-purple-200 dark:border-purple-800' },
-    admin:       { label: 'Admin',       icon: ShieldCheck, cls: 'bg-brand-100  text-brand-700  dark:bg-brand-900/40  dark:text-brand-300  border-brand-200  dark:border-brand-800'  },
-    student:     { label: 'Student',     icon: GraduationCap, cls: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700'     },
+    super_admin:    { label: 'Super Admin',    icon: Crown,         cls: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 border-purple-200 dark:border-purple-800' },
+    admin:          { label: 'Admin',          icon: ShieldCheck,   cls: 'bg-brand-100  text-brand-700  dark:bg-brand-900/40  dark:text-brand-300  border-brand-200  dark:border-brand-800'  },
+    course_creator: { label: 'Course Creator', icon: Sparkles,      cls: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' },
+    student:        { label: 'Student',        icon: GraduationCap, cls: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700'     },
   };
   const cfg = map[role] || map.student;
   const Icon = cfg.icon;
@@ -142,6 +145,19 @@ export const UserManagement = () => {
     }
   };
 
+  // ── Course Creator Approval / Rejection ──────────────────────────────────
+  const handleApproveCreator = async (u) => {
+    await approveCourseCreator(u.uid);
+    setUsers(prev => prev.map(x => x.uid === u.uid ? { ...x, role: 'course_creator', creatorApprovalStatus: 'approved' } : x));
+    showNotice(`Approved ${u.name} as a Course Creator!`);
+  };
+
+  const handleRejectCreator = async (u) => {
+    await rejectCourseCreator(u.uid);
+    setUsers(prev => prev.map(x => x.uid === u.uid ? { ...x, creatorApprovalStatus: 'rejected' } : x));
+    showNotice(`Declined Course Creator application for ${u.name}. User remains a student.`);
+  };
+
   // ── Remove Admin → downgrade to student ──────────────────────────────────
   const handleRemoveAdmin = async (u) => {
     if (!isSuperAdmin) return showNotice('Only Super Admin can remove admins.', 'err');
@@ -152,17 +168,27 @@ export const UserManagement = () => {
   };
 
   // ── Filtering ─────────────────────────────────────────────────────────────
+  const pendingCreators = users.filter(u => 
+    u.creatorApprovalStatus === 'pending' || 
+    (u.requestedRole === 'course_creator' && u.role !== 'course_creator')
+  );
+
   const filtered = users.filter(u => {
     const q = searchTerm.toLowerCase();
     const matchesSearch = (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q);
     const matchesMem  = membershipFilter === 'all' || u.membership === membershipFilter;
-    const matchesRole = roleFilter       === 'all' || u.role === roleFilter;
+    const matchesRole = roleFilter === 'all' 
+      || (roleFilter === 'pending_creator' 
+          ? (u.creatorApprovalStatus === 'pending' || (u.requestedRole === 'course_creator' && u.role !== 'course_creator')) 
+          : u.role === roleFilter);
     return matchesSearch && matchesMem && matchesRole;
   });
 
   const counts = {
     total:    users.length,
-    students: users.filter(u => u.role === 'student').length,
+    students: users.filter(u => u.role === 'student' && u.creatorApprovalStatus !== 'pending').length,
+    creators: users.filter(u => u.role === 'course_creator').length,
+    pending:  pendingCreators.length,
     admins:   users.filter(u => u.role === 'admin').length,
     premium:  users.filter(u => u.membership === 'premium').length,
   };
@@ -170,7 +196,7 @@ export const UserManagement = () => {
   return (
     <DashboardLayout
       title="User Management"
-      subtitle="Manage students, admins, memberships, and account standards."
+      subtitle="Manage students, course creators, admins, memberships, and account standards."
     >
       <div className="space-y-6">
 
@@ -189,12 +215,13 @@ export const UserManagement = () => {
         )}
 
         {/* Stats row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
           {[
-            { label: 'Total Users',     value: counts.total,    icon: Users,      color: 'text-brand-600'  },
-            { label: 'Students',        value: counts.students, icon: GraduationCap, color: 'text-slate-600' },
-            { label: 'Admins',          value: counts.admins,   icon: ShieldCheck, color: 'text-purple-600' },
-            { label: 'Premium Members', value: counts.premium,  icon: Sparkles,   color: 'text-amber-600'  },
+            { label: 'Total Users',       value: counts.total,    icon: Users,         color: 'text-brand-600'  },
+            { label: 'Students',          value: counts.students, icon: GraduationCap, color: 'text-slate-600' },
+            { label: 'Course Creators',   value: counts.creators, icon: Sparkles,      color: 'text-indigo-600' },
+            { label: 'Pending Approvals', value: counts.pending,  icon: Clock,         color: 'text-amber-600'  },
+            { label: 'Admins',            value: counts.admins,   icon: ShieldCheck,   color: 'text-purple-600' },
           ].map(s => (
             <div key={s.label} className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
               <s.icon className={`w-5 h-5 ${s.color}`} />
@@ -232,6 +259,52 @@ export const UserManagement = () => {
           </div>
         </div>
 
+        {/* Pending Course Creator Applications Banner */}
+        {pendingCreators.length > 0 && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-300 dark:border-amber-800/60 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5 text-amber-900 dark:text-amber-200">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center font-bold">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-black text-sm">
+                    {pendingCreators.length} Course Creator Application{pendingCreators.length > 1 ? 's' : ''} Awaiting Approval
+                  </h4>
+                  <p className="text-[11px] text-amber-700/80 dark:text-amber-300/80">
+                    Course creators can author courses and content. Their created/edited courses wait for your approval before launching.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1">
+              {pendingCreators.map(applicant => (
+                <div key={applicant.uid} className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800/50 flex items-center justify-between gap-2 shadow-2xs">
+                  <div className="min-w-0">
+                    <p className="font-bold text-xs text-slate-900 dark:text-white truncate">{applicant.name}</p>
+                    <p className="text-[10px] text-slate-400 font-mono truncate">{applicant.email}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <button
+                      onClick={() => handleApproveCreator(applicant)}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] shadow-xs transition flex items-center gap-1"
+                    >
+                      <Check className="w-3 h-3" /> Approve
+                    </button>
+                    <button
+                      onClick={() => handleRejectCreator(applicant)}
+                      className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 font-bold text-[10px] transition"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Filter bar + Add Admin */}
         <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-3 items-center justify-between">
           <div className="relative w-full sm:w-72">
@@ -259,11 +332,15 @@ export const UserManagement = () => {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300"
+              className="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 font-semibold"
             >
               <option value="all">All Roles</option>
-              <option value="student">Students</option>
-              <option value="admin">Admins</option>
+              <option value="student">Students ({counts.students})</option>
+              <option value="course_creator">Course Creators ({counts.creators})</option>
+              {counts.pending > 0 && (
+                <option value="pending_creator">⏳ Pending Creator Approvals ({counts.pending})</option>
+              )}
+              <option value="admin">Admins ({counts.admins})</option>
               <option value="super_admin">Super Admin</option>
             </select>
 
@@ -338,29 +415,56 @@ export const UserManagement = () => {
                       <td className="py-3.5 px-5">
                         {protected_ ? (
                           <RoleBadge role={u.role} />
-                        ) : isSuperAdmin && u.role !== 'student' ? (
+                        ) : isSuperAdmin && u.role === 'admin' ? (
                           <div className="flex items-center gap-1.5">
                             <RoleBadge role={u.role} />
-                            {u.role === 'admin' && (
-                              <button
-                                onClick={() => handleRemoveAdmin(u)}
-                                className="text-[10px] text-rose-500 hover:text-rose-700 font-semibold underline"
-                                title="Remove admin privileges"
-                              >
-                                Remove
-                              </button>
-                            )}
+                            <button
+                              onClick={() => handleRemoveAdmin(u)}
+                              className="text-[10px] text-rose-500 hover:text-rose-700 font-semibold underline"
+                              title="Remove admin privileges"
+                            >
+                              Remove
+                            </button>
                           </div>
                         ) : (
-                          <select
-                            value={u.role}
-                            onChange={(e) => handleRoleChange(u, e.target.value)}
-                            disabled={protected_}
-                            className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold capitalize disabled:opacity-50"
-                          >
-                            <option value="student">Student</option>
-                            {isSuperAdmin && <option value="admin">Admin</option>}
-                          </select>
+                          <div className="space-y-1.5">
+                            {(u.creatorApprovalStatus === 'pending' || (u.requestedRole === 'course_creator' && u.role !== 'course_creator')) && (
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1">
+                                  <Clock className="w-2.5 h-2.5 animate-pulse text-amber-600" />
+                                  Creator Request
+                                </span>
+                                <button
+                                  onClick={() => handleApproveCreator(u)}
+                                  className="px-2 py-0.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold transition flex items-center gap-1 shadow-xs"
+                                  title="Approve Course Creator request"
+                                >
+                                  <Check className="w-2.5 h-2.5" /> Approve
+                                </button>
+                                <button
+                                  onClick={() => handleRejectCreator(u)}
+                                  className="px-1.5 py-0.5 rounded-md bg-slate-200 hover:bg-rose-100 text-slate-600 hover:text-rose-700 text-[10px] font-bold transition"
+                                  title="Decline request"
+                                >
+                                  Decline
+                                </button>
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-1.5">
+                              {u.role === 'course_creator' && <RoleBadge role="course_creator" />}
+                              <select
+                                value={u.role}
+                                onChange={(e) => handleRoleChange(u, e.target.value)}
+                                disabled={protected_}
+                                className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold capitalize disabled:opacity-50"
+                              >
+                                <option value="student">Student</option>
+                                <option value="course_creator">Course Creator</option>
+                                {isSuperAdmin && <option value="admin">Admin</option>}
+                              </select>
+                            </div>
+                          </div>
                         )}
                       </td>
 

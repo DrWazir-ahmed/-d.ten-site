@@ -31,6 +31,24 @@ export const Badge = ({ type = 'free', children, size = 'sm', className = '' }) 
     );
   }
 
+  if (type === 'creator' || type === 'course_creator') {
+    return (
+      <span className={`inline-flex items-center gap-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 ${sizeClasses} ${className}`}>
+        <Sparkles className="w-3.5 h-3.5" />
+        {children || 'Course Creator'}
+      </span>
+    );
+  }
+
+  if (type === 'pending' || type === 'pending_approval') {
+    return (
+      <span className={`inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/40 ${sizeClasses} ${className}`}>
+        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+        {children || 'Pending Approval'}
+      </span>
+    );
+  }
+
   return (
     <span className={`inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 ${sizeClasses} ${className}`}>
       {children}
