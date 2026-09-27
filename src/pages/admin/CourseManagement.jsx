@@ -11,15 +11,16 @@ import {
   X, 
   Save, 
   Layers, 
-  Clock,
-  FolderPlus,
-  PlayCircle,
-  FileText,
-  HelpCircle,
-  ChevronDown,
-  ChevronUp,
-  AlertCircle,
-  Check
+  Clock, 
+  FolderPlus, 
+  PlayCircle, 
+  FileText, 
+  HelpCircle, 
+  ChevronDown, 
+  ChevronUp, 
+  AlertCircle, 
+  Check,
+  Award
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { 
@@ -27,13 +28,14 @@ import {
   createCourse, 
   updateCourse, 
   deleteCourse, 
-  getCategories,
-  approveCourse
+  getCategories, 
+  approveCourse 
 } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { RichTextarea } from '../../components/common/RichTextarea';
 import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
 import { useAuth } from '../../context/AuthContext';
+import { TestBuilderModal, DEFAULT_TEST_SETTINGS, createSampleQuestions } from '../../components/course/TestBuilderModal';
 
 export const CourseManagement = () => {
   const { currentUser, userProfile, isAdmin, isSuperAdmin, isCourseCreator } = useAuth();
@@ -50,6 +52,12 @@ export const CourseManagement = () => {
   const [expandedModules, setExpandedModules] = useState({});
   const [expandedSubmodules, setExpandedSubmodules] = useState({});
   const [expandedTopicDetails, setExpandedTopicDetails] = useState({});
+
+  // Standard Test Assessment Builder modal state
+  const [testModalOpen, setTestModalOpen] = useState(false);
+  const [testTarget, setTestTarget] = useState(null); // { modIdx, topIdx, isSubmodule, submodIdx }
+  const [currentTestConfig, setCurrentTestConfig] = useState(null);
+  const [testStageTitle, setTestStageTitle] = useState('');
   
   // Form fields
   const [formData, setFormData] = useState({
@@ -159,7 +167,8 @@ export const CourseManagement = () => {
           duration: t.duration || '15 mins',
           type: t.type || 'text',
           content: t.content || '',
-          videoUrl: t.videoUrl || ''
+          videoUrl: t.videoUrl || '',
+          testData: t.testData || (t.type === 'quiz' && course.quiz ? course.quiz : null)
         })),
         submodules: (m.submodules || []).map((sm, smIdx) => ({
           id: sm.id || `submod-${mIdx + 1}-${smIdx + 1}`,
@@ -171,7 +180,8 @@ export const CourseManagement = () => {
             duration: st.duration || '15 mins',
             type: st.type || 'text',
             content: st.content || '',
-            videoUrl: st.videoUrl || ''
+            videoUrl: st.videoUrl || '',
+            testData: st.testData || (st.type === 'quiz' && course.quiz ? course.quiz : null)
           }))
         }))
       }));
@@ -187,7 +197,8 @@ export const CourseManagement = () => {
             duration: l.duration || '15 mins',
             type: l.type || 'text',
             content: l.content || '',
-            videoUrl: l.videoUrl || ''
+            videoUrl: l.videoUrl || '',
+            testData: l.testData || (l.type === 'quiz' && course.quiz ? course.quiz : null)
           })),
           submodules: []
         }
@@ -206,7 +217,8 @@ export const CourseManagement = () => {
               duration: '15 mins',
               type: 'video',
               content: 'Welcome to this course curriculum.',
-              videoUrl: ''
+              videoUrl: '',
+              testData: null
             }
           ],
           submodules: []
@@ -460,6 +472,136 @@ export const CourseManagement = () => {
       ...prev,
       [topicId]: !prev[topicId]
     }));
+  };
+
+  // --- Test & Assessment Handling (at any stage of course development) ---
+
+  const handleOpenTestBuilder = (modIdx, topIdx, isSubmodule = false, submodIdx = null) => {
+    let topic;
+    let stageName;
+    if (isSubmodule) {
+      topic = formData.modules[modIdx].submodules[submodIdx].topics[topIdx];
+      stageName = `Module ${modIdx + 1}.${submodIdx + 1} Assessment`;
+    } else {
+      topic = formData.modules[modIdx].topics[topIdx];
+      stageName = `Module ${modIdx + 1} Assessment`;
+    }
+
+    setTestTarget({ modIdx, topIdx, isSubmodule, submodIdx });
+    setTestStageTitle(stageName);
+    setCurrentTestConfig(topic.testData || {
+      title: topic.title || `${stageName} & Review Test`,
+      settings: DEFAULT_TEST_SETTINGS,
+      questions: createSampleQuestions()
+    });
+    setTestModalOpen(true);
+  };
+
+  const handleAddTest = (modIdx) => {
+    const mod = formData.modules[modIdx];
+    const topNumber = (mod.topics?.length || 0) + 1;
+    const sampleQs = createSampleQuestions();
+    const testTitle = `Module ${modIdx + 1} Assessment & Review Test`;
+    const newTopic = {
+      id: `top-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      title: testTitle,
+      duration: '15 mins',
+      type: 'quiz',
+      content: 'Standard testing assessment assessing key competencies and learning outcomes.',
+      videoUrl: '',
+      testData: {
+        title: testTitle,
+        settings: DEFAULT_TEST_SETTINGS,
+        questions: sampleQs
+      }
+    };
+
+    const newTopIdx = (mod.topics || []).length;
+    setFormData(prev => {
+      const nextMods = [...prev.modules];
+      nextMods[modIdx] = {
+        ...nextMods[modIdx],
+        topics: [...(nextMods[modIdx].topics || []), newTopic]
+      };
+      return { ...prev, modules: nextMods };
+    });
+
+    setTestTarget({ modIdx, topIdx: newTopIdx, isSubmodule: false });
+    setTestStageTitle(`Module ${modIdx + 1} Assessment`);
+    setCurrentTestConfig(newTopic.testData);
+    setTestModalOpen(true);
+  };
+
+  const handleAddSubmoduleTest = (modIdx, submodIdx) => {
+    const submod = formData.modules[modIdx].submodules[submodIdx];
+    const topNumber = (submod.topics?.length || 0) + 1;
+    const sampleQs = createSampleQuestions();
+    const testTitle = `Sub-module ${modIdx + 1}.${submodIdx + 1} Assessment Test`;
+    const newTopic = {
+      id: `top-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      title: testTitle,
+      duration: '15 mins',
+      type: 'quiz',
+      content: 'Standard testing assessment covering sub-module skills.',
+      videoUrl: '',
+      testData: {
+        title: testTitle,
+        settings: DEFAULT_TEST_SETTINGS,
+        questions: sampleQs
+      }
+    };
+
+    const newTopIdx = (submod.topics || []).length;
+    setFormData(prev => {
+      const nextMods = [...prev.modules];
+      const submodules = [...(nextMods[modIdx].submodules || [])];
+      submodules[submodIdx] = {
+        ...submodules[submodIdx],
+        topics: [...(submodules[submodIdx].topics || []), newTopic]
+      };
+      nextMods[modIdx] = { ...nextMods[modIdx], submodules };
+      return { ...prev, modules: nextMods };
+    });
+
+    setTestTarget({ modIdx, topIdx: newTopIdx, isSubmodule: true, submodIdx });
+    setTestStageTitle(`Sub-module ${modIdx + 1}.${submodIdx + 1} Assessment`);
+    setCurrentTestConfig(newTopic.testData);
+    setTestModalOpen(true);
+  };
+
+  const handleSaveTestConfig = (savedTestData) => {
+    if (!testTarget) return;
+    const { modIdx, topIdx, isSubmodule, submodIdx } = testTarget;
+
+    setFormData(prev => {
+      const nextMods = [...prev.modules];
+      if (isSubmodule) {
+        const submodules = [...(nextMods[modIdx].submodules || [])];
+        const topics = [...submodules[submodIdx].topics];
+        topics[topIdx] = {
+          ...topics[topIdx],
+          type: 'quiz',
+          title: savedTestData.title || topics[topIdx].title,
+          testData: savedTestData,
+          duration: savedTestData.settings?.timeLimit ? `${savedTestData.settings.timeLimit} mins` : '15 mins'
+        };
+        submodules[submodIdx] = { ...submodules[submodIdx], topics };
+        nextMods[modIdx] = { ...nextMods[modIdx], submodules };
+      } else {
+        const topics = [...nextMods[modIdx].topics];
+        topics[topIdx] = {
+          ...topics[topIdx],
+          type: 'quiz',
+          title: savedTestData.title || topics[topIdx].title,
+          testData: savedTestData,
+          duration: savedTestData.settings?.timeLimit ? `${savedTestData.settings.timeLimit} mins` : '15 mins'
+        };
+        nextMods[modIdx] = { ...nextMods[modIdx], topics };
+      }
+      return { ...prev, modules: nextMods };
+    });
+
+    setTestModalOpen(false);
   };
 
   // --- Save & Form Submission ---
@@ -1114,24 +1256,42 @@ export const CourseManagement = () => {
                                         <BookOpen className="w-3.5 h-3.5 text-brand-600" />
                                         <span>Direct Module Topics ({(mod.topics || []).length})</span>
                                       </h5>
-                                      <button
-                                        type="button"
-                                        onClick={() => handleAddTopic(modIdx)}
-                                        className="text-[11px] font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
-                                      >
-                                        <Plus className="w-3 h-3" /> Add Topic
-                                      </button>
+                                      <div className="flex items-center gap-2">
+                                        <button
+                                          type="button"
+                                          onClick={() => handleAddTopic(modIdx)}
+                                          className="text-[11px] font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
+                                        >
+                                          <Plus className="w-3 h-3" /> Add Topic
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleAddTest(modIdx)}
+                                          className="text-[11px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-800/60 hover:bg-amber-100 dark:hover:bg-amber-900/50 flex items-center gap-1 transition"
+                                          title="Insert a test at this module stage"
+                                        >
+                                          <Award className="w-3 h-3 text-amber-600" /> + Add Test / Assessment
+                                        </button>
+                                      </div>
                                     </div>
 
                                     {(!mod.topics || mod.topics.length === 0) ? (
-                                      <div className="py-3 text-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                                      <div className="py-3 text-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl space-x-2">
                                         <span>No direct topics in this section. </span>
                                         <button
                                           type="button"
                                           onClick={() => handleAddTopic(modIdx)}
-                                          className="text-brand-600 dark:text-brand-400 font-bold hover:underline ml-1"
+                                          className="text-brand-600 dark:text-brand-400 font-bold hover:underline"
                                         >
                                           + Add Topic
+                                        </button>
+                                        <span>or</span>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleAddTest(modIdx)}
+                                          className="text-amber-600 dark:text-amber-400 font-bold hover:underline"
+                                        >
+                                          + Add Test / Assessment
                                         </button>
                                       </div>
                                     ) : (
@@ -1182,8 +1342,20 @@ export const CourseManagement = () => {
                                                   className="w-24 px-2.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700 text-center"
                                                 />
 
-                                                {/* Toggle notes & Delete button */}
-                                                <div className="flex items-center gap-1 justify-end">
+                                                {/* Actions & Buttons */}
+                                                <div className="flex items-center gap-1.5 justify-end">
+                                                  {top.type === 'quiz' && (
+                                                    <button
+                                                      type="button"
+                                                      onClick={() => handleOpenTestBuilder(modIdx, topIdx, false)}
+                                                      className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-white flex items-center gap-1 shadow-2xs transition"
+                                                      title="Configure test questions, items, and settings"
+                                                    >
+                                                      <Award className="w-3 h-3" />
+                                                      <span>Configure Test</span>
+                                                    </button>
+                                                  )}
+
                                                   <button
                                                     type="button"
                                                     onClick={() => toggleTopicDetails(top.id)}
@@ -1193,7 +1365,7 @@ export const CourseManagement = () => {
                                                         : 'text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
                                                     }`}
                                                   >
-                                                    {isDetailsOpen ? 'Hide Content' : 'Edit Content'}
+                                                    {isDetailsOpen ? 'Hide' : 'Details'}
                                                   </button>
 
                                                   <button
@@ -1207,31 +1379,63 @@ export const CourseManagement = () => {
                                                 </div>
                                               </div>
 
-                                              {/* Expandable Topic Notes / Video URL */}
+                                              {/* Expandable Topic Notes / Video URL / Test Studio */}
                                               {isDetailsOpen && (
                                                 <div className="p-3 bg-slate-50/80 dark:bg-slate-800/50 rounded-xl space-y-2 border border-slate-200/80 dark:border-slate-700/80 text-xs animate-fadeIn">
-                                                  {top.type === 'video' && (
-                                                    <div>
-                                                      <label className="font-semibold text-slate-600 dark:text-slate-300 block mb-1">
-                                                        Video Embed URL:
-                                                      </label>
-                                                      <input
-                                                        type="text"
-                                                        value={top.videoUrl || ''}
-                                                        onChange={(e) => handleUpdateTopic(modIdx, topIdx, 'videoUrl', e.target.value)}
-                                                        placeholder="https://www.youtube.com/embed/..."
-                                                        className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 font-mono"
-                                                      />
-                                                    </div>
-                                                  )}
+                                                  {top.type === 'quiz' ? (
+                                                    <div className="p-4 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 space-y-3">
+                                                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                        <div className="flex items-center gap-2">
+                                                          <Award className="w-4 h-4 text-amber-600" />
+                                                          <span className="font-bold text-slate-900 dark:text-white">
+                                                            Assessment / Test Stage
+                                                          </span>
+                                                        </div>
+                                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100 self-start sm:self-auto">
+                                                          {(top.testData?.questions || []).length || 4} Items • Pass: {top.testData?.settings?.passingScore || 70}%
+                                                        </span>
+                                                      </div>
 
-                                                  <RichTextarea
-                                                    label="Lesson Notes & Learning Text:"
-                                                    rows={4}
-                                                    value={top.content || ''}
-                                                    onChange={(e) => handleUpdateTopic(modIdx, topIdx, 'content', e.target.value)}
-                                                    placeholder="Detailed notes, study points, code snippets, or instructions for this topic..."
-                                                  />
+                                                      <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                                                        Supports standard testing formats: Multiple Choice (MCQs), True/False, Matching Columns, and Sequential Ordering with custom time limits, attempts, and answer randomizations.
+                                                      </p>
+
+                                                      <div className="flex items-center gap-2">
+                                                        <button
+                                                          type="button"
+                                                          onClick={() => handleOpenTestBuilder(modIdx, topIdx, false)}
+                                                          className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5"
+                                                        >
+                                                          <Award className="w-3.5 h-3.5" /> Launch Testing Studio &amp; Questions
+                                                        </button>
+                                                      </div>
+                                                    </div>
+                                                  ) : (
+                                                    <>
+                                                      {top.type === 'video' && (
+                                                        <div>
+                                                          <label className="font-semibold text-slate-600 dark:text-slate-300 block mb-1">
+                                                            Video Embed URL:
+                                                          </label>
+                                                          <input
+                                                            type="text"
+                                                            value={top.videoUrl || ''}
+                                                            onChange={(e) => handleUpdateTopic(modIdx, topIdx, 'videoUrl', e.target.value)}
+                                                            placeholder="https://www.youtube.com/embed/..."
+                                                            className="w-full px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 font-mono"
+                                                          />
+                                                        </div>
+                                                      )}
+
+                                                      <RichTextarea
+                                                        label="Lesson Notes & Learning Text:"
+                                                        rows={4}
+                                                        value={top.content || ''}
+                                                        onChange={(e) => handleUpdateTopic(modIdx, topIdx, 'content', e.target.value)}
+                                                        placeholder="Detailed notes, study points, code snippets, or instructions for this topic..."
+                                                      />
+                                                    </>
+                                                  )}
                                                 </div>
                                               )}
                                             </div>
@@ -1330,6 +1534,16 @@ export const CourseManagement = () => {
 
                                                   <button
                                                     type="button"
+                                                    onClick={() => handleAddSubmoduleTest(modIdx, submodIdx)}
+                                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 hover:bg-amber-100 font-bold text-[11px] transition shadow-2xs"
+                                                    title="Add test assessment to this sub-module"
+                                                  >
+                                                    <Award className="w-3 h-3 text-amber-600" />
+                                                    <span>Add Test</span>
+                                                  </button>
+
+                                                  <button
+                                                    type="button"
                                                     onClick={() => handleDeleteSubmodule(modIdx, submodIdx)}
                                                     className="p-1 text-slate-400 hover:text-red-600 dark:hover:text-red-400 rounded hover:bg-red-50 dark:hover:bg-red-950/40 transition"
                                                     title="Delete sub-module"
@@ -1343,7 +1557,7 @@ export const CourseManagement = () => {
                                               {isSubExpanded && (
                                                 <div className="p-3 space-y-2 bg-slate-50/40 dark:bg-slate-950/20">
                                                   {(!submod.topics || submod.topics.length === 0) ? (
-                                                    <div className="py-2.5 text-center text-[11px] text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
+                                                    <div className="py-2.5 text-center text-[11px] text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg space-x-2">
                                                       <span>No topics in this sub-module. </span>
                                                       <button
                                                         type="button"
@@ -1351,6 +1565,14 @@ export const CourseManagement = () => {
                                                         className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
                                                       >
                                                         + Add topic
+                                                      </button>
+                                                      <span>or</span>
+                                                      <button
+                                                        type="button"
+                                                        onClick={() => handleAddSubmoduleTest(modIdx, submodIdx)}
+                                                        className="text-amber-600 dark:text-amber-400 font-bold hover:underline"
+                                                      >
+                                                        + Add test
                                                       </button>
                                                     </div>
                                                   ) : (
@@ -1396,7 +1618,19 @@ export const CourseManagement = () => {
                                                                 className="w-20 px-2 py-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 rounded border border-slate-200 dark:border-slate-700 text-center"
                                                               />
 
-                                                              <div className="flex items-center gap-1 justify-end">
+                                                              <div className="flex items-center gap-1.5 justify-end">
+                                                                {top.type === 'quiz' && (
+                                                                  <button
+                                                                    type="button"
+                                                                    onClick={() => handleOpenTestBuilder(modIdx, topIdx, true, submodIdx)}
+                                                                    className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-amber-500 hover:bg-amber-600 text-white flex items-center gap-1 shadow-2xs transition"
+                                                                    title="Configure test questions and standards"
+                                                                  >
+                                                                    <Award className="w-3 h-3" />
+                                                                    <span>Test ({(top.testData?.questions || []).length || 4} Qs)</span>
+                                                                  </button>
+                                                                )}
+
                                                                 <button
                                                                   type="button"
                                                                   onClick={() => toggleTopicDetails(top.id)}
@@ -1406,7 +1640,7 @@ export const CourseManagement = () => {
                                                                       : 'text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
                                                                   }`}
                                                                 >
-                                                                  {isDetailsOpen ? 'Hide Content' : 'Edit Content'}
+                                                                  {isDetailsOpen ? 'Hide' : 'Details'}
                                                                 </button>
 
                                                                 <button
@@ -1420,31 +1654,56 @@ export const CourseManagement = () => {
                                                               </div>
                                                             </div>
 
-                                                            {/* Expandable Topic Notes / Video URL */}
+                                                            {/* Expandable Topic Notes / Video URL / Test Studio */}
                                                             {isDetailsOpen && (
                                                               <div className="p-2.5 bg-slate-50/80 dark:bg-slate-800/50 rounded-lg space-y-2 border border-slate-200/80 dark:border-slate-700/80 text-xs animate-fadeIn">
-                                                                {top.type === 'video' && (
-                                                                  <div>
-                                                                    <label className="font-semibold text-slate-600 dark:text-slate-300 block mb-1 text-[11px]">
-                                                                      Video Embed URL:
-                                                                    </label>
-                                                                    <input
-                                                                      type="text"
-                                                                      value={top.videoUrl || ''}
-                                                                      onChange={(e) => handleUpdateSubmoduleTopic(modIdx, submodIdx, topIdx, 'videoUrl', e.target.value)}
-                                                                      placeholder="https://www.youtube.com/embed/..."
-                                                                      className="w-full px-2 py-1 text-xs bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 font-mono"
-                                                                    />
+                                                                {top.type === 'quiz' ? (
+                                                                  <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-2">
+                                                                    <div className="flex items-center justify-between">
+                                                                      <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white text-xs">
+                                                                        <Award className="w-3.5 h-3.5 text-amber-600" />
+                                                                        <span>Sub-module Assessment Test</span>
+                                                                      </div>
+                                                                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100">
+                                                                        {(top.testData?.questions || []).length || 4} Questions • Pass: {top.testData?.settings?.passingScore || 70}%
+                                                                      </span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-2">
+                                                                      <button
+                                                                        type="button"
+                                                                        onClick={() => handleOpenTestBuilder(modIdx, topIdx, true, submodIdx)}
+                                                                        className="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition flex items-center gap-1"
+                                                                      >
+                                                                        <Award className="w-3 h-3" /> Launch Test Builder
+                                                                      </button>
+                                                                    </div>
                                                                   </div>
-                                                                )}
+                                                                ) : (
+                                                                  <>
+                                                                    {top.type === 'video' && (
+                                                                      <div>
+                                                                        <label className="font-semibold text-slate-600 dark:text-slate-300 block mb-1 text-[11px]">
+                                                                          Video Embed URL:
+                                                                        </label>
+                                                                        <input
+                                                                          type="text"
+                                                                          value={top.videoUrl || ''}
+                                                                          onChange={(e) => handleUpdateSubmoduleTopic(modIdx, submodIdx, topIdx, 'videoUrl', e.target.value)}
+                                                                          placeholder="https://www.youtube.com/embed/..."
+                                                                          className="w-full px-2 py-1 text-xs bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 font-mono"
+                                                                        />
+                                                                      </div>
+                                                                    )}
 
-                                                                <RichTextarea
-                                                                  label="Lesson Notes & Learning Text:"
-                                                                  rows={3}
-                                                                  value={top.content || ''}
-                                                                  onChange={(e) => handleUpdateSubmoduleTopic(modIdx, submodIdx, topIdx, 'content', e.target.value)}
-                                                                  placeholder="Detailed notes, study points, code snippets, or instructions..."
-                                                                />
+                                                                    <RichTextarea
+                                                                      label="Lesson Notes & Learning Text:"
+                                                                      rows={3}
+                                                                      value={top.content || ''}
+                                                                      onChange={(e) => handleUpdateSubmoduleTopic(modIdx, submodIdx, topIdx, 'content', e.target.value)}
+                                                                      placeholder="Detailed notes, study points, code snippets, or instructions..."
+                                                                    />
+                                                                  </>
+                                                                )}
                                                               </div>
                                                             )}
                                                           </div>
@@ -1508,10 +1767,18 @@ export const CourseManagement = () => {
                 </div>
 
               </form>
-
             </div>
           </div>
         )}
+
+        {/* Standard Test Assessment Builder Modal */}
+        <TestBuilderModal
+          isOpen={testModalOpen}
+          onClose={() => setTestModalOpen(false)}
+          initialData={currentTestConfig}
+          onSave={handleSaveTestConfig}
+          stageTitle={testStageTitle || 'Course Assessment Stage'}
+        />
 
       </div>
     </DashboardLayout>

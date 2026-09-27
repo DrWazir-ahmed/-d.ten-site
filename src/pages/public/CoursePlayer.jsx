@@ -32,6 +32,7 @@ import { ProgressBar } from '../../components/common/ProgressBar';
 import { Badge } from '../../components/common/Badge';
 import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
+import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
 
 export const CoursePlayer = () => {
   const { id } = useParams();
@@ -259,6 +260,24 @@ export const CoursePlayer = () => {
     }
   };
 
+  const handleTestComplete = async ({ passed, score, earnedPoints, totalPoints }) => {
+    setQuizScore(score);
+    setQuizSubmitted(true);
+
+    await recordQuizResult(
+      currentUser.uid,
+      course.id,
+      course.title,
+      currentLesson.title || "Course Assessment",
+      score,
+      passed
+    );
+
+    if (passed && !isCompleted) {
+      handleToggleComplete(true);
+    }
+  };
+
   const resetLessonState = () => {
     setQuizSubmitted(false);
     setQuizAnswers({});
@@ -402,83 +421,21 @@ export const CoursePlayer = () => {
                   </div>
                 )}
               </div>
-            ) : currentLesson.type === 'quiz' && course.quiz ? (
-              /* Interactive Course Quiz */
+            ) : currentLesson.type === 'quiz' || currentLesson.type === 'test' || currentLesson.testData || course.quiz ? (
+              /* Standard Testing System Assessment Player (MCQs, True/False, Matching Column, Sequential Ordering) */
               <div className="space-y-6">
-                <div className="p-5 rounded-2xl bg-brand-50/60 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800">
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white mb-1">
-                    {course.quiz.title}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Passing score required: {course.quiz.passingScore}% to receive completion credit.
-                  </p>
-                </div>
-
-                <div className="space-y-6">
-                  {course.quiz.questions?.map((q, qIdx) => (
-                    <div key={q.id || qIdx} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-                      <p className="font-bold text-sm text-slate-900 dark:text-white mb-4">
-                        {qIdx + 1}. {q.question}
-                      </p>
-                      <div className="space-y-2.5">
-                        {q.options?.map((opt, optIdx) => {
-                          const isSelected = quizAnswers[qIdx] === optIdx;
-                          const isCorrect = optIdx === q.correctAnswer;
-                          let style = "border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800";
-
-                          if (quizSubmitted) {
-                            if (isCorrect) style = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200";
-                            else if (isSelected) style = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200";
-                          } else if (isSelected) {
-                            style = "border-brand-600 bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300";
-                          }
-
-                          return (
-                            <div
-                              key={optIdx}
-                              onClick={() => handleQuizAnswer(qIdx, optIdx)}
-                              className={`p-3 rounded-xl border text-xs sm:text-sm font-medium cursor-pointer transition flex items-center justify-between ${style}`}
-                            >
-                              <span>{opt}</span>
-                              {quizSubmitted && isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {quizSubmitted && (
-                        <div className="mt-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-900 dark:text-amber-200">
-                          <strong>Explanation:</strong> {q.explanation}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {!quizSubmitted ? (
-                  <button
-                    onClick={handleQuizSubmit}
-                    disabled={Object.keys(quizAnswers).length === 0}
-                    className="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow transition"
-                  >
-                    Submit Quiz Answers
-                  </button>
-                ) : (
-                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                    <div>
-                      <span className="text-xs text-slate-400">Assessment Result:</span>
-                      <div className="text-xl font-black text-slate-900 dark:text-white">
-                        Score: {quizScore}% {quizScore >= (course.quiz.passingScore || 70) ? '🎉 Passed' : '⚠️ Need 70%'}
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => { setQuizSubmitted(false); setQuizAnswers({}); }}
-                      className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5 inline mr-1" /> Retake
-                    </button>
-                  </div>
-                )}
+                <StandardTestPlayer
+                  testData={currentLesson.testData || (currentLesson.type === 'quiz' && course.quiz ? course.quiz : {
+                    title: currentLesson.title,
+                    questions: currentLesson.questions || course.quiz?.questions || []
+                  })}
+                  courseId={course.id}
+                  courseTitle={course.title}
+                  lessonTitle={currentLesson.title}
+                  isCompleted={isCompleted}
+                  onComplete={handleTestComplete}
+                  onNextLesson={activeLessonIndex < (course.lessons?.length || 1) - 1 ? handleNextLesson : null}
+                />
               </div>
             ) : (
               /* Reading / Text Lesson */
@@ -715,6 +672,8 @@ export const CoursePlayer = () => {
                             <div className="flex items-center gap-2 truncate pr-2">
                               {completed ? (
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              ) : les.type === 'quiz' || les.type === 'test' || les.testData ? (
+                                <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                               ) : (
                                 <span className="w-3.5 h-3.5 rounded-full border border-slate-300 dark:border-slate-600 text-[9px] flex items-center justify-center shrink-0">
                                   •
@@ -771,12 +730,19 @@ export const CoursePlayer = () => {
                                   <div className="flex items-center gap-2 truncate pr-2">
                                     {completed ? (
                                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                                    ) : les.type === 'quiz' || les.type === 'test' || les.testData ? (
+                                      <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                                     ) : (
                                       <span className="w-3.5 h-3.5 rounded-full border border-slate-300 dark:border-slate-600 text-[9px] flex items-center justify-center shrink-0">
                                         •
                                       </span>
                                     )}
                                     <span className="truncate">{les.title}</span>
+                                    {(les.type === 'quiz' || les.type === 'test' || les.testData) && (
+                                      <span className="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-[9px] text-amber-600 dark:text-amber-400 font-bold shrink-0">
+                                        Test
+                                      </span>
+                                    )}
                                   </div>
                                   <span className="text-[10px] text-slate-400 capitalize shrink-0">
                                     {les.duration}
@@ -795,6 +761,7 @@ export const CoursePlayer = () => {
               course.lessons?.map((les, idx) => {
                 const active = idx === activeLessonIndex;
                 const completed = enrollment?.completedLessons?.includes(les.id);
+                const isTest = les.type === 'quiz' || les.type === 'test' || les.testData;
 
                 return (
                   <div
@@ -813,12 +780,19 @@ export const CoursePlayer = () => {
                     <div className="flex items-center gap-2.5 truncate pr-2">
                       {completed ? (
                         <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      ) : isTest ? (
+                        <Award className="w-4 h-4 text-amber-500 flex-shrink-0" />
                       ) : (
                         <span className="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-600 text-[10px] flex items-center justify-center flex-shrink-0">
                           {idx + 1}
                         </span>
                       )}
                       <span className="truncate">{les.title}</span>
+                      {isTest && (
+                        <span className="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-[9px] text-amber-600 dark:text-amber-400 font-bold shrink-0">
+                          Test
+                        </span>
+                      )}
                     </div>
                     <span className="text-[10px] text-slate-400 capitalize flex-shrink-0">
                       {les.duration}

@@ -234,6 +234,7 @@ export const CourseDetails = () => {
                       <div className="divide-y divide-slate-100 dark:divide-slate-800/60 p-2 sm:p-3">
                         {(mod.topics || mod.lessons || []).map((topic, topIdx) => {
                           const isLessonDone = enrollment?.completedLessons?.includes(topic.id);
+                          const isTest = topic.type === 'quiz' || topic.type === 'test' || Boolean(topic.testData);
                           return (
                             <div 
                               key={topic.id || topIdx} 
@@ -244,16 +245,33 @@ export const CourseDetails = () => {
                                 <div className={`w-6 h-6 rounded-md flex items-center justify-center font-bold text-[11px] ${
                                   isLessonDone 
                                     ? 'bg-emerald-500/10 text-emerald-600' 
+                                    : isTest
+                                    ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400'
                                     : 'bg-slate-200/70 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                                 }`}>
-                                  {isLessonDone ? <CheckCircle2 className="w-3.5 h-3.5" /> : `${modIdx + 1}.${topIdx + 1}`}
+                                  {isLessonDone ? (
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                  ) : isTest ? (
+                                    <Award className="w-3.5 h-3.5" />
+                                  ) : (
+                                    `${modIdx + 1}.${topIdx + 1}`
+                                  )}
                                 </div>
                                 <div>
-                                  <div className="font-semibold text-slate-900 dark:text-white text-xs sm:text-sm">
-                                    {topic.title}
+                                  <div className="font-semibold text-slate-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
+                                    <span>{topic.title}</span>
+                                    {isTest && (
+                                      <span className="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-[9px] text-amber-600 dark:text-amber-400 font-bold shrink-0">
+                                        Test
+                                      </span>
+                                    )}
                                   </div>
                                   <div className="text-[11px] text-slate-400 capitalize">
-                                    {topic.type || 'text'} • {topic.duration || '15 mins'}
+                                    {isTest ? (
+                                      `${topic.testData?.questions?.length || 'Standard'} Questions • ${topic.testData?.settings?.timeLimit ? `${topic.testData.settings.timeLimit} mins` : (topic.duration || 'Assessment')}`
+                                    ) : (
+                                      `${topic.type || 'text'} • ${topic.duration || '15 mins'}`
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -264,7 +282,11 @@ export const CourseDetails = () => {
                                     {isLessonDone ? 'Completed' : 'Upcoming'}
                                   </span>
                                 ) : (
-                                  <span className="text-[11px] text-slate-400">{topic.duration || '15 mins'}</span>
+                                  <span className="text-[11px] text-slate-400">
+                                    {isTest && topic.testData?.settings?.timeLimit 
+                                      ? `${topic.testData.settings.timeLimit} mins` 
+                                      : (topic.duration || '15 mins')}
+                                  </span>
                                 )}
                               </div>
                             </div>
@@ -296,6 +318,7 @@ export const CourseDetails = () => {
                             <div className="divide-y divide-slate-100 dark:divide-slate-800/60 p-2">
                               {(submod.topics || []).map((topic, topIdx) => {
                                 const isLessonDone = enrollment?.completedLessons?.includes(topic.id);
+                                const isTest = topic.type === 'quiz' || topic.type === 'test' || Boolean(topic.testData);
                                 return (
                                   <div 
                                     key={topic.id || topIdx} 
@@ -306,16 +329,33 @@ export const CourseDetails = () => {
                                       <div className={`w-5 h-5 rounded-md flex items-center justify-center font-bold text-[10px] ${
                                         isLessonDone 
                                           ? 'bg-emerald-500/10 text-emerald-600' 
+                                          : isTest
+                                          ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400'
                                           : 'bg-indigo-100/70 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
                                       }`}>
-                                        {isLessonDone ? <CheckCircle2 className="w-3 h-3" /> : `${modIdx + 1}.${subIdx + 1}.${topIdx + 1}`}
+                                        {isLessonDone ? (
+                                          <CheckCircle2 className="w-3 h-3" />
+                                        ) : isTest ? (
+                                          <Award className="w-3 h-3" />
+                                        ) : (
+                                          `${modIdx + 1}.${subIdx + 1}.${topIdx + 1}`
+                                        )}
                                       </div>
                                       <div>
-                                        <div className="font-semibold text-slate-900 dark:text-white text-xs">
-                                          {topic.title}
+                                        <div className="font-semibold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
+                                          <span>{topic.title}</span>
+                                          {isTest && (
+                                            <span className="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-[9px] text-amber-600 dark:text-amber-400 font-bold shrink-0">
+                                              Test
+                                            </span>
+                                          )}
                                         </div>
                                         <div className="text-[10px] text-slate-400 capitalize">
-                                          {topic.type || 'text'} • {topic.duration || '15 mins'}
+                                          {isTest ? (
+                                            `${topic.testData?.questions?.length || 'Standard'} Questions • ${topic.testData?.settings?.timeLimit ? `${topic.testData.settings.timeLimit} mins` : (topic.duration || 'Assessment')}`
+                                          ) : (
+                                            `${topic.type || 'text'} • ${topic.duration || '15 mins'}`
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -326,7 +366,11 @@ export const CourseDetails = () => {
                                           {isLessonDone ? 'Completed' : 'Upcoming'}
                                         </span>
                                       ) : (
-                                        <span className="text-[10px] text-slate-400">{topic.duration || '15 mins'}</span>
+                                        <span className="text-[10px] text-slate-400">
+                                          {isTest && topic.testData?.settings?.timeLimit 
+                                            ? `${topic.testData.settings.timeLimit} mins` 
+                                            : (topic.duration || '15 mins')}
+                                        </span>
                                       )}
                                     </div>
                                   </div>
@@ -344,22 +388,40 @@ export const CourseDetails = () => {
               <div className="divide-y divide-slate-100 dark:divide-slate-800">
                 {course.lessons?.map((lesson, idx) => {
                   const isLessonDone = enrollment?.completedLessons?.includes(lesson.id);
+                  const isTest = lesson.type === 'quiz' || lesson.type === 'test' || Boolean(lesson.testData);
                   return (
                     <div key={lesson.id} className="py-3.5 flex items-center justify-between text-xs sm:text-sm">
                       <div className="flex items-center gap-3">
                         <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
                           isLessonDone 
                             ? 'bg-emerald-500/10 text-emerald-600' 
+                            : isTest
+                            ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                         }`}>
-                          {isLessonDone ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                          {isLessonDone ? (
+                            <CheckCircle2 className="w-4 h-4" />
+                          ) : isTest ? (
+                            <Award className="w-4 h-4" />
+                          ) : (
+                            idx + 1
+                          )}
                         </div>
                         <div>
-                          <div className="font-semibold text-slate-900 dark:text-white">
-                            {lesson.title}
+                          <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <span>{lesson.title}</span>
+                            {isTest && (
+                              <span className="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-[9px] text-amber-600 dark:text-amber-400 font-bold shrink-0">
+                                Test
+                              </span>
+                            )}
                           </div>
                           <div className="text-[11px] text-slate-400 capitalize">
-                            {lesson.type} • {lesson.duration}
+                            {isTest ? (
+                              `${lesson.testData?.questions?.length || 'Standard'} Questions • ${lesson.testData?.settings?.timeLimit ? `${lesson.testData.settings.timeLimit} mins` : (lesson.duration || 'Assessment')}`
+                            ) : (
+                              `${lesson.type || 'text'} • ${lesson.duration || '15 mins'}`
+                            )}
                           </div>
                         </div>
                       </div>
@@ -370,7 +432,11 @@ export const CourseDetails = () => {
                             {isLessonDone ? 'Completed' : 'Upcoming'}
                           </span>
                         ) : (
-                          <span className="text-xs text-slate-400">Topic {idx + 1}</span>
+                          <span className="text-xs text-slate-400">
+                            {isTest && lesson.testData?.settings?.timeLimit 
+                              ? `${lesson.testData.settings.timeLimit} mins` 
+                              : (lesson.duration || `Topic ${idx + 1}`)}
+                          </span>
                         )}
                       </div>
                     </div>
