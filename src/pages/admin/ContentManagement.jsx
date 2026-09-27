@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Plus, Search, Edit2, Trash2, X, Save, CheckCircle2, ImageIcon, Sparkles, AlertCircle, Check } from 'lucide-react';
+import { 
+  FileText, 
+  Plus, 
+  Search, 
+  Edit2, 
+  Trash2, 
+  X, 
+  Save, 
+  CheckCircle2, 
+  ImageIcon, 
+  Sparkles, 
+  AlertCircle, 
+  Check,
+  Presentation,
+  Upload,
+  Play
+} from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { getContent, createContent, updateContent, deleteContent, approveContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { RichTextarea } from '../../components/common/RichTextarea';
 import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
+import { PresentationRunner } from '../../components/common/PresentationRunner';
+import { parsePptxFile } from '../../utils/pptxParser';
 import { useAuth } from '../../context/AuthContext';
 
 export const ContentManagement = () => {
@@ -15,6 +33,8 @@ export const ContentManagement = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [notice, setNotice] = useState('');
+  const [previewPresentation, setPreviewPresentation] = useState(null);
+  const [uploadingPptx, setUploadingPptx] = useState(false);
 
   const defaultThumbnail = '';
 
@@ -27,7 +47,12 @@ export const ContentManagement = () => {
     thumbnail: defaultThumbnail,
     membership: 'free',
     status: 'published',
-    body: ''
+    body: '',
+    isPresentation: false,
+    format: 'pptx',
+    slideCount: 0,
+    presentationData: null,
+    presentationUrl: ''
   });
 
   const load = async () => {
@@ -60,7 +85,12 @@ export const ContentManagement = () => {
       thumbnail: defaultThumbnail,
       membership: 'free',
       status: isCourseCreator && !isAdmin ? 'pending_approval' : 'published',
-      body: ''
+      body: '',
+      isPresentation: false,
+      format: 'pptx',
+      slideCount: 0,
+      presentationData: null,
+      presentationUrl: ''
     });
     setModalOpen(true);
   };
@@ -81,9 +111,51 @@ export const ContentManagement = () => {
       thumbnail: item.thumbnail || '',
       membership: item.membership || 'free',
       status: item.status || 'published',
-      body: item.body || ''
+      body: item.body || '',
+      isPresentation: item.contentType === 'Presentation' || item.isPresentation || Boolean(item.presentationData),
+      format: item.format || 'pptx',
+      slideCount: item.slideCount || item.presentationData?.slides?.length || 0,
+      presentationData: item.presentationData || null,
+      presentationUrl: item.presentationUrl || ''
     });
     setModalOpen(true);
+  };
+
+  const handlePptxUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingPptx(true);
+    try {
+      const result = await parsePptxFile(file);
+      if (result.success && result.slides?.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          contentType: 'Presentation',
+          isPresentation: true,
+          format: 'pptx',
+          slideCount: result.totalSlides,
+          title: prev.title || result.title || file.name.replace(/\.[^/.]+$/, ''),
+          description: prev.description || `Interactive PowerPoint presentation containing ${result.totalSlides} slides.`,
+          presentationData: {
+            title: result.title || file.name.replace(/\.[^/.]+$/, ''),
+            author: prev.author || 'Dr Wazir Ahmed',
+            format: 'pptx',
+            slideCount: result.totalSlides,
+            slides: result.slides
+          }
+        }));
+        setNotice(`✅ Successfully parsed "${file.name}": ${result.totalSlides} slides extracted!`);
+        setTimeout(() => setNotice(''), 4500);
+      } else {
+        alert(result.error || 'Failed to parse PPTX file. Ensure it is a valid PowerPoint file.');
+      }
+    } catch (err) {
+      alert(`Error reading file: ${err.message}`);
+    } finally {
+      setUploadingPptx(false);
+      e.target.value = '';
+    }
   };
 
   const handleSave = async (e) => {
@@ -252,8 +324,13 @@ export const ContentManagement = () => {
               <div className="p-5 flex flex-col flex-1 justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 flex-wrap">
                       <Badge type={item.membership} size="xs" />
+                      {(item.contentType === 'Presentation' || item.isPresentation || item.presentationData) && (
+                        <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-950/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Presentation className="w-3 h-3" /> PPTX • {item.slideCount || item.presentationData?.slides?.length || 0} Slides
+                        </span>
+                      )}
                       {item.status === 'pending_approval' && (
                         <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-full">
                           Pending Approval
@@ -268,7 +345,7 @@ export const ContentManagement = () => {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-                  <div>
+                  <div className="flex items-center gap-1.5">
                     {isAdmin && item.status === 'pending_approval' && (
                       <button
                         onClick={() => handleApproveAndLaunch(item)}
@@ -276,6 +353,15 @@ export const ContentManagement = () => {
                         title="Approve & Launch live on site"
                       >
                         <Check className="w-3.5 h-3.5" /> Approve
+                      </button>
+                    )}
+                    {(item.contentType === 'Presentation' || item.isPresentation || item.presentationData) && (
+                      <button
+                        onClick={() => setPreviewPresentation(item)}
+                        className="px-2.5 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm transition"
+                        title="Run Presentation in live player"
+                      >
+                        <Presentation className="w-3.5 h-3.5" /> Run Deck
                       </button>
                     )}
                   </div>
@@ -339,12 +425,24 @@ export const ContentManagement = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="font-semibold block mb-1">Content Type</label>
-                    <input
-                      type="text"
+                    <select
                       value={formData.contentType}
-                      onChange={(e) => setFormData({ ...formData, contentType: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
-                    />
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        contentType: e.target.value,
+                        isPresentation: e.target.value === 'Presentation'
+                      })}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-semibold"
+                    >
+                      <option value="Presentation">Presentation (.PPTX)</option>
+                      <option value="Study Notes">Study Notes</option>
+                      <option value="PDFs">PDFs / Charts</option>
+                      <option value="Worksheets">Worksheets</option>
+                      <option value="Educational Guides">Educational Guides</option>
+                      <option value="Articles">Articles</option>
+                      <option value="Exam Resources">Exam Resources</option>
+                      <option value="Vocabulary Guides">Vocabulary Guides</option>
+                    </select>
                   </div>
                   <div>
                     <label className="font-semibold block mb-1">Category</label>
@@ -367,6 +465,74 @@ export const ContentManagement = () => {
                     </select>
                   </div>
                 </div>
+
+                {/* Presentation Studio Controls */}
+                {(formData.contentType === 'Presentation' || formData.isPresentation) && (
+                  <div className="p-4 rounded-2xl bg-orange-50/70 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800/60 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Presentation className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                        <div>
+                          <h4 className="font-bold text-xs sm:text-sm text-orange-950 dark:text-orange-200">
+                            PowerPoint (.PPTX) Presentation Studio
+                          </h4>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            Upload any .pptx file from your computer or link a cloud slide deck.
+                          </p>
+                        </div>
+                      </div>
+                      {formData.presentationData && (
+                        <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold text-[11px] flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {formData.presentationData.slides?.length || formData.slideCount || 0} Slides Loaded
+                        </span>
+                      )}
+                    </div>
+
+                    {/* File upload input */}
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                      <label className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-sm transition">
+                        <Upload className="w-4 h-4" />
+                        <span>{uploadingPptx ? 'Reading .PPTX File...' : 'Upload .PPTX File'}</span>
+                        <input
+                          type="file"
+                          accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                          onChange={handlePptxUpload}
+                          className="hidden"
+                          disabled={uploadingPptx}
+                        />
+                      </label>
+
+                      {formData.presentationData && (
+                        <button
+                          type="button"
+                          onClick={() => setPreviewPresentation({
+                            title: formData.title || 'Presentation Preview',
+                            presentationData: formData.presentationData
+                          })}
+                          className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-orange-300 dark:border-orange-700 hover:bg-orange-100 dark:hover:bg-orange-900/40 text-orange-800 dark:text-orange-200 font-bold text-xs flex items-center justify-center gap-1.5 transition"
+                        >
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                          <span>Test / Preview in Runner</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Fallback Cloud link / Embed URL */}
+                    <div>
+                      <label className="font-semibold block mb-1 text-[11px] text-slate-600 dark:text-slate-400">
+                        Optional: Online Embed Link (Google Slides / OneDrive / Office 365)
+                      </label>
+                      <input
+                        type="url"
+                        value={formData.presentationUrl || ''}
+                        onChange={(e) => setFormData({ ...formData, presentationUrl: e.target.value })}
+                        placeholder="https://docs.google.com/presentation/d/.../embed"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {isAdmin && (
                   <div className="grid grid-cols-2 gap-3">
@@ -420,6 +586,14 @@ export const ContentManagement = () => {
               </form>
             </div>
           </div>
+        )}
+
+        {/* Presentation Live Preview Runner */}
+        {previewPresentation && (
+          <PresentationRunner
+            presentation={previewPresentation}
+            onClose={() => setPreviewPresentation(null)}
+          />
         )}
 
       </div>

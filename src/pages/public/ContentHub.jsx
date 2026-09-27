@@ -10,7 +10,9 @@ import {
   X, 
   Eye, 
   Printer,
-  Edit3
+  Edit3,
+  Presentation,
+  Play
 } from 'lucide-react';
 import { getContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
@@ -19,6 +21,7 @@ import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { IslamiatVocabViewer } from '../../components/common/IslamiatVocabViewer';
 import { EnglishPdfViewer } from '../../components/common/EnglishPdfViewer';
 import { EnglishWorksheetViewer } from '../../components/common/EnglishWorksheetViewer';
+import { PresentationRunner } from '../../components/common/PresentationRunner';
 import { FBISE_ISLAMIAT_9_VOCAB } from '../../data/fbiseIslamiatVocab';
 
 export const ContentHub = () => {
@@ -30,6 +33,7 @@ export const ContentHub = () => {
   const [membershipFilter, setMembershipFilter] = useState('all');
 
   const [activeReadingItem, setActiveReadingItem] = useState(null);
+  const [activePresentation, setActivePresentation] = useState(null);
   const [gateOpen, setGateOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState('');
 
@@ -75,6 +79,10 @@ export const ContentHub = () => {
       setGateOpen(true);
       return;
     }
+    if (item.contentType === 'Presentation' || item.isPresentation) {
+      setActivePresentation(item);
+      return;
+    }
     setActiveReadingItem(item);
   };
 
@@ -82,16 +90,36 @@ export const ContentHub = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider mb-3">
-          <FileText className="w-3.5 h-3.5" /> Curated Knowledge Library
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider mb-3">
+            <FileText className="w-3.5 h-3.5" /> Curated Knowledge Library
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+            Educational Content, Guides & Presentations
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-2xl">
+            High-yield reference guides, formula sheets, interactive .PPTX presentations, worksheets, exam preparation roadmaps, and academic articles.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-          Educational Content & Guides
-        </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-2xl">
-          High-yield reference guides, formula sheets, worksheets, exam preparation roadmaps, and academic articles.
-        </p>
+
+        {/* Quick Launch Presentation Button */}
+        <div>
+          <button
+            onClick={() => setActivePresentation({
+              title: 'Interactive Presentation Runner',
+              subtitle: 'Drop or open any .PPTX file from your device to present',
+              author: 'Dr Wazir Ahmed',
+              format: 'pptx',
+              slides: []
+            })}
+            className="px-4 py-2.5 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-orange-500/25 transition hover:scale-105 active:scale-95"
+            title="Open and run any PowerPoint .PPTX file on your computer"
+          >
+            <Presentation className="w-4 h-4" />
+            <span>Open & Run .PPTX Slides</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter Toolbar */}
@@ -187,6 +215,9 @@ export const ContentHub = () => {
                 </div>
                 <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5">
                   <span>{item.contentType}</span>
+                  {(item.contentType === 'Presentation' || item.isPresentation) && (
+                    <span className="text-orange-300 font-bold">• PPTX • {item.slideCount || item.presentationData?.slides?.length || 8} Slides</span>
+                  )}
                   {item.category === 'Islamiat' && (
                     <span className="text-amber-300 font-bold">• 80 Words</span>
                   )}
@@ -227,6 +258,8 @@ export const ContentHub = () => {
                 className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm ${
                   item.membership === 'premium' && !isPremium
                     ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                    : item.contentType === 'Presentation' || item.isPresentation
+                    ? 'bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white shadow-orange-500/20'
                     : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                 }`}
               >
@@ -234,6 +267,11 @@ export const ContentHub = () => {
                   <>
                     <Sparkles className="w-3.5 h-3.5 fill-white" />
                     <span>Unlock Guide</span>
+                  </>
+                ) : item.contentType === 'Presentation' || item.isPresentation ? (
+                  <>
+                    <Presentation className="w-3.5 h-3.5" />
+                    <span>Run Presentation (.PPTX)</span>
                   </>
                 ) : item.isWorksheet ? (
                   <>
@@ -371,6 +409,14 @@ export const ContentHub = () => {
         onClose={() => setGateOpen(false)}
         resourceTitle={selectedResource}
       />
+
+      {/* Interactive Presentation Runner Stage */}
+      {activePresentation && (
+        <PresentationRunner
+          presentation={activePresentation}
+          onClose={() => setActivePresentation(null)}
+        />
+      )}
     </div>
   );
 };

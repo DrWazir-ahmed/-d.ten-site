@@ -9,6 +9,11 @@ import { FBISE_ISLAMIAT_ITEM } from './fbiseIslamiatVocab';
 import { ACTIVE_PASSIVE_PDF_ITEM } from './activePassivePdfData';
 import { TENSES_PDF_ITEM } from './tensesPdfData';
 import { ACTIVE_PASSIVE_WORKSHEET_ITEM, TENSES_WORKSHEET_ITEM } from './worksheetsData';
+import { 
+  ENGLISH_TENSES_PRESENTATION_ITEM, 
+  AI_PRESENTATION_ITEM, 
+  ACTIVE_PASSIVE_PRESENTATION_ITEM 
+} from './presentationData';
 
 export const INITIAL_CATEGORIES = {
   courses: [
@@ -40,6 +45,7 @@ export const INITIAL_CATEGORIES = {
     "Teacher Tools"
   ],
   content: [
+    "Presentation",
     "Articles",
     "Study Notes",
     "Worksheets",
@@ -1159,5 +1165,8 @@ Adaptive learning algorithms can identify exactly where a learner encounters fri
   ACTIVE_PASSIVE_PDF_ITEM,
   TENSES_PDF_ITEM,
   ACTIVE_PASSIVE_WORKSHEET_ITEM,
-  TENSES_WORKSHEET_ITEM
+  TENSES_WORKSHEET_ITEM,
+  ENGLISH_TENSES_PRESENTATION_ITEM,
+  AI_PRESENTATION_ITEM,
+  ACTIVE_PASSIVE_PRESENTATION_ITEM
 ];
