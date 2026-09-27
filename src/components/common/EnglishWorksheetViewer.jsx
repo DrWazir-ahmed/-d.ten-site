@@ -69,7 +69,9 @@ export const EnglishWorksheetViewer = ({ worksheetType = 'active-passive', onPri
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 0; padding: 15px; color: #000; background: #fff; }
   .page { page-break-after: always; max-width: 1050px; margin: 0 auto 30px auto; position: relative; }
   .watermark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; opacity: 0.05; transform: rotate(-25deg); font-size: 55px; font-weight: 900; }
-  .header-title { text-align: center; font-size: 19px; font-weight: 800; text-decoration: underline; margin-bottom: 12px; }
+  .doc-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 2.5px solid #000; padding-bottom: 10px; margin-bottom: 12px; }
+  .doc-header img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
+  .header-title { text-align: center; font-size: 19px; font-weight: 800; text-decoration: underline; flex: 1; padding: 0 8px; }
   .meta-grid { display: flex; flex-wrap: wrap; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 8px; line-height: 1.8; }
   table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
   th, td { border: 1px solid #000; padding: 6px 8px; }
@@ -82,7 +84,11 @@ export const EnglishWorksheetViewer = ({ worksheetType = 'active-passive', onPri
   <!-- PAGE 1 -->
   <div class="page">
     <div class="watermark">Deesu Training &amp; Education Network (D.TEN)</div>
-    <div class="header-title">${title} (A4 Page size Printable)</div>
+    <div class="doc-header">
+      <img src="https://dten.deesu.org/logo.png" alt="D.TEN Logo" />
+      <div class="header-title">${title} (A4 Page size Printable)</div>
+      <img src="https://dten.deesu.org/logo.png" alt="D.TEN Logo" />
+    </div>
     <div class="meta-grid">
       ${isActivePassive 
         ? '<div>Name _________________________ &nbsp;&nbsp; Roll#___________ &nbsp;&nbsp; Date____-____-________ &nbsp;&nbsp; Total Marks ____ &nbsp;&nbsp; Obtained Marks______</div><div style="width:100%; margin-top:4px;">Subject ______________________ &nbsp;&nbsp; Verb ______________________ &nbsp;&nbsp; Object _________________________</div>' 
@@ -162,13 +168,18 @@ export const EnglishWorksheetViewer = ({ worksheetType = 'active-passive', onPri
       <div className="relative z-10 space-y-4">
         {/* Header on Page 1 */}
         {!isSecondPage && (
-          <div className="space-y-3 pb-2 border-b border-slate-300">
-            <h1 className="text-center font-serif text-lg sm:text-2xl font-black tracking-tight underline decoration-slate-400 underline-offset-4">
-              {isActivePassive ? 'Active/Passive Voice Worksheet' : 'English Tense Worksheet'}{' '}
-              <span className="text-xs sm:text-sm font-normal text-slate-500 no-underline inline-block">
-                (A4 Page size Printable)
-              </span>
-            </h1>
+          <div className="space-y-3 pb-3 border-b-2 border-slate-900 mb-2">
+            {/* Dual-logo header row */}
+            <div className="flex items-center justify-between gap-2">
+              <img src="/logo.png" alt="D.TEN Logo" className="w-12 h-12 object-contain flex-shrink-0" />
+              <h1 className="text-center font-serif text-lg sm:text-2xl font-black tracking-tight underline decoration-slate-400 underline-offset-4 flex-1 px-2">
+                {isActivePassive ? 'Active/Passive Voice Worksheet' : 'English Tense Worksheet'}{' '}
+                <span className="text-xs sm:text-sm font-normal text-slate-500 no-underline inline-block">
+                  (A4 Page size Printable)
+                </span>
+              </h1>
+              <img src="/logo.png" alt="D.TEN Logo" className="w-12 h-12 object-contain flex-shrink-0" />
+            </div>
 
             {/* Student metadata fields */}
             {isActivePassive ? (
