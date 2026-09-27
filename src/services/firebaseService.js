@@ -549,18 +549,37 @@ export const deleteCourse = async (id) => {
    ========================================================================= */
 
 export const getApps = async () => {
+  let list = [];
   if (isFirebaseConfigured && db) {
     try {
       const q = query(collection(db, "apps"));
       const snapshot = await getDocs(q);
       if (!snapshot.empty) {
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       }
     } catch (err) {
       console.warn("Firestore getApps failed, using local store:", err);
     }
   }
-  return getLocal('apps', INITIAL_APPS);
+
+  const localItems = getLocal('apps', INITIAL_APPS) || [];
+  const existingIds = new Set(list.map(item => item.id));
+
+  localItems.forEach(item => {
+    if (!existingIds.has(item.id)) {
+      list.push(item);
+      existingIds.add(item.id);
+    }
+  });
+
+  INITIAL_APPS.forEach(seed => {
+    if (!existingIds.has(seed.id)) {
+      list.push(seed);
+      existingIds.add(seed.id);
+    }
+  });
+
+  return list;
 };
 
 export const createApp = async (appData) => {
@@ -578,8 +597,8 @@ export const createApp = async (appData) => {
     }
   }
 
-  const apps = getLocal('apps', INITIAL_APPS);
-  const updated = [newApp, ...apps];
+  const apps = getLocal('apps', INITIAL_APPS) || [];
+  const updated = [newApp, ...apps.filter(a => a.id !== newApp.id)];
   setLocal('apps', updated);
   return newApp;
 };
@@ -593,7 +612,7 @@ export const updateApp = async (id, appData) => {
     }
   }
 
-  const apps = getLocal('apps', INITIAL_APPS);
+  const apps = getLocal('apps', INITIAL_APPS) || [];
   const updated = apps.map(a => a.id === id ? { ...a, ...appData } : a);
   setLocal('apps', updated);
   return updated.find(a => a.id === id);
@@ -608,7 +627,7 @@ export const deleteApp = async (id) => {
     }
   }
 
-  const apps = getLocal('apps', INITIAL_APPS);
+  const apps = getLocal('apps', INITIAL_APPS) || [];
   const updated = apps.filter(a => a.id !== id);
   setLocal('apps', updated);
   return true;
@@ -619,18 +638,37 @@ export const deleteApp = async (id) => {
    ========================================================================= */
 
 export const getTools = async () => {
+  let list = [];
   if (isFirebaseConfigured && db) {
     try {
       const q = query(collection(db, "tools"));
       const snapshot = await getDocs(q);
       if (!snapshot.empty) {
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       }
     } catch (err) {
       console.warn("Firestore getTools failed, using local store:", err);
     }
   }
-  return getLocal('tools', INITIAL_TOOLS);
+
+  const localItems = getLocal('tools', INITIAL_TOOLS) || [];
+  const existingIds = new Set(list.map(item => item.id));
+
+  localItems.forEach(item => {
+    if (!existingIds.has(item.id)) {
+      list.push(item);
+      existingIds.add(item.id);
+    }
+  });
+
+  INITIAL_TOOLS.forEach(seed => {
+    if (!existingIds.has(seed.id)) {
+      list.push(seed);
+      existingIds.add(seed.id);
+    }
+  });
+
+  return list;
 };
 
 export const createTool = async (toolData) => {
@@ -648,8 +686,8 @@ export const createTool = async (toolData) => {
     }
   }
 
-  const tools = getLocal('tools', INITIAL_TOOLS);
-  const updated = [newTool, ...tools];
+  const tools = getLocal('tools', INITIAL_TOOLS) || [];
+  const updated = [newTool, ...tools.filter(t => t.id !== newTool.id)];
   setLocal('tools', updated);
   return newTool;
 };
@@ -663,7 +701,7 @@ export const updateTool = async (id, toolData) => {
     }
   }
 
-  const tools = getLocal('tools', INITIAL_TOOLS);
+  const tools = getLocal('tools', INITIAL_TOOLS) || [];
   const updated = tools.map(t => t.id === id ? { ...t, ...toolData } : t);
   setLocal('tools', updated);
   return updated.find(t => t.id === id);
@@ -678,7 +716,7 @@ export const deleteTool = async (id) => {
     }
   }
 
-  const tools = getLocal('tools', INITIAL_TOOLS);
+  const tools = getLocal('tools', INITIAL_TOOLS) || [];
   const updated = tools.filter(t => t.id !== id);
   setLocal('tools', updated);
   return true;
@@ -689,26 +727,66 @@ export const deleteTool = async (id) => {
    ========================================================================= */
 
 export const getContent = async () => {
+  let list = [];
   if (isFirebaseConfigured && db) {
     try {
       const q = query(collection(db, "content"));
       const snapshot = await getDocs(q);
       if (!snapshot.empty) {
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       }
     } catch (err) {
       console.warn("Firestore getContent failed, using local store:", err);
     }
   }
-  const localItems = getLocal('content', INITIAL_CONTENT);
-  const localIds = new Set(localItems.map(item => item.id));
-  const missing = INITIAL_CONTENT.filter(item => !localIds.has(item.id));
-  if (missing.length > 0) {
-    const merged = [...localItems, ...missing];
-    setLocal('content', merged);
-    return merged;
+
+  const localItems = getLocal('content', INITIAL_CONTENT) || [];
+  const existingIds = new Set(list.map(item => item.id));
+
+  // Merge local items that aren't in Firestore yet
+  localItems.forEach(item => {
+    if (!existingIds.has(item.id)) {
+      list.push(item);
+      existingIds.add(item.id);
+    }
+  });
+
+  // GUARANTEE: Never let any initial content (seed guides, worksheets, PDFs, presentations) disappear!
+  INITIAL_CONTENT.forEach(seed => {
+    if (!existingIds.has(seed.id)) {
+      list.push(seed);
+      existingIds.add(seed.id);
+    }
+  });
+
+  // Safely persist to local storage without throwing QuotaExceededError
+  try {
+    // Sanitize any large base64 strings before writing to local storage
+    const sanitizedList = list.map(item => {
+      if (item.presentationData?.slides) {
+        return {
+          ...item,
+          presentationData: {
+            ...item.presentationData,
+            slides: item.presentationData.slides.map(s => ({
+              ...s,
+              images: (s.images || []).map(img => ({
+                id: img.id,
+                name: img.name,
+                dataUrl: (img.dataUrl && img.dataUrl.length < 30000) ? img.dataUrl : ''
+              }))
+            }))
+          }
+        };
+      }
+      return item;
+    });
+    setLocal('content', sanitizedList);
+  } catch (err) {
+    console.warn("Could not cache content to localStorage:", err);
   }
-  return localItems;
+
+  return list;
 };
 
 export const createContent = async (itemData) => {
@@ -719,32 +797,71 @@ export const createContent = async (itemData) => {
     status: itemData.status || 'published'
   };
 
+  // Sanitize for Firestore 1MB document limit
+  let firestorePayload = { ...newItem };
+  if (firestorePayload.presentationData?.slides) {
+    firestorePayload.presentationData = {
+      ...firestorePayload.presentationData,
+      slides: firestorePayload.presentationData.slides.map(s => ({
+        ...s,
+        images: (s.images || []).map(img => ({
+          id: img.id,
+          name: img.name,
+          dataUrl: (img.dataUrl && img.dataUrl.length < 40000) ? img.dataUrl : ''
+        }))
+      }))
+    };
+  }
+
   if (isFirebaseConfigured && db) {
     try {
-      await setDoc(doc(db, "content", newItem.id), newItem);
+      await setDoc(doc(db, "content", newItem.id), firestorePayload);
     } catch (err) {
       console.warn("Firestore createContent error:", err);
     }
   }
 
-  const content = getLocal('content', INITIAL_CONTENT);
-  const updated = [newItem, ...content];
-  setLocal('content', updated);
+  const content = getLocal('content', INITIAL_CONTENT) || [];
+  const updated = [newItem, ...content.filter(c => c.id !== newItem.id)];
+  try {
+    setLocal('content', updated);
+  } catch (e) {
+    console.warn("LocalStorage save warning:", e);
+  }
   return newItem;
 };
 
 export const updateContent = async (id, itemData) => {
+  let firestorePayload = { ...itemData };
+  if (firestorePayload.presentationData?.slides) {
+    firestorePayload.presentationData = {
+      ...firestorePayload.presentationData,
+      slides: firestorePayload.presentationData.slides.map(s => ({
+        ...s,
+        images: (s.images || []).map(img => ({
+          id: img.id,
+          name: img.name,
+          dataUrl: (img.dataUrl && img.dataUrl.length < 40000) ? img.dataUrl : ''
+        }))
+      }))
+    };
+  }
+
   if (isFirebaseConfigured && db) {
     try {
-      await updateDoc(doc(db, "content", id), itemData);
+      await updateDoc(doc(db, "content", id), firestorePayload);
     } catch (err) {
       console.warn("Firestore updateContent error:", err);
     }
   }
 
-  const content = getLocal('content', INITIAL_CONTENT);
+  const content = getLocal('content', INITIAL_CONTENT) || [];
   const updated = content.map(c => c.id === id ? { ...c, ...itemData } : c);
-  setLocal('content', updated);
+  try {
+    setLocal('content', updated);
+  } catch (e) {
+    console.warn("LocalStorage update warning:", e);
+  }
   return updated.find(c => c.id === id);
 };
 
@@ -757,9 +874,13 @@ export const deleteContent = async (id) => {
     }
   }
 
-  const content = getLocal('content', INITIAL_CONTENT);
+  const content = getLocal('content', INITIAL_CONTENT) || [];
   const updated = content.filter(c => c.id !== id);
-  setLocal('content', updated);
+  try {
+    setLocal('content', updated);
+  } catch (e) {
+    console.warn("LocalStorage delete warning:", e);
+  }
   return true;
 };
 

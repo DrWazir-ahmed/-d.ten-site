@@ -23,6 +23,7 @@ import { RichTextarea } from '../../components/common/RichTextarea';
 import { ThumbnailUpload } from '../../components/common/ThumbnailUpload';
 import { PresentationRunner } from '../../components/common/PresentationRunner';
 import { parsePptxFile } from '../../utils/pptxParser';
+import { savePresentationDeck, getPresentationDeck } from '../../utils/presentationStorage';
 import { useAuth } from '../../context/AuthContext';
 
 export const ContentManagement = () => {
@@ -35,6 +36,8 @@ export const ContentManagement = () => {
   const [notice, setNotice] = useState('');
   const [previewPresentation, setPreviewPresentation] = useState(null);
   const [uploadingPptx, setUploadingPptx] = useState(false);
+  const [editingSlideIdx, setEditingSlideIdx] = useState(null);
+  const uploadedFileBlobRef = useRef(null);
 
   const defaultThumbnail = '';
 
@@ -118,6 +121,16 @@ export const ContentManagement = () => {
       presentationData: item.presentationData || null,
       presentationUrl: item.presentationUrl || ''
     });
+    if (item.contentType === 'Presentation' || item.isPresentation) {
+      getPresentationDeck(item.id).then(cached => {
+        if (cached?.deckData?.slides?.length > 0) {
+          setFormData(prev => ({
+            ...prev,
+            presentationData: cached.deckData
+          }));
+        }
+      });
+    }
     setModalOpen(true);
   };
 
@@ -125,6 +138,7 @@ export const ContentManagement = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    uploadedFileBlobRef.current = file;
     setUploadingPptx(true);
     try {
       const result = await parsePptxFile(file);
@@ -133,15 +147,16 @@ export const ContentManagement = () => {
           ...prev,
           contentType: 'Presentation',
           isPresentation: true,
-          format: 'pptx',
+          format: result.format || 'pptx',
           slideCount: result.totalSlides,
           title: prev.title || result.title || file.name.replace(/\.[^/.]+$/, ''),
           description: prev.description || `Interactive PowerPoint presentation containing ${result.totalSlides} slides.`,
           presentationData: {
             title: result.title || file.name.replace(/\.[^/.]+$/, ''),
             author: prev.author || 'Dr Wazir Ahmed',
-            format: 'pptx',
+            format: result.format || 'pptx',
             slideCount: result.totalSlides,
+            aspectRatio: result.aspectRatio || '16:9',
             slides: result.slides
           }
         }));
@@ -156,6 +171,90 @@ export const ContentManagement = () => {
       setUploadingPptx(false);
       e.target.value = '';
     }
+  };
+
+  // Slide Deck Management Helpers
+  const handleAddSlide = () => {
+    const currentSlides = formData.presentationData?.slides || [];
+    const newSlideNum = currentSlides.length + 1;
+    const newSlide = {
+      id: newSlideNum,
+      slideNumber: newSlideNum,
+      layout: 'content',
+      title: `Slide ${newSlideNum}: New Academic Unit`,
+      subtitle: 'Key concepts and analytical overview',
+      bullets: [
+        'Core point 1: Define baseline principles.',
+        'Core point 2: Practical applications and methodology.'
+      ],
+      notes: 'Presenter talking points for this slide.'
+    };
+    const updatedSlides = [...currentSlides, newSlide];
+    setFormData(prev => ({
+      ...prev,
+      slideCount: updatedSlides.length,
+      presentationData: {
+        ...(prev.presentationData || { title: prev.title, author: prev.author, format: 'pptx' }),
+        slides: updatedSlides,
+        slideCount: updatedSlides.length
+      }
+    }));
+  };
+
+  const handleDeleteSlide = (idx) => {
+    const currentSlides = formData.presentationData?.slides || [];
+    if (currentSlides.length <= 1) {
+      alert('A presentation must have at least one slide.');
+      return;
+    }
+    const updatedSlides = currentSlides.filter((_, i) => i !== idx).map((s, i) => ({
+      ...s,
+      id: i + 1,
+      slideNumber: i + 1
+    }));
+    setFormData(prev => ({
+      ...prev,
+      slideCount: updatedSlides.length,
+      presentationData: {
+        ...prev.presentationData,
+        slides: updatedSlides,
+        slideCount: updatedSlides.length
+      }
+    }));
+    if (editingSlideIdx === idx) setEditingSlideIdx(null);
+  };
+
+  const handleMoveSlide = (idx, direction) => {
+    const currentSlides = [...(formData.presentationData?.slides || [])];
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= currentSlides.length) return;
+    const temp = currentSlides[idx];
+    currentSlides[idx] = currentSlides[targetIdx];
+    currentSlides[targetIdx] = temp;
+    const renumbered = currentSlides.map((s, i) => ({ ...s, id: i + 1, slideNumber: i + 1 }));
+    setFormData(prev => ({
+      ...prev,
+      presentationData: {
+        ...prev.presentationData,
+        slides: renumbered
+      }
+    }));
+  };
+
+  const handleUpdateSlideField = (idx, field, value) => {
+    const currentSlides = [...(formData.presentationData?.slides || [])];
+    if (!currentSlides[idx]) return;
+    currentSlides[idx] = {
+      ...currentSlides[idx],
+      [field]: value
+    };
+    setFormData(prev => ({
+      ...prev,
+      presentationData: {
+        ...prev.presentationData,
+        slides: currentSlides
+      }
+    }));
   };
 
   const handleSave = async (e) => {
@@ -174,19 +273,28 @@ export const ContentManagement = () => {
       author: isCourseCreator && !isAdmin ? (userProfile?.name || formData.author) : formData.author
     };
 
+    let savedItem = null;
     if (editingItem) {
-      await updateContent(editingItem.id, payload);
+      savedItem = await updateContent(editingItem.id, payload);
       setNotice(isCourseCreator && !isAdmin
         ? `Content "${formData.title}" saved and submitted for Admin approval before updating on site.`
         : `Resource "${formData.title}" updated.`
       );
     } else {
-      await createContent(payload);
+      savedItem = await createContent(payload);
       setNotice(isCourseCreator && !isAdmin
         ? `New content "${formData.title}" submitted for Admin review. Waiting for approval to launch on site.`
         : `New resource "${formData.title}" published.`
       );
     }
+
+    if (payload.isPresentation && payload.presentationData) {
+      const targetId = editingItem?.id || savedItem?.id || payload.id;
+      if (targetId) {
+        await savePresentationDeck(targetId, payload.presentationData, uploadedFileBlobRef.current);
+      }
+    }
+
     setModalOpen(false);
     await load();
     setTimeout(() => setNotice(''), 4500);
@@ -489,14 +597,14 @@ export const ContentManagement = () => {
                       )}
                     </div>
 
-                    {/* File upload input */}
-                    <div className="flex flex-col sm:flex-row items-center gap-3">
-                      <label className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-sm transition">
+                    {/* File upload input & quick actions */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      <label className="px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-sm transition">
                         <Upload className="w-4 h-4" />
-                        <span>{uploadingPptx ? 'Reading .PPTX File...' : 'Upload .PPTX File'}</span>
+                        <span>{uploadingPptx ? 'Parsing PowerPoint...' : 'Upload PowerPoint (.PPTX / .PPT)'}</span>
                         <input
                           type="file"
-                          accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                          accept=".pptx,.ppt,.ppsx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
                           onChange={handlePptxUpload}
                           className="hidden"
                           disabled={uploadingPptx}
@@ -504,19 +612,132 @@ export const ContentManagement = () => {
                       </label>
 
                       {formData.presentationData && (
-                        <button
-                          type="button"
-                          onClick={() => setPreviewPresentation({
-                            title: formData.title || 'Presentation Preview',
-                            presentationData: formData.presentationData
-                          })}
-                          className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-orange-300 dark:border-orange-700 hover:bg-orange-100 dark:hover:bg-orange-900/40 text-orange-800 dark:text-orange-200 font-bold text-xs flex items-center justify-center gap-1.5 transition"
-                        >
-                          <Play className="w-3.5 h-3.5 fill-current" />
-                          <span>Test / Preview in Runner</span>
-                        </button>
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setPreviewPresentation({
+                              title: formData.title || 'Presentation Preview',
+                              presentationData: formData.presentationData
+                            })}
+                            className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-sm"
+                          >
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                            <span>Preview in Runner</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={handleAddSlide}
+                            className="px-3 py-2 rounded-xl border border-orange-300 dark:border-orange-700 hover:bg-orange-100 dark:hover:bg-orange-900/40 text-orange-800 dark:text-orange-200 font-bold text-xs flex items-center gap-1"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add Slide</span>
+                          </button>
+                        </>
                       )}
                     </div>
+
+                    {/* Slide Deck Inspector & Editor */}
+                    {formData.presentationData?.slides && formData.presentationData.slides.length > 0 && (
+                      <div className="space-y-2 pt-2 border-t border-orange-200 dark:border-orange-800/60">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                            <Layers className="w-4 h-4 text-orange-500" />
+                            <span>Slide Deck Structure ({formData.presentationData.slides.length} Slides)</span>
+                          </span>
+                          <span className="text-[11px] text-slate-400">Click to expand & edit slide details</span>
+                        </div>
+
+                        <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                          {formData.presentationData.slides.map((s, idx) => (
+                            <div 
+                              key={idx} 
+                              className="p-3 rounded-xl border border-orange-200/80 dark:border-orange-900/40 bg-white dark:bg-slate-900 space-y-2"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300 text-[10px] font-bold flex items-center justify-center font-mono">
+                                    {idx + 1}
+                                  </span>
+                                  <input
+                                    type="text"
+                                    value={s.title || ''}
+                                    onChange={(e) => handleUpdateSlideField(idx, 'title', e.target.value)}
+                                    placeholder="Slide Title"
+                                    className="font-bold text-xs px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white w-48 sm:w-64"
+                                  />
+                                </div>
+
+                                <div className="flex items-center gap-1">
+                                  <select
+                                    value={s.layout || 'content'}
+                                    onChange={(e) => handleUpdateSlideField(idx, 'layout', e.target.value)}
+                                    className="text-[10px] px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                                  >
+                                    <option value="title">Title Layout</option>
+                                    <option value="content">Content Layout</option>
+                                    <option value="comparison">Two-Column</option>
+                                    <option value="table">Table Layout</option>
+                                    <option value="conclusion">Summary Layout</option>
+                                  </select>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveSlide(idx, -1)}
+                                    disabled={idx === 0}
+                                    className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 text-xs"
+                                    title="Move Up"
+                                  >
+                                    ↑
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveSlide(idx, 1)}
+                                    disabled={idx === formData.presentationData.slides.length - 1}
+                                    className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 text-xs"
+                                    title="Move Down"
+                                  >
+                                    ↓
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteSlide(idx)}
+                                    className="p-1 rounded text-rose-500 hover:text-rose-700 text-xs ml-1"
+                                    title="Delete Slide"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              <input
+                                type="text"
+                                value={s.subtitle || ''}
+                                onChange={(e) => handleUpdateSlideField(idx, 'subtitle', e.target.value)}
+                                placeholder="Subtitle / Context phrase (optional)"
+                                className="w-full text-[11px] px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                              />
+
+                              <textarea
+                                rows={2}
+                                value={(s.bullets || []).join('\n')}
+                                onChange={(e) => handleUpdateSlideField(idx, 'bullets', e.target.value.split('\n'))}
+                                placeholder="Slide bullet points (one per line)..."
+                                className="w-full text-xs p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-mono"
+                              />
+
+                              <input
+                                type="text"
+                                value={s.notes || ''}
+                                onChange={(e) => handleUpdateSlideField(idx, 'notes', e.target.value)}
+                                placeholder="Speaker talking notes for presenter..."
+                                className="w-full text-[10px] px-2 py-1 rounded-lg border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-950/20 text-amber-900 dark:text-amber-300"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Fallback Cloud link / Embed URL */}
                     <div>
