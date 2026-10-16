@@ -1,31 +1,31 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, BookOpen, Layers, Wrench, FileText, Sparkles, ArrowRight } from 'lucide-react';
-import { getCourses, getApps, getTools, getContent } from '../../services/firebaseService';
+import { Search, X, BookOpen, Layers, Wrench, FileText, Sparkles, ArrowRight, ClipboardCheck } from 'lucide-react';
+import { getCourses, getApps, getTests, getTools, getContent } from '../../services/firebaseService';
 import { Badge } from './Badge';
 
 export const GlobalSearchModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('all'); // all, courses, apps, tools, content
+  const [activeTab, setActiveTab] = useState('all'); // all, courses, tests, tools, content
   const [membershipFilter, setMembershipFilter] = useState('all'); // all, free, premium
 
   const [courses, setCourses] = useState([]);
-  const [apps, setApps] = useState([]);
+  const [tests, setTests] = useState([]);
   const [tools, setTools] = useState([]);
   const [content, setContent] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
       const loadData = async () => {
-        const [c, a, t, cnt] = await Promise.all([
+        const [c, ts, t, cnt] = await Promise.all([
           getCourses(),
-          getApps(),
+          getTests(),
           getTools(),
           getContent()
         ]);
         setCourses(c);
-        setApps(a);
+        setTests(ts);
         setTools(t);
         setContent(cnt);
       };
@@ -34,7 +34,7 @@ export const GlobalSearchModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const results = useMemo(() => {
-    if (!searchTerm.trim()) return { courses: [], apps: [], tools: [], content: [], total: 0 };
+    if (!searchTerm.trim()) return { courses: [], tests: [], tools: [], content: [], total: 0 };
     const query = searchTerm.toLowerCase();
 
     const filterItem = (item) => {
@@ -50,20 +50,20 @@ export const GlobalSearchModal = ({ isOpen, onClose }) => {
     };
 
     const filteredCourses = activeTab === 'all' || activeTab === 'courses' ? courses.filter(filterItem) : [];
-    const filteredApps = activeTab === 'all' || activeTab === 'apps' ? apps.filter(filterItem) : [];
+    const filteredTests = activeTab === 'all' || activeTab === 'tests' ? tests.filter(filterItem) : [];
     const filteredTools = activeTab === 'all' || activeTab === 'tools' ? tools.filter(filterItem) : [];
     const filteredContent = activeTab === 'all' || activeTab === 'content' ? content.filter(filterItem) : [];
 
-    const total = filteredCourses.length + filteredApps.length + filteredTools.length + filteredContent.length;
+    const total = filteredCourses.length + filteredTests.length + filteredTools.length + filteredContent.length;
 
     return {
       courses: filteredCourses,
-      apps: filteredApps,
+      tests: filteredTests,
       tools: filteredTools,
       content: filteredContent,
       total
     };
-  }, [searchTerm, activeTab, membershipFilter, courses, apps, tools, content]);
+  }, [searchTerm, activeTab, membershipFilter, courses, tests, tools, content]);
 
   if (!isOpen) return null;
 
@@ -114,7 +114,7 @@ export const GlobalSearchModal = ({ isOpen, onClose }) => {
             {[
               { id: 'all', label: 'All' },
               { id: 'courses', label: 'Courses' },
-              { id: 'apps', label: 'Apps' },
+              { id: 'tests', label: 'Tests' },
               { id: 'tools', label: 'Tools' },
               { id: 'content', label: 'Content' }
             ].map(tab => (
@@ -241,29 +241,29 @@ export const GlobalSearchModal = ({ isOpen, onClose }) => {
                 </div>
               )}
 
-              {/* Apps */}
-              {results.apps.length > 0 && (
+              {/* Tests */}
+              {results.tests.length > 0 && (
                 <div className="pt-3">
                   <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    <Layers className="w-3.5 h-3.5" /> Apps ({results.apps.length})
+                    <ClipboardCheck className="w-3.5 h-3.5" /> Tests ({results.tests.length})
                   </div>
                   <div className="space-y-1">
-                    {results.apps.map(app => (
+                    {results.tests.map(test => (
                       <div
-                        key={app.id}
-                        onClick={() => handleSelect(`/apps`)}
+                        key={test.id}
+                        onClick={() => handleSelect(`/tests`)}
                         className="group flex items-center justify-between p-2.5 rounded-xl hover:bg-brand-50/60 dark:hover:bg-slate-800/80 cursor-pointer transition"
                       >
                         <div>
                           <div className="font-semibold text-sm text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400">
-                            {app.name}
+                            {test.title}
                           </div>
                           <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
-                            {app.description}
+                            {test.description}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge type={app.membership} size="xs" />
+                          <Badge type={test.membership || 'free'} size="xs" />
                           <ArrowRight className="w-4 h-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>

@@ -22,7 +22,8 @@ import {
   GraduationCap,
   Flame,
   FolderTree,
-  CreditCard
+  CreditCard,
+  ClipboardCheck
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -48,7 +49,7 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
             { label: "User Management", path: "/admin/users", icon: Users },
             { label: "Payment & Revenue", path: "/admin/payments", icon: CreditCard },
             { label: "Course Management", path: "/admin/courses", icon: BookOpen },
-            { label: "App Management", path: "/admin/apps", icon: Layers },
+            { label: "Test Management", path: "/admin/tests", icon: ClipboardCheck },
             { label: "Tool Management", path: "/admin/tools", icon: Wrench },
             { label: "Content Management", path: "/admin/content", icon: FileText },
             { label: "Category Management", path: "/admin/categories", icon: FolderTree }
@@ -88,7 +89,7 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
             { label: "My Enrolled Courses", path: "/dashboard/my-courses", icon: BookOpen },
             { label: "Explore Courses", path: "/courses", icon: BookOpen },
             { label: "Interactive Tools", path: "/tools", icon: Wrench },
-            { label: "Learning Apps", path: "/apps", icon: Layers }
+            { label: "Standard Tests", path: "/tests", icon: ClipboardCheck }
           ]
         },
         {
@@ -117,7 +118,7 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
           title: "Resources & Tools",
           items: [
             { label: "Premium & Free Courses", path: "/courses", icon: BookOpen },
-            { label: "Learning Apps Hub", path: "/apps", icon: Layers },
+            { label: "Standard Tests Hub", path: "/tests", icon: ClipboardCheck },
             { label: "Interactive Tools & Studio", path: "/tools", icon: Wrench },
             { label: "Study Materials & Notes", path: "/content", icon: FileText }
           ]
@@ -148,7 +149,7 @@ export const DashboardLayout = ({ children, title = "Dashboard", subtitle = "" }
         title: "Free Resources",
         items: [
           { label: "Free Courses", path: "/courses", icon: BookOpen },
-          { label: "Free Apps", path: "/apps", icon: Layers },
+          { label: "Standard Tests", path: "/tests", icon: ClipboardCheck },
           { label: "Free Tools", path: "/tools", icon: Wrench },
           { label: "Educational Content", path: "/content", icon: FileText }
         ]

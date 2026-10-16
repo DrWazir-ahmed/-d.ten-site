@@ -36,6 +36,15 @@ export const INITIAL_CATEGORIES = {
     "Grammar Apps",
     "Mathematics Apps"
   ],
+  tests: [
+    "Academic",
+    "Life Skill",
+    "Technical",
+    "Current Affairs",
+    "Everyday Science",
+    "General & Aptitude",
+    "Other"
+  ],
   tools: [
     "Calculators",
     "Quiz Tools",
@@ -1169,4 +1178,427 @@ Adaptive learning algorithms can identify exactly where a learner encounters fri
   ENGLISH_TENSES_PRESENTATION_ITEM,
   AI_PRESENTATION_ITEM,
   ACTIVE_PASSIVE_PRESENTATION_ITEM
+];
+
+export const INITIAL_TESTS = [
+  {
+    id: "test-academic-grammar",
+    title: "English Grammar, Syntax & Vocabulary Mastery Test",
+    description: "Standardized evaluation of sentence structure, parts of speech, active/passive voice, and literary terminology.",
+    category: "Academic",
+    difficulty: "Intermediate",
+    timeLimit: 15,
+    passingScore: 70,
+    membership: "free",
+    status: "published",
+    author: "Dr Wazir Ahmed",
+    thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80",
+    settings: {
+      timeLimit: 15,
+      passingScore: 70,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      instructions: "Read every question attentively. This assessment includes MCQs, True/False evaluation, Fill in the Blanks, and Column Matching."
+    },
+    questions: [
+      {
+        id: "q-acad-1",
+        type: "mcq",
+        question: "Which sentence demonstrates correct subject-verb agreement?",
+        options: [
+          "The group of research students are planning their project.",
+          "Neither the manager nor the employees was aware of the delay.",
+          "The list of candidates has been approved by the committee.",
+          "Every teacher and student were present in the hall."
+        ],
+        correctAnswer: 2,
+        explanation: "'The list of candidates has been approved...' is correct because the subject is the singular noun 'list', not the plural prepositional object 'candidates'.",
+        points: 2
+      },
+      {
+        id: "q-acad-2",
+        type: "true_false",
+        question: "In the passive voice, the original object of the active sentence always becomes the new grammatical subject.",
+        correctAnswer: true,
+        explanation: "True. Passive transformations reposition the patient/object into the subject position (e.g., 'He wrote a letter' -> 'A letter was written by him').",
+        points: 1
+      },
+      {
+        id: "q-acad-3",
+        type: "fill_blank",
+        question: "A word that connects words, phrases, or clauses together is called a [blank].",
+        acceptedAnswers: ["conjunction", "Conjunction"],
+        caseSensitive: false,
+        hint: "Examples include 'and', 'but', 'although', 'because'.",
+        explanation: "Conjunctions are coordinating or subordinating connective words in English syntax.",
+        points: 2
+      },
+      {
+        id: "q-acad-4",
+        type: "matching",
+        question: "Match each literary figure of speech with its accurate definition:",
+        pairs: [
+          { id: "p1", left: "Metaphor", right: "Direct symbolic comparison without 'like' or 'as'" },
+          { id: "p2", left: "Personification", right: "Giving human qualities to non-human entities" },
+          { id: "p3", left: "Hyperbole", right: "Deliberate exaggeration for rhetorical effect" },
+          { id: "p4", left: "Onomatopoeia", right: "Word that imitates the natural sound of a thing" }
+        ],
+        explanation: "Literary devices deepen linguistic richness and enhance analytical comprehension.",
+        points: 3
+      }
+    ]
+  },
+  {
+    id: "test-life-skills-safety",
+    title: "Emergency First Aid & Workplace Safety Assessment",
+    description: "Crucial life-saving knowledge evaluation including CPR techniques, fire suppression, chemical hazard mitigation, and trauma response.",
+    category: "Life Skill",
+    difficulty: "Beginner",
+    timeLimit: 12,
+    passingScore: 75,
+    membership: "free",
+    status: "published",
+    author: "Dr Wazir Ahmed",
+    thumbnail: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+    settings: {
+      timeLimit: 12,
+      passingScore: 75,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      instructions: "Answer all safety questions carefully. Practical first aid understanding can save lives in critical emergencies."
+    },
+    questions: [
+      {
+        id: "q-life-1",
+        type: "mcq",
+        question: "What is the recommended adult CPR compression-to-ventilation ratio for a single rescuer according to AHA guidelines?",
+        options: [
+          "15 compressions to 2 breaths",
+          "30 compressions to 2 breaths",
+          "50 compressions to 1 breath",
+          "10 compressions to 5 breaths"
+        ],
+        correctAnswer: 1,
+        explanation: "Standard single-rescuer adult CPR protocols mandate 30 chest compressions followed by 2 rescue breaths at a rate of 100-120 compressions per minute.",
+        points: 2
+      },
+      {
+        id: "q-life-2",
+        type: "true_false",
+        question: "When dealing with severe arterial bleeding, you should immediately remove soaked initial bandages before applying fresh ones.",
+        correctAnswer: false,
+        explanation: "False. Never remove blood-soaked dressings as doing so disrupts early clot formation. Always apply additional sterile pads directly on top with firm direct pressure.",
+        points: 1
+      },
+      {
+        id: "q-life-3",
+        type: "fill_blank",
+        question: "When operating a portable fire extinguisher, remember the acronym PASS: Pull the pin, Aim low, Squeeze the handle, and [blank] from side to side.",
+        acceptedAnswers: ["Sweep", "sweep"],
+        caseSensitive: false,
+        hint: "A sweeping motion covering the base of the fire.",
+        explanation: "PASS: Pull the safety pin, Aim nozzle at the base of fire, Squeeze lever steadily, and Sweep side to side.",
+        points: 2
+      },
+      {
+        id: "q-life-4",
+        type: "matching",
+        question: "Match each fire classification with its corresponding primary fuel source:",
+        pairs: [
+          { id: "p1", left: "Class A Fire", right: "Ordinary combustibles (wood, paper, textiles, plastics)" },
+          { id: "p2", left: "Class B Fire", right: "Flammable liquids and gases (gasoline, oil, propane)" },
+          { id: "p3", left: "Class C Fire", right: "Energized electrical equipment (transformers, wiring)" },
+          { id: "p4", left: "Class K Fire", right: "Cooking media and commercial kitchen oils / fats" }
+        ],
+        explanation: "Selecting the correct extinguisher classification prevents hazardous flashovers and electrical shock.",
+        points: 3
+      }
+    ]
+  },
+  {
+    id: "test-technical-web-dev",
+    title: "Web Engineering & Software Architecture Fundamentals",
+    description: "Comprehensive technical evaluation covering HTML5 semantic standards, CSS flexbox/grid, JavaScript event loop, and REST API conventions.",
+    category: "Technical",
+    difficulty: "Advanced",
+    timeLimit: 20,
+    passingScore: 70,
+    membership: "premium",
+    status: "published",
+    author: "Dr Wazir Ahmed",
+    thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+    settings: {
+      timeLimit: 20,
+      passingScore: 70,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      instructions: "Technical exam for software practitioners. Assess core computer science, front-end architecture, and asynchronous execution."
+    },
+    questions: [
+      {
+        id: "q-tech-1",
+        type: "mcq",
+        question: "Which HTTP response status code is standard for successfully created resources following a POST request?",
+        options: [
+          "200 OK",
+          "201 Created",
+          "204 No Content",
+          "304 Not Modified"
+        ],
+        correctAnswer: 1,
+        explanation: "HTTP 201 Created signifies that the request succeeded and resulted in the instantiation of one or more new resources.",
+        points: 2
+      },
+      {
+        id: "q-tech-2",
+        type: "true_false",
+        question: "In JavaScript, promises scheduled with queueMicrotask or resolved Promise.then() execute before the next macrotask (such as setTimeout).",
+        correctAnswer: true,
+        explanation: "True. The JavaScript microtask queue is fully drained at the end of each macrotask and before the browser renders or processes the next macrotask.",
+        points: 2
+      },
+      {
+        id: "q-tech-3",
+        type: "fill_blank",
+        question: "In CSS Box Model, the transparent clearing area between the content box and its border is known as [blank].",
+        acceptedAnswers: ["padding", "Padding"],
+        caseSensitive: false,
+        hint: "It pushes borders outward from the internal content.",
+        explanation: "Padding defines the internal spacing surrounding an element's content box inside its border.",
+        points: 2
+      },
+      {
+        id: "q-tech-4",
+        type: "matching",
+        question: "Match each web technology or protocol with its core design layer:",
+        pairs: [
+          { id: "p1", left: "HTML5", right: "Semantic content structure and document object hierarchy" },
+          { id: "p2", left: "CSS3", right: "Visual layout presentation, typography and responsive design" },
+          { id: "p3", left: "JavaScript ES6+", right: "Client-side interactivity and asynchronous business logic" },
+          { id: "p4", left: "HTTPS / TLS", right: "Cryptographic transport security and payload encryption" }
+        ],
+        explanation: "Modern decoupled web architecture cleanly separates structure, presentation, behavior, and transport security.",
+        points: 3
+      }
+    ]
+  },
+  {
+    id: "test-current-affairs-world",
+    title: "Global Affairs, Geopolitics & World Organisations Evaluation",
+    description: "In-depth test on contemporary international treaties, United Nations charter bodies, global economic institutions, and diplomatic accords.",
+    category: "Current Affairs",
+    difficulty: "Intermediate",
+    timeLimit: 15,
+    passingScore: 65,
+    membership: "free",
+    status: "published",
+    author: "Dr Wazir Ahmed",
+    thumbnail: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80",
+    settings: {
+      timeLimit: 15,
+      passingScore: 65,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      instructions: "Evaluate your geopolitical awareness, international relations literacy, and knowledge of multilateral governance frameworks."
+    },
+    questions: [
+      {
+        id: "q-ca-1",
+        type: "mcq",
+        question: "Which organ of the United Nations holds primary responsibility for the maintenance of international peace and security?",
+        options: [
+          "The General Assembly",
+          "The Security Council (UNSC)",
+          "The Economic and Social Council (ECOSOC)",
+          "The International Court of Justice"
+        ],
+        correctAnswer: 1,
+        explanation: "Under Article 24 of the UN Charter, members confer upon the UN Security Council primary responsibility for global peace and security.",
+        points: 2
+      },
+      {
+        id: "q-ca-2",
+        type: "true_false",
+        question: "The Paris Climate Agreement (COP21) is a legally binding international treaty aimed at limiting global warming to well below 2°C.",
+        correctAnswer: true,
+        explanation: "True. Adopted in December 2015, the Paris Agreement legally obligates signatory states to communicate progressively ambitious Nationally Determined Contributions (NDCs).",
+        points: 1
+      },
+      {
+        id: "q-ca-3",
+        type: "fill_blank",
+        question: "The principal judicial organ of the United Nations (ICJ) is headquartered at the Peace Palace in [blank].",
+        acceptedAnswers: ["The Hague", "Hague", "the hague"],
+        caseSensitive: false,
+        hint: "City located in the Netherlands.",
+        explanation: "The International Court of Justice (ICJ) resides at The Hague, Netherlands.",
+        points: 2
+      },
+      {
+        id: "q-ca-4",
+        type: "matching",
+        question: "Match each global institution with its primary international mandate:",
+        pairs: [
+          { id: "p1", left: "World Health Organization (WHO)", right: "International public health leadership and epidemic surveillance" },
+          { id: "p2", left: "UNESCO", right: "Promoting world peace through education, arts, science, and cultural heritage" },
+          { id: "p3", left: "International Monetary Fund (IMF)", right: "Macroeconomic financial stability and balance-of-payments assistance" },
+          { id: "p4", left: "World Trade Organization (WTO)", right: "Rules of multilateral commerce and settling trade disputes between nations" }
+        ],
+        explanation: "Multilateral institutions regulate global cooperation across public health, culture, finance, and international trade.",
+        points: 3
+      }
+    ]
+  },
+  {
+    id: "test-everyday-science",
+    title: "Everyday Science, Physics & Environmental Mechanics Test",
+    description: "Practical scientific inquiry evaluating atmospheric physics, biological cycles, chemical reactions in daily life, and astronomical fundamentals.",
+    category: "Everyday Science",
+    difficulty: "Beginner",
+    timeLimit: 15,
+    passingScore: 70,
+    membership: "free",
+    status: "published",
+    author: "Dr Wazir Ahmed",
+    thumbnail: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=800&q=80",
+    settings: {
+      timeLimit: 15,
+      passingScore: 70,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      instructions: "Everyday scientific knowledge tests your understanding of natural phenomena, mechanical laws, and environmental processes."
+    },
+    questions: [
+      {
+        id: "q-es-1",
+        type: "mcq",
+        question: "Why does the daytime sky appear blue to an observer on Earth?",
+        options: [
+          "Oceans reflect blue light back into the upper stratosphere.",
+          "Rayleigh scattering scatters shorter blue wavelengths more intensely than longer red wavelengths.",
+          "Nitrogen and oxygen molecules absorb all visible light except blue.",
+          "The ozone layer filters out infrared and ultraviolet rays, leaving pure blue."
+        ],
+        correctAnswer: 1,
+        explanation: "Rayleigh scattering causes solar radiation with shorter wavelengths (blue and violet) to scatter in all directions upon collision with atmospheric gases.",
+        points: 2
+      },
+      {
+        id: "q-es-2",
+        type: "true_false",
+        question: "Sound waves are mechanical waves and therefore cannot propagate through a true vacuum.",
+        correctAnswer: true,
+        explanation: "True. Sound requires a physical medium (solid, liquid, or gas) to transmit pressure oscillations. Unlike light, sound cannot travel through empty space.",
+        points: 1
+      },
+      {
+        id: "q-es-3",
+        type: "fill_blank",
+        question: "The biological process through which autotrophic plants convert light energy, carbon dioxide, and water into glucose is called [blank].",
+        acceptedAnswers: ["photosynthesis", "Photosynthesis"],
+        caseSensitive: false,
+        hint: "Occurs inside chloroplasts using chlorophyll pigments.",
+        explanation: "Photosynthesis produces chemical energy and releases oxygen into the terrestrial atmosphere.",
+        points: 2
+      },
+      {
+        id: "q-es-4",
+        type: "matching",
+        question: "Match each scientific measurement instrument with what it quantitatively measures:",
+        pairs: [
+          { id: "p1", left: "Barometer", right: "Atmospheric and barometric pressure" },
+          { id: "p2", left: "Anemometer", right: "Wind speed and velocity" },
+          { id: "p3", left: "Hygrometer", right: "Relative humidity and moisture content in air" },
+          { id: "p4", left: "Seismograph", right: "Earthquake vibrations and tectonic ground motion" }
+        ],
+        explanation: "Scientific instruments enable precise empirical observation of meteorological and geological phenomena.",
+        points: 3
+      }
+    ]
+  },
+  {
+    id: "test-aptitude-reasoning",
+    title: "Logical Deduction, Spatial & Quantitative Aptitude Test",
+    description: "Cognitive assessment evaluating analytical deductions, numerical progression sequences, syllogistic reasoning, and critical thinking.",
+    category: "General & Aptitude",
+    difficulty: "Intermediate",
+    timeLimit: 15,
+    passingScore: 75,
+    membership: "free",
+    status: "published",
+    author: "Dr Wazir Ahmed",
+    thumbnail: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80",
+    settings: {
+      timeLimit: 15,
+      passingScore: 75,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      instructions: "Carefully analyze patterns, numerical relationships, and deductive premises to solve each problem."
+    },
+    questions: [
+      {
+        id: "q-apt-1",
+        type: "mcq",
+        question: "Identify the next number in this sequence: 2, 6, 12, 20, 30, ?",
+        options: [
+          "40",
+          "42",
+          "44",
+          "46"
+        ],
+        correctAnswer: 1,
+        explanation: "The consecutive differences between terms are +4, +6, +8, +10, and +12. Therefore, 30 + 12 = 42 (also n^2 + n for n = 1,2,3,4,5,6).",
+        points: 2
+      },
+      {
+        id: "q-apt-2",
+        type: "true_false",
+        question: "If 'All roses are flowers' and 'Some flowers fade quickly', it logically guarantees that 'Some roses fade quickly'.",
+        correctAnswer: false,
+        explanation: "False. This is the fallacy of the undistributed middle. While roses are flowers, the ones that fade quickly could belong entirely to non-rose species.",
+        points: 2
+      },
+      {
+        id: "q-apt-3",
+        type: "fill_blank",
+        question: "A geometric triangle with exactly two sides of equal length and two congruent base angles is called an [blank] triangle.",
+        acceptedAnswers: ["isosceles", "Isosceles"],
+        caseSensitive: false,
+        hint: "Greek for 'equal legs'.",
+        explanation: "An isosceles triangle possesses two congruent sides and matching adjacent interior angles.",
+        points: 2
+      },
+      {
+        id: "q-apt-4",
+        type: "matching",
+        question: "Match each deductive reasoning term with its epistemological definition:",
+        pairs: [
+          { id: "p1", left: "Premise", right: "A foundational statement or assumption supporting an argument" },
+          { id: "p2", left: "Syllogism", right: "Three-part deductive argument composed of major, minor, and concluding premises" },
+          { id: "p3", left: "Fallacy", right: "An error in reasoning that renders an argument invalid" },
+          { id: "p4", left: "Induction", right: "Deriving general probability principles from specific empirical observations" }
+        ],
+        explanation: "Formal logic structures sound analytical reasoning, critical debate, and empirical problem solving.",
+        points: 3
+      }
+    ]
+  }
 ];

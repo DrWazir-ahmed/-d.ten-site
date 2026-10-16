@@ -16,9 +16,13 @@ import {
   Layers, 
   ListOrdered, 
   Columns,
-  Play
+  Play,
+  Bookmark,
+  FileText
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { saveQuizResult } from '../../services/firebaseService';
+import { useAuth } from '../../context/AuthContext';
 
 export const StandardTestPlayer = ({
   testData,
@@ -29,6 +33,8 @@ export const StandardTestPlayer = ({
   isCompleted = false,
   onNextLesson
 }) => {
+  const { currentUser } = useAuth();
+
   // Normalize test data (supports modular testData, legacy quiz, or fallback)
   const normalizedTest = useMemo(() => {
     if (!testData) return null;
@@ -66,10 +72,13 @@ export const StandardTestPlayer = ({
         question: q.question || `Question ${idx + 1}`,
         options: q.options || [],
         correctAnswer: q.correctAnswer !== undefined ? q.correctAnswer : 0,
+        acceptedAnswers: q.acceptedAnswers || (q.correctAnswer !== undefined ? [String(q.correctAnswer)] : []),
+        caseSensitive: Boolean(q.caseSensitive),
+        hint: q.hint || '',
         pairs: q.pairs || [],
         items: q.items || [],
         explanation: q.explanation || '',
-        points: Number(q.points) || (type === 'matching' || type === 'ordering' ? 2 : 1)
+        points: Number(q.points) || (type === 'matching' || type === 'ordering' || type === 'fill_blank' ? 2 : 1)
       };
     });
 
@@ -88,6 +97,7 @@ export const StandardTestPlayer = ({
   const [totalPoints, setTotalPoints] = useState(0);
   const [passed, setPassed] = useState(false);
   const [attemptsCount, setAttemptsCount] = useState(0);
+  const [markedForReview, setMarkedForReview] = useState({});
   const [timeLeft, setTimeLeft] = useState(0); // in seconds
   const [timeSpent, setTimeSpent] = useState(0);
   const timerRef = useRef(null);
@@ -99,6 +109,7 @@ export const StandardTestPlayer = ({
   useEffect(() => {
     setHasStarted(false);
     setAnswers({});
+    setMarkedForReview({});
     setSubmitted(false);
     setScore(0);
     setEarnedPoints(0);
@@ -178,6 +189,11 @@ export const StandardTestPlayer = ({
     setAnswers(prev => ({ ...prev, [qId]: val }));
   };
 
+  const handleFillBlank = (qId, val) => {
+    if (submitted) return;
+    setAnswers(prev => ({ ...prev, [qId]: val }));
+  };
+
   const handleMatchPair = (qId, pairId, selectedRight) => {
     if (submitted) return;
     setAnswers(prev => ({
@@ -218,10 +234,28 @@ export const StandardTestPlayer = ({
       if (q.type === 'mcq') {
         if (userAns === q.correctAnswer) {
           earned += qPts;
+        } else if (normalizedTest.settings.negativeMarking > 0 && userAns !== undefined && userAns !== null) {
+          earned = Math.max(0, earned - Number(normalizedTest.settings.negativeMarking));
         }
       } else if (q.type === 'true_false') {
         if (userAns === q.correctAnswer) {
           earned += qPts;
+        } else if (normalizedTest.settings.negativeMarking > 0 && userAns !== undefined && userAns !== null) {
+          earned = Math.max(0, earned - Number(normalizedTest.settings.negativeMarking));
+        }
+      } else if (q.type === 'fill_blank') {
+        const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
+          ? q.acceptedAnswers
+          : [String(q.correctAnswer || '')];
+        const trimmed = (userAns || '').toString().trim();
+        const isMatch = acceptable.some(acc => {
+          if (q.caseSensitive) return acc.toString().trim() === trimmed;
+          return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
+        });
+        if (isMatch && trimmed.length > 0) {
+          earned += qPts;
+        } else if (normalizedTest.settings.negativeMarking > 0 && trimmed.length > 0) {
+          earned = Math.max(0, earned - Number(normalizedTest.settings.negativeMarking));
         }
       } else if (q.type === 'matching') {
         if (userAns && typeof userAns === 'object') {
@@ -260,6 +294,22 @@ export const StandardTestPlayer = ({
         spread: 70,
         origin: { y: 0.6 }
       });
+    }
+
+    try {
+      saveQuizResult({
+        userId: currentUser?.uid || 'current-user',
+        courseId: courseId || testData?.id || 'standard-test',
+        courseTitle: courseTitle || normalizedTest.title,
+        quizTitle: normalizedTest.title,
+        score: calculatedPct,
+        passed: isPassing,
+        earnedPoints: earned,
+        totalPoints: total,
+        completedAt: new Date().toISOString()
+      });
+    } catch (e) {
+      console.warn("Could not record test result to student dashboard:", e);
     }
 
     if (onComplete) {
@@ -328,6 +378,7 @@ export const StandardTestPlayer = ({
   const typeCounts = {
     mcq: qs.filter(q => q.type === 'mcq').length,
     true_false: qs.filter(q => q.type === 'true_false').length,
+    fill_blank: qs.filter(q => q.type === 'fill_blank').length,
     matching: qs.filter(q => q.type === 'matching').length,
     ordering: qs.filter(q => q.type === 'ordering').length
   };
@@ -406,6 +457,11 @@ export const StandardTestPlayer = ({
                 {typeCounts.true_false} True / False
               </span>
             )}
+            {typeCounts.fill_blank > 0 && (
+              <span className="px-2.5 py-1 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 font-bold border border-teal-200 dark:border-teal-800">
+                {typeCounts.fill_blank} Fill in the Blank
+              </span>
+            )}
             {typeCounts.matching > 0 && (
               <span className="px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 font-bold border border-purple-200 dark:border-purple-800">
                 {typeCounts.matching} Matching Column
@@ -447,6 +503,9 @@ export const StandardTestPlayer = ({
     const a = answers[q.id];
     if (q.type === 'mcq' || q.type === 'true_false') {
       return a !== undefined && a !== null ? cnt + 1 : cnt;
+    }
+    if (q.type === 'fill_blank') {
+      return a !== undefined && a !== null && a.toString().trim().length > 0 ? cnt + 1 : cnt;
     }
     if (q.type === 'matching') {
       const pairs = Object.keys(a || {}).length;
@@ -564,6 +623,49 @@ export const StandardTestPlayer = ({
         </div>
       )}
 
+      {/* Question Navigation Palette */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+          <span>Question Palette:</span>
+          <div className="flex items-center gap-2 text-[11px] font-normal text-slate-400">
+            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Answered</span>
+            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" /> Review</span>
+            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700 inline-block" /> Pending</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          {qs.map((q, qIndex) => {
+            const isAnswered = answers[q.id] !== undefined && answers[q.id] !== null && (
+              q.type === 'fill_blank' ? answers[q.id].toString().trim().length > 0 :
+              q.type === 'matching' ? Object.keys(answers[q.id] || {}).length > 0 : true
+            );
+            const isMarked = Boolean(markedForReview[q.id]);
+
+            return (
+              <button
+                key={q.id}
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById(`question-card-${q.id}`);
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }}
+                className={`w-7 h-7 rounded-xl font-bold text-xs transition flex items-center justify-center ${
+                  isMarked
+                    ? 'bg-amber-500 text-white shadow-xs ring-2 ring-amber-300'
+                    : isAnswered
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
+                }`}
+                title={`Question ${qIndex + 1} (${isMarked ? 'Marked for Review' : isAnswered ? 'Answered' : 'Unanswered'})`}
+              >
+                {qIndex + 1}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* List of Questions */}
       <div className="space-y-6">
         {qs.map((q, idx) => {
@@ -578,6 +680,15 @@ export const StandardTestPlayer = ({
               isCorrect = userAns === q.correctAnswer;
             } else if (q.type === 'true_false') {
               isCorrect = userAns === q.correctAnswer;
+            } else if (q.type === 'fill_blank') {
+              const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
+                ? q.acceptedAnswers
+                : [String(q.correctAnswer || '')];
+              const trimmed = (userAns || '').toString().trim();
+              isCorrect = acceptable.some(acc => {
+                if (q.caseSensitive) return acc.toString().trim() === trimmed;
+                return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
+              }) && trimmed.length > 0;
             } else if (q.type === 'matching') {
               let matchCount = 0;
               (q.pairs || []).forEach(p => {
@@ -598,6 +709,7 @@ export const StandardTestPlayer = ({
           return (
             <div
               key={q.id}
+              id={`question-card-${q.id}`}
               className={`p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border shadow-sm transition-all space-y-4 ${
                 submitted
                   ? isCorrect
@@ -619,15 +731,32 @@ export const StandardTestPlayer = ({
                       ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'
                       : q.type === 'true_false'
                       ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                      : q.type === 'fill_blank'
+                      ? 'bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300'
                       : q.type === 'matching'
                       ? 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300'
                       : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
                   }`}>
-                    {q.type.replace('_', ' ')}
+                    {q.type === 'fill_blank' ? 'Fill in the Blank' : q.type.replace('_', ' ')}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={submitted}
+                    onClick={() => setMarkedForReview(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                    className={`p-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1 transition ${
+                      markedForReview[q.id]
+                        ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-500/40 text-amber-600 dark:text-amber-400'
+                        : 'border-slate-200 dark:border-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
+                    }`}
+                    title="Mark question to review later"
+                  >
+                    <Bookmark className={`w-3.5 h-3.5 ${markedForReview[q.id] ? 'fill-amber-500 text-amber-500' : ''}`} />
+                    <span className="hidden sm:inline">{markedForReview[q.id] ? 'Marked' : 'Review'}</span>
+                  </button>
+
                   <span className="text-xs font-bold text-slate-400">{q.points || 1} pt</span>
                   {submitted && (
                     <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold flex items-center gap-1 ${
@@ -722,7 +851,49 @@ export const StandardTestPlayer = ({
                 </div>
               )}
 
-              {/* 3. MATCHING COLUMN RENDERER */}
+              {/* 3. FILL IN THE BLANK RENDERER */}
+              {q.type === 'fill_blank' && (
+                <div className="space-y-3 pt-1">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      disabled={submitted}
+                      value={userAns || ''}
+                      onChange={(e) => handleFillBlank(q.id, e.target.value)}
+                      placeholder="Type your answer here..."
+                      className={`w-full px-4 py-3 rounded-2xl border text-sm font-medium transition focus:outline-none ${
+                        submitted
+                          ? isCorrect
+                            ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-100'
+                            : 'border-rose-500 bg-rose-50/50 dark:bg-rose-950/30 text-rose-900 dark:text-rose-100'
+                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20'
+                      }`}
+                    />
+                  </div>
+
+                  {submitted && (
+                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-1.5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-bold text-slate-500 dark:text-slate-400">Accepted Answer(s):</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(q.acceptedAnswers && q.acceptedAnswers.length > 0 ? q.acceptedAnswers : [q.correctAnswer]).map((acc, aIdx) => (
+                            <span key={aIdx} className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 font-mono font-bold text-xs">
+                              {acc}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      {q.caseSensitive && (
+                        <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                          Note: Case-sensitive matching was enforced for this question.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* 4. MATCHING COLUMN RENDERER */}
               {q.type === 'matching' && (
                 <div className="space-y-3 pt-1 text-xs">
                   <p className="text-[11px] text-slate-400">

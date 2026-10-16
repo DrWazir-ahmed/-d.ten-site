@@ -12,11 +12,12 @@ import {
   ShieldAlert,
   ArrowUpRight,
   FolderTree,
-  CreditCard
+  CreditCard,
+  ClipboardCheck
 } from 'lucide-react';
 
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
-import { getAllUsers, getCourses, getApps, getTools, getContent } from '../../services/firebaseService';
+import { getAllUsers, getCourses, getApps, getTests, getTools, getContent } from '../../services/firebaseService';
 import { useAuth } from '../../context/AuthContext';
 
 
@@ -25,22 +26,25 @@ export const AdminDashboard = () => {
   const [users,   setUsers]   = useState([]);
   const [courses, setCourses] = useState([]);
   const [apps,    setApps]    = useState([]);
+  const [tests,   setTests]   = useState([]);
   const [tools,   setTools]   = useState([]);
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     setLoading(true);
-    const [u, c, a, t, cnt] = await Promise.all([
+    const [u, c, a, ts, t, cnt] = await Promise.all([
       getAllUsers(),
       getCourses(),
       getApps(),
+      getTests(),
       getTools(),
       getContent()
     ]);
     setUsers(u);
     setCourses(c);
     setApps(a);
+    setTests(ts);
     setTools(t);
     setContent(cnt);
     setLoading(false);
@@ -162,15 +166,15 @@ export const AdminDashboard = () => {
             </Link>
 
             <Link
-              to="/admin/apps"
+              to="/admin/tests"
               className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-purple transition group block"
             >
               <div className="flex items-center justify-between mb-2">
-                <Layers className="w-5 h-5 text-purple" />
+                <ClipboardCheck className="w-5 h-5 text-purple" />
                 <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-purple transition" />
               </div>
-              <div className="text-2xl font-black text-slate-900 dark:text-white">{apps.length}</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Learning Apps</div>
+              <div className="text-2xl font-black text-slate-900 dark:text-white">{tests.length}</div>
+              <div className="text-xs text-slate-500 font-medium mt-1">Standard Tests</div>
             </Link>
 
             <Link
@@ -209,7 +213,7 @@ export const AdminDashboard = () => {
               { label: "Users & Roles", path: "/admin/users", icon: Users },
               { label: "Payments & Revenue", path: "/admin/payments", icon: CreditCard },
               { label: "Courses & Curricula", path: "/admin/courses", icon: BookOpen },
-              { label: "Learning Apps", path: "/admin/apps", icon: Layers },
+              { label: "Standard Tests", path: "/admin/tests", icon: ClipboardCheck },
               { label: "Educational Tools", path: "/admin/tools", icon: Wrench },
               { label: "Content Library", path: "/admin/content", icon: FileText },
               { label: "Categories", path: "/admin/categories", icon: FolderTree }

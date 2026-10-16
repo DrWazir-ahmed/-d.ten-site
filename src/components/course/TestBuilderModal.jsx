@@ -18,9 +18,20 @@ import {
   ListOrdered, 
   AlertCircle,
   Check,
-  RotateCcw
+  RotateCcw,
+  FileText
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
+
+export const TEST_CATEGORIES = [
+  'Academic',
+  'Life Skill',
+  'Technical',
+  'Current Affairs',
+  'Everyday Science',
+  'General & Aptitude',
+  'Other'
+];
 
 export const DEFAULT_TEST_SETTINGS = {
   passingScore: 70,
@@ -53,6 +64,16 @@ export const createSampleQuestions = () => [
   },
   {
     id: `q-${Date.now()}-3`,
+    type: 'fill_blank',
+    question: 'A word that expresses an action, occurrence, or state of being is known as a [blank].',
+    acceptedAnswers: ['verb', 'Verb'],
+    caseSensitive: false,
+    hint: 'Examples: run, speak, illuminate, exist.',
+    explanation: 'Verbs form the essential grammatical predicate of an English sentence.',
+    points: 2
+  },
+  {
+    id: `q-${Date.now()}-4`,
     type: 'matching',
     question: 'Match each literary and grammatical term with its correct definition:',
     pairs: [
@@ -65,7 +86,7 @@ export const createSampleQuestions = () => [
     points: 2
   },
   {
-    id: `q-${Date.now()}-4`,
+    id: `q-${Date.now()}-5`,
     type: 'ordering',
     question: 'Arrange the standard stages of the writing and essay formulation process in correct sequential order:',
     items: [
@@ -88,6 +109,12 @@ export const TestBuilderModal = ({
 }) => {
   const [activeTab, setActiveTab] = useState('questions'); // 'questions' | 'settings' | 'preview'
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('Academic');
+  const [customCategory, setCustomCategory] = useState('');
+  const [difficulty, setDifficulty] = useState('Intermediate');
+  const [membership, setMembership] = useState('free');
+  const [thumbnail, setThumbnail] = useState('');
   const [settings, setSettings] = useState(DEFAULT_TEST_SETTINGS);
   const [questions, setQuestions] = useState([]);
   const [expandedQuestions, setExpandedQuestions] = useState({});
@@ -100,6 +127,18 @@ export const TestBuilderModal = ({
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title || 'Course Assessment');
+      setDescription(initialData.description || '');
+      const cat = initialData.category || 'Academic';
+      if (TEST_CATEGORIES.includes(cat)) {
+        setCategory(cat);
+        setCustomCategory('');
+      } else {
+        setCategory('Other');
+        setCustomCategory(cat);
+      }
+      setDifficulty(initialData.difficulty || 'Intermediate');
+      setMembership(initialData.membership || 'free');
+      setThumbnail(initialData.thumbnail || '');
       setSettings({
         ...DEFAULT_TEST_SETTINGS,
         ...(initialData.settings || {})
@@ -110,7 +149,13 @@ export const TestBuilderModal = ({
         setQuestions(createSampleQuestions());
       }
     } else {
-      setTitle('Course Assessment & Knowledge Check');
+      setTitle('Standard Assessment & Knowledge Check');
+      setDescription('');
+      setCategory('Academic');
+      setCustomCategory('');
+      setDifficulty('Intermediate');
+      setMembership('free');
+      setThumbnail('');
       setSettings(DEFAULT_TEST_SETTINGS);
       setQuestions(createSampleQuestions());
     }
@@ -141,6 +186,17 @@ export const TestBuilderModal = ({
         correctAnswer: true,
         explanation: 'Clarification regarding why this statement is true or false.',
         points: 1
+      };
+    } else if (type === 'fill_blank') {
+      newQ = {
+        id: qId,
+        type: 'fill_blank',
+        question: 'Enter sentence prompt and place [blank] where the word is missing (e.g. In CSS, the space between content and border is [blank])...',
+        acceptedAnswers: ['padding'],
+        caseSensitive: false,
+        hint: 'Internal spacing property.',
+        explanation: 'Padding defines internal space inside the element border.',
+        points: 2
       };
     } else if (type === 'matching') {
       newQ = {
@@ -309,6 +365,11 @@ export const TestBuilderModal = ({
 
     const testPayload = {
       title,
+      description,
+      category: category === 'Other' && customCategory ? customCategory : category,
+      difficulty,
+      membership,
+      thumbnail,
       settings,
       questions,
       totalPoints,
@@ -331,6 +392,18 @@ export const TestBuilderModal = ({
         if (ans === q.correctAnswer) earned += Number(q.points) || 1;
       } else if (q.type === 'true_false') {
         if (ans === q.correctAnswer) earned += Number(q.points) || 1;
+      } else if (q.type === 'fill_blank') {
+        const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
+          ? q.acceptedAnswers
+          : [q.correctAnswer || ''];
+        const trimmed = (ans || '').toString().trim();
+        const matches = acceptable.some(acc => {
+          if (q.caseSensitive) return acc.toString().trim() === trimmed;
+          return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
+        });
+        if (matches && trimmed.length > 0) {
+          earned += Number(q.points) || 2;
+        }
       } else if (q.type === 'matching') {
         // Evaluate pairs
         if (ans && typeof ans === 'object') {
@@ -501,6 +574,14 @@ export const TestBuilderModal = ({
 
                   <button
                     type="button"
+                    onClick={() => handleAddQuestion('fill_blank')}
+                    className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-teal-500 text-slate-700 dark:text-slate-200 font-bold text-xs shadow-2xs hover:shadow transition flex items-center gap-1.5"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-teal-600" /> Fill in the Blank
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => handleAddQuestion('matching')}
                     className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-purple-500 text-slate-700 dark:text-slate-200 font-bold text-xs shadow-2xs hover:shadow transition flex items-center gap-1.5"
                   >
@@ -539,11 +620,13 @@ export const TestBuilderModal = ({
                               ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'
                               : q.type === 'true_false'
                               ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                              : q.type === 'fill_blank'
+                              ? 'bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300'
                               : q.type === 'matching'
                               ? 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300'
                               : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
                           }`}>
-                            {q.type === 'mcq' ? 'MCQ' : q.type === 'true_false' ? 'True / False' : q.type === 'matching' ? 'Matching Column' : 'Sequential Ordering'}
+                            {q.type === 'mcq' ? 'MCQ' : q.type === 'true_false' ? 'True / False' : q.type === 'fill_blank' ? 'Fill in the Blank' : q.type === 'matching' ? 'Matching Column' : 'Sequential Ordering'}
                           </span>
 
                           <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate flex-1 cursor-pointer" onClick={() => toggleExpand(q.id)}>
@@ -711,7 +794,59 @@ export const TestBuilderModal = ({
                             </div>
                           )}
 
-                          {/* 3. MATCHING COLUMN PAIRS */}
+                          {/* 3. FILL IN THE BLANK OPTIONS */}
+                          {q.type === 'fill_blank' && (
+                            <div className="space-y-3">
+                              <div>
+                                <label className="font-bold text-slate-700 dark:text-slate-300 block text-xs mb-1">
+                                  Accepted Correct Answers (Enter comma-separated variations):
+                                </label>
+                                <input
+                                  type="text"
+                                  value={Array.isArray(q.acceptedAnswers) ? q.acceptedAnswers.join(', ') : (q.correctAnswer || '')}
+                                  onChange={(e) => {
+                                    const list = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                    handleUpdateQuestion(qIdx, 'acceptedAnswers', list);
+                                    if (list.length > 0) {
+                                      handleUpdateQuestion(qIdx, 'correctAnswer', list[0]);
+                                    }
+                                  }}
+                                  placeholder="e.g. photosynthesis, Photosynthesis, light synthesis"
+                                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-mono"
+                                />
+                                <p className="text-[11px] text-slate-400 mt-1">
+                                  Tip: Include valid spelling variations. The candidate receives points if their typed input matches any of these.
+                                </p>
+                              </div>
+
+                              <div className="flex flex-wrap items-center gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                  <input
+                                    type="checkbox"
+                                    checked={Boolean(q.caseSensitive)}
+                                    onChange={(e) => handleUpdateQuestion(qIdx, 'caseSensitive', e.target.checked)}
+                                    className="rounded text-brand-600 focus:ring-brand-500"
+                                  />
+                                  <span>Case Sensitive (Require exact uppercase / lowercase match)</span>
+                                </label>
+                              </div>
+
+                              <div>
+                                <label className="font-bold text-slate-700 dark:text-slate-300 block text-xs mb-1">
+                                  Optional Hint (Shown to student during test):
+                                </label>
+                                <input
+                                  type="text"
+                                  value={q.hint || ''}
+                                  onChange={(e) => handleUpdateQuestion(qIdx, 'hint', e.target.value)}
+                                  placeholder="e.g. Occurs inside chloroplasts using chlorophyll..."
+                                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 4. MATCHING COLUMN PAIRS */}
                           {q.type === 'matching' && (
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
@@ -857,6 +992,104 @@ export const TestBuilderModal = ({
           {/* TAB 2: OPTIONS & SETTINGS */}
           {activeTab === 'settings' && (
             <div className="space-y-6 max-w-3xl mx-auto text-xs sm:text-sm">
+              
+              {/* Test Information & Classification */}
+              <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                <h4 className="font-black text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-brand-600" />
+                  <span>Test Details &amp; Subject Classification</span>
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Assessment Category:
+                    </label>
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold"
+                    >
+                      {TEST_CATEGORIES.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {category === 'Other' ? (
+                    <div>
+                      <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                        Custom Category Name:
+                      </label>
+                      <input
+                        type="text"
+                        value={customCategory}
+                        onChange={(e) => setCustomCategory(e.target.value)}
+                        placeholder="e.g. Environmental Law, Aviation..."
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                        Difficulty Level:
+                      </label>
+                      <select
+                        value={difficulty}
+                        onChange={(e) => setDifficulty(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold"
+                      >
+                        <option value="Beginner">Beginner (Foundational)</option>
+                        <option value="Intermediate">Intermediate (Standard)</option>
+                        <option value="Advanced">Advanced (Expert / Rigorous)</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Membership Access Tier:
+                    </label>
+                    <select
+                      value={membership}
+                      onChange={(e) => setMembership(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold"
+                    >
+                      <option value="free">Free Access (All registered students)</option>
+                      <option value="premium">Premium Pro (Requires active subscription)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Thumbnail Image URL (Optional):
+                    </label>
+                    <input
+                      type="url"
+                      value={thumbnail}
+                      onChange={(e) => setThumbnail(e.target.value)}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Description &amp; Syllabus Overview:
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Brief summary of skills, concepts, and topics tested in this assessment..."
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
+                  />
+                </div>
+              </div>
+
               <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                 <h4 className="font-black text-sm text-slate-900 dark:text-white flex items-center gap-2">
                   <Award className="w-4 h-4 text-brand-600" />
@@ -911,7 +1144,7 @@ export const TestBuilderModal = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-slate-100 dark:border-slate-800">
                   <div>
                     <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
                       Attempts Allowed:
@@ -931,6 +1164,22 @@ export const TestBuilderModal = ({
 
                   <div>
                     <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Negative Marking Penalty:
+                    </label>
+                    <select
+                      value={settings.negativeMarking || 0}
+                      onChange={(e) => setSettings({ ...settings, negativeMarking: Number(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold"
+                    >
+                      <option value="0">No Penalty (0 deduction)</option>
+                      <option value="0.25">-0.25 points for wrong answer</option>
+                      <option value="0.33">-0.33 points (1/3rd penalty)</option>
+                      <option value="0.5">-0.50 points for wrong answer</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
                       Progression Requirement:
                     </label>
                     <label className="flex items-center gap-2 mt-2 cursor-pointer">
@@ -941,7 +1190,7 @@ export const TestBuilderModal = ({
                         className="w-4 h-4 rounded text-brand-600 accent-brand-600"
                       />
                       <span className="font-semibold text-slate-700 dark:text-slate-300">
-                        Require Passing Score to advance course
+                        Require Passing Score to advance
                       </span>
                     </label>
                   </div>
@@ -1118,6 +1367,40 @@ export const TestBuilderModal = ({
                             </button>
                           );
                         })}
+                      </div>
+                    )}
+
+                    {/* Fill in the Blank Interactive Preview */}
+                    {q.type === 'fill_blank' && (
+                      <div className="space-y-2 pt-1 text-xs">
+                        <input
+                          type="text"
+                          disabled={previewSubmitted}
+                          value={previewAnswers[q.id] || ''}
+                          onChange={(e) => !previewSubmitted && setPreviewAnswers({ ...previewAnswers, [q.id]: e.target.value })}
+                          placeholder="Type your answer here..."
+                          className={`w-full px-3 py-2 rounded-xl border font-semibold ${
+                            previewSubmitted
+                              ? (() => {
+                                  const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
+                                    ? q.acceptedAnswers : [q.correctAnswer || ''];
+                                  const trimmed = (previewAnswers[q.id] || '').trim();
+                                  const isMatch = acceptable.some(a => q.caseSensitive ? a.trim() === trimmed : a.trim().toLowerCase() === trimmed.toLowerCase());
+                                  return isMatch && trimmed.length > 0
+                                    ? 'border-emerald-500 bg-emerald-50 text-emerald-900 font-bold'
+                                    : 'border-rose-500 bg-rose-50 text-rose-900';
+                                })()
+                              : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800'
+                          }`}
+                        />
+                        {q.hint && !previewSubmitted && (
+                          <p className="text-[11px] text-amber-600 dark:text-amber-400">💡 Hint: {q.hint}</p>
+                        )}
+                        {previewSubmitted && (
+                          <div className="text-[11px] text-emerald-600 font-bold">
+                            Accepted: {(q.acceptedAnswers || [q.correctAnswer]).join(', ')}
+                          </div>
+                        )}
                       </div>
                     )}
 

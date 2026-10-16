@@ -12,7 +12,8 @@ import {
   Layers, 
   FileText, 
   ArrowRight,
-  Bookmark
+  Bookmark,
+  ClipboardCheck
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
@@ -22,7 +23,7 @@ import {
   getUserEnrollments, 
   getCourses, 
   getTools, 
-  getApps, 
+  getTests, 
   getUserQuizResults 
 } from '../../services/firebaseService';
 
@@ -31,7 +32,7 @@ export const FreeDashboard = () => {
   const [enrollments, setEnrollments] = useState([]);
   const [recommendedCourses, setRecommendedCourses] = useState([]);
   const [tools, setTools] = useState([]);
-  const [apps, setApps] = useState([]);
+  const [tests, setTests] = useState([]);
   const [quizResults, setQuizResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,15 +43,16 @@ export const FreeDashboard = () => {
       if (!currentUser?.uid) return;
       setLoading(true);
 
-      const [enrs, allCourses, allTools, allApps, qResults] = await Promise.all([
+      const [enrs, allCourses, allTools, allTests, qResults] = await Promise.all([
         getUserEnrollments(currentUser.uid),
         getCourses(),
         getTools(),
-        getApps(),
+        getTests(),
         getUserQuizResults(currentUser.uid)
       ]);
 
       setEnrollments(enrs);
+      setTests(allTests.slice(0, 4));
       // Filter recommended free courses not yet completed
       const freeCourses = allCourses.filter(c => c.membership === 'free');
       setRecommendedCourses(freeCourses.slice(0, 3));
@@ -238,28 +240,28 @@ export const FreeDashboard = () => {
             </div>
           </div>
 
-          {/* Free Apps */}
+          {/* Standard Tests */}
           <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                <Layers className="w-4 h-4 text-purple" /> Free Learning Apps
+                <ClipboardCheck className="w-4 h-4 text-purple" /> Featured Standard Tests
               </h4>
-              <Link to="/apps" className="text-xs font-semibold text-purple hover:underline">
-                Explore Apps
+              <Link to="/tests" className="text-xs font-semibold text-purple hover:underline">
+                Explore All Tests
               </Link>
             </div>
             <div className="space-y-2">
-              {apps.map((a) => (
+              {tests.map((t) => (
                 <Link
-                  key={a.id}
-                  to="/apps"
+                  key={t.id}
+                  to="/tests"
                   className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-purple/10 transition flex items-center justify-between text-xs"
                 >
-                  <div>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">{a.name}</span>
-                    <span className="text-[11px] text-slate-400 block">{a.category}</span>
+                  <div className="min-w-0 pr-2">
+                    <span className="font-bold text-slate-800 dark:text-slate-200 block truncate">{t.title}</span>
+                    <span className="text-[11px] text-slate-400 block">{t.category} &bull; {(t.questions || []).length} questions</span>
                   </div>
-                  <span className="text-purple font-bold text-[11px]">Launch →</span>
+                  <span className="text-purple font-bold text-[11px] shrink-0">Take Test →</span>
                 </Link>
               ))}
             </div>

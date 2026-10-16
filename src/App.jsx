@@ -15,6 +15,7 @@ import { Courses } from './pages/public/Courses';
 import { CourseDetails } from './pages/public/CourseDetails';
 import { CoursePlayer } from './pages/public/CoursePlayer';
 import { Apps } from './pages/public/Apps';
+import { Tests } from './pages/public/Tests';
 import { Tools } from './pages/public/Tools';
 import { ContentHub } from './pages/public/ContentHub';
 import { Pricing } from './pages/public/Pricing';
@@ -42,6 +43,7 @@ import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { UserManagement } from './pages/admin/UserManagement';
 import { CourseManagement } from './pages/admin/CourseManagement';
 import { AppManagement } from './pages/admin/AppManagement';
+import { TestManagement } from './pages/admin/TestManagement';
 import { ToolManagement } from './pages/admin/ToolManagement';
 import { ContentManagement } from './pages/admin/ContentManagement';
 import { CategoryManagement } from './pages/admin/CategoryManagement';
@@ -74,7 +76,8 @@ const AppContent = () => {
           <Route path="/about" element={<About />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetails />} />
-          <Route path="/apps" element={<Apps />} />
+          <Route path="/tests" element={<Tests />} />
+          <Route path="/apps" element={<Tests />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/content" element={<ContentHub />} />
           <Route path="/pricing" element={<Pricing />} />
@@ -195,10 +198,18 @@ const AppContent = () => {
             } 
           />
           <Route 
+            path="/admin/tests" 
+            element={
+              <ProtectedRoute requireAdmin={true}>
+                <TestManagement />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/admin/apps" 
             element={
               <ProtectedRoute requireAdmin={true}>
-                <AppManagement />
+                <TestManagement />
               </ProtectedRoute>
             } 
           />

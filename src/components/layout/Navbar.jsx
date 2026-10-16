@@ -33,7 +33,7 @@ export const Navbar = ({ onOpenSearch }) => {
   const navLinks = [
     { label: 'Home', path: '/' },
     { label: 'Courses', path: '/courses' },
-    { label: 'Apps', path: '/apps' },
+    { label: 'Tests', path: '/tests' },
     { label: 'Tools', path: '/tools' },
     { label: 'Content', path: '/content' },
     { label: 'Pricing', path: '/pricing' },

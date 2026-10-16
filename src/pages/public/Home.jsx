@@ -17,9 +17,10 @@ import {
   PlayCircle,
   HelpCircle,
   Zap,
-  Users
+  Users,
+  ClipboardCheck
 } from 'lucide-react';
-import { getCourses, getApps, getTools, getContent } from '../../services/firebaseService';
+import { getCourses, getApps, getTests, getTools, getContent } from '../../services/firebaseService';
 import { Badge } from '../../components/common/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
@@ -29,6 +30,7 @@ export const Home = () => {
   const { isGuest, isPremium } = useAuth();
   const [courses, setCourses] = useState([]);
   const [apps, setApps] = useState([]);
+  const [tests, setTests] = useState([]);
   const [tools, setTools] = useState([]);
   const [content, setContent] = useState([]);
   const [gateOpen, setGateOpen] = useState(false);
@@ -36,14 +38,16 @@ export const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [c, a, t, cnt] = await Promise.all([
+      const [c, a, ts, t, cnt] = await Promise.all([
         getCourses(),
         getApps(),
+        getTests(),
         getTools(),
         getContent()
       ]);
       setCourses(c.filter(course => course.status === 'published' || !course.status).slice(0, 6));
       setApps(a.slice(0, 4));
+      setTests(ts.slice(0, 4));
       setTools(t.slice(0, 4));
       const sortedContent = [...cnt]
         .filter(item => item.status === 'published' || !item.status)
@@ -88,7 +92,7 @@ export const Home = () => {
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-            Explore courses, educational apps, interactive tools and learning resources designed to help you learn smarter.
+            Explore courses, standardized skill tests, interactive tools and learning resources designed to help you learn smarter.
           </p>
 
           {/* Action Buttons */}
@@ -138,8 +142,8 @@ export const Home = () => {
               <div className="text-xs text-slate-500 font-medium">Interactive Tools</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-black text-purple">8+</div>
-              <div className="text-xs text-slate-500 font-medium">Educational Apps</div>
+              <div className="text-2xl sm:text-3xl font-black text-purple">6+</div>
+              <div className="text-xs text-slate-500 font-medium">Standard Tests</div>
             </div>
             <div>
               <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">100%</div>
@@ -231,54 +235,54 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Learning Apps Showcase */}
+      {/* Standard Tests Showcase */}
       <section className="bg-slate-100/70 dark:bg-slate-900/40 py-16 border-y border-slate-200/80 dark:border-slate-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
               <div className="flex items-center gap-2 text-purple text-xs font-bold uppercase tracking-wider mb-2">
-                <Layers className="w-4 h-4" /> Gamified Experiences
+                <ClipboardCheck className="w-4 h-4" /> Standardized Assessments
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                Interactive Learning Apps
+                Standard Tests & Skill Evaluations
               </h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                Gamified apps built to train mental arithmetic, vocabulary retention, and road safety.
+                Evaluate your knowledge across Academic, Life Skills, Technical, Current Affairs, and Everyday Science.
               </p>
             </div>
             <Link
-              to="/apps"
+              to="/tests"
               className="inline-flex items-center gap-1.5 text-sm font-bold text-purple hover:underline group"
             >
-              <span>Explore All Apps</span>
+              <span>Explore All Tests</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {apps.map((app) => (
+            {tests.map((test) => (
               <div
-                key={app.id}
-                onClick={() => handleResourceClick(app, `/apps`)}
+                key={test.id}
+                onClick={() => handleResourceClick(test, `/tests`)}
                 className="group p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-lg hover:border-purple/40 transition-all cursor-pointer flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-purple/10 text-purple flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-                      <Layers className="w-6 h-6" />
+                      <ClipboardCheck className="w-6 h-6" />
                     </div>
-                    <Badge type={app.membership} size="xs" />
+                    <Badge type={test.membership || 'free'} size="xs" />
                   </div>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-purple transition">
-                    {app.name}
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-purple transition line-clamp-1">
+                    {test.title}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
-                    {app.description}
+                    {test.description}
                   </p>
                 </div>
                 <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-                  <span>{app.category}</span>
-                  <span className="text-purple font-bold">Launch App →</span>
+                  <span>{test.category}</span>
+                  <span className="text-purple font-bold">Take Test →</span>
                 </div>
               </div>
             ))}

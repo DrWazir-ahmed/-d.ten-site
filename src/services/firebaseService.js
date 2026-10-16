@@ -16,6 +16,7 @@ import {
 import { 
   INITIAL_COURSES, 
   INITIAL_APPS, 
+  INITIAL_TESTS,
   INITIAL_TOOLS, 
   INITIAL_CONTENT, 
   INITIAL_CATEGORIES 
@@ -148,6 +149,17 @@ export const initializeLocalStore = () => {
   if (!getLocal('apps', null)) setLocal('apps', INITIAL_APPS);
   if (!getLocal('tools', null)) setLocal('tools', INITIAL_TOOLS);
 
+  const existingTests = getLocal('tests', null);
+  if (!existingTests) {
+    setLocal('tests', INITIAL_TESTS);
+  } else {
+    const existingIds = new Set(existingTests.map(t => t.id));
+    const missingTests = INITIAL_TESTS.filter(t => !existingIds.has(t.id));
+    if (missingTests.length > 0) {
+      setLocal('tests', [...existingTests, ...missingTests]);
+    }
+  }
+
   const existingContent = getLocal('content', null);
   if (!existingContent) {
     setLocal('content', INITIAL_CONTENT);
@@ -170,9 +182,11 @@ export const initializeLocalStore = () => {
   } else {
     // ensure new category options exist
     const mergedContentCats = Array.from(new Set([...(existingCategories.content || []), ...(INITIAL_CATEGORIES.content || [])]));
+    const mergedTestCats = Array.from(new Set([...(existingCategories.tests || []), ...(INITIAL_CATEGORIES.tests || [])]));
     setLocal('categories', {
       ...existingCategories,
-      content: mergedContentCats
+      content: mergedContentCats,
+      tests: mergedTestCats
     });
   }
   const existingUsers = getLocal('users', null);
@@ -630,6 +644,127 @@ export const deleteApp = async (id) => {
   const apps = getLocal('apps', INITIAL_APPS) || [];
   const updated = apps.filter(a => a.id !== id);
   setLocal('apps', updated);
+  return true;
+};
+
+/* =========================================================================
+   TESTS / ASSESSMENTS SERVICE
+   ========================================================================= */
+
+export const getTests = async () => {
+  let list = [];
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, "tests"));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      }
+    } catch (err) {
+      console.warn("Firestore getTests failed, using local store:", err);
+    }
+  }
+
+  const localItems = getLocal('tests', INITIAL_TESTS) || [];
+  const existingIds = new Set(list.map(item => item.id));
+
+  localItems.forEach(item => {
+    if (!existingIds.has(item.id)) {
+      list.push(item);
+      existingIds.add(item.id);
+    }
+  });
+
+  INITIAL_TESTS.forEach(seed => {
+    if (!existingIds.has(seed.id)) {
+      list.push(seed);
+      existingIds.add(seed.id);
+    }
+  });
+
+  return list;
+};
+
+export const getTestById = async (id) => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db, "tests", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() };
+      }
+    } catch (err) {
+      console.warn("Firestore getTestById failed, using local fallback:", err);
+    }
+  }
+
+  const allTests = await getTests();
+  return allTests.find(t => t.id === id) || null;
+};
+
+export const createTest = async (testData) => {
+  const newTest = {
+    ...testData,
+    id: testData.id || `test-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    status: testData.status || 'published',
+    questions: testData.questions || [],
+    settings: {
+      timeLimit: 15,
+      passingScore: 70,
+      attemptsAllowed: 0,
+      shuffleQuestions: false,
+      shuffleOptions: false,
+      showInstantFeedback: false,
+      negativeMarking: 0,
+      ...(testData.settings || {})
+    }
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, "tests", newTest.id), newTest);
+    } catch (err) {
+      console.warn("Firestore createTest error:", err);
+    }
+  }
+
+  const tests = getLocal('tests', INITIAL_TESTS) || [];
+  const updated = [newTest, ...tests.filter(t => t.id !== newTest.id)];
+  setLocal('tests', updated);
+  return newTest;
+};
+
+export const updateTest = async (id, testData) => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, "tests", id), {
+        ...testData,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn("Firestore updateTest error:", err);
+    }
+  }
+
+  const tests = getLocal('tests', INITIAL_TESTS) || [];
+  const updated = tests.map(t => t.id === id ? { ...t, ...testData, updatedAt: new Date().toISOString() } : t);
+  setLocal('tests', updated);
+  return updated.find(t => t.id === id);
+};
+
+export const deleteTest = async (id) => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await deleteDoc(doc(db, "tests", id));
+    } catch (err) {
+      console.warn("Firestore deleteTest error:", err);
+    }
+  }
+
+  const tests = getLocal('tests', INITIAL_TESTS) || [];
+  const updated = tests.filter(t => t.id !== id);
+  setLocal('tests', updated);
   return true;
 };
 
@@ -1195,6 +1330,8 @@ export const recordQuizResult = async (userId, courseId, courseTitle, quizTitle,
   return newResult;
 };
 
+export const saveQuizResult = recordQuizResult;
+
 export const getUserQuizResults = async (userId) => {
   if (!userId) return [];
   if (isFirebaseConfigured && db) {
@@ -1507,6 +1644,7 @@ export const inviteAdmin = async ({ email, name, password }) => {
 export const seedDatabase = async () => {
   setLocal('courses', INITIAL_COURSES);
   setLocal('apps', INITIAL_APPS);
+  setLocal('tests', INITIAL_TESTS);
   setLocal('tools', INITIAL_TOOLS);
   setLocal('content', INITIAL_CONTENT);
   setLocal('categories', INITIAL_CATEGORIES);
@@ -1520,6 +1658,10 @@ export const seedDatabase = async () => {
       // Seed apps
       for (const appItem of INITIAL_APPS) {
         await setDoc(doc(db, "apps", appItem.id), appItem);
+      }
+      // Seed tests
+      for (const testItem of INITIAL_TESTS) {
+        await setDoc(doc(db, "tests", testItem.id), testItem);
       }
       // Seed tools
       for (const tool of INITIAL_TOOLS) {
