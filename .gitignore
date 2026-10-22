@@ -30,3 +30,7 @@ dist-ssr
 
 .vercel
 .env*
+
+# Model cache & binaries
+models/
+
