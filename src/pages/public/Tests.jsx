@@ -28,6 +28,7 @@ import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
 import { CurriculumSystemExplorer } from '../../components/tests/CurriculumSystemExplorer';
+import { useSEO } from '../../hooks/useSEO';
 
 export const Tests = () => {
   const { isPremium } = useAuth();
@@ -54,6 +55,12 @@ export const Tests = () => {
     'General & Aptitude',
     'Other'
   ];
+
+  // Dynamic SEO when on standalone view
+  useSEO(activeViewTab === 'standalone' ? {
+    title: 'Standard Skill Tests & Assessments | D.TEN Academy',
+    description: 'Explore comprehensive standard skill tests with instant evaluation, passing threshold metrics, and detailed question breakdowns.'
+  } : {});
 
   useEffect(() => {
     const load = async () => {
