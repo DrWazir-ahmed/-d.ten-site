@@ -391,7 +391,7 @@ export const CurriculumSystemExplorer = () => {
               </div>
 
               {/* Systems Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {indexData.systems.map(sys => {
                   const theme = getSystemTheme(sys);
                   const totalClasses = sys.classes?.length || 0;
@@ -407,57 +407,57 @@ export const CurriculumSystemExplorer = () => {
                     <article
                       key={sys.id}
                       onClick={() => handleSelectSystem(sys)}
-                      className={`group relative rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-6 overflow-hidden ${theme.glow}`}
+                      className={`group relative rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 overflow-hidden ${theme.glow}`}
                     >
                       {/* Decorative top gradient accent bar */}
-                      <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${theme.gradient}`} />
+                      <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${theme.gradient}`} />
 
-                      <div className="space-y-4">
+                      <div className="space-y-3">
                         {/* Header icon + country flag pill + tag */}
-                        <div className="flex items-start justify-between gap-3">
-                          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg shadow-brand-500/20 group-hover:scale-105 group-hover:rotate-1 transition-transform`}>
-                            {theme.icon}
+                        <div className="flex items-start justify-between gap-2.5">
+                          <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform shrink-0`}>
+                            {React.cloneElement(theme.icon, { className: 'w-5 h-5 text-white' })}
                           </div>
-                          <div className="flex flex-col items-end gap-1.5">
-                            <span className="px-3 py-1 rounded-full text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-sm">
-                              <span className="text-base leading-none">{sys.flag || theme.flag}</span>
-                              <span>{sys.country || theme.country}</span>
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-2xs">
+                              <span className="text-sm leading-none">{sys.flag || theme.flag}</span>
+                              <span className="text-[11px]">{sys.country || theme.country}</span>
                             </span>
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border ${theme.badgeBg}`}>
+                            <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${theme.badgeBg}`}>
                               {totalClasses} {totalClasses === 1 ? 'Class' : 'Classes'}
                             </span>
                           </div>
                         </div>
 
                         <div>
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
                             {theme.tag}
                           </span>
-                          <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
+                          <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-1.5">
                             <span>{sys.name}</span>
                           </h3>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug line-clamp-2">
                             {theme.subtitle}
                           </p>
                         </div>
 
                         {/* Metric Counter Strip */}
-                        <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800/80 text-center">
+                        <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800/80 text-center">
                           <div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Subjects</span>
-                            <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-0.5 block">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Subjects</span>
+                            <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5 block">
                               {totalSubjects}
                             </span>
                           </div>
                           <div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Chapters</span>
-                            <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-0.5 block">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Chapters</span>
+                            <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5 block">
                               {totalChapters}
                             </span>
                           </div>
                           <div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total MCQs</span>
-                            <span className="text-xs sm:text-sm font-black text-brand-600 dark:text-brand-400 mt-0.5 block font-mono">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Total MCQs</span>
+                            <span className="text-xs font-black text-brand-600 dark:text-brand-400 mt-0.5 block font-mono">
                               {totalQuestions.toLocaleString()}
                             </span>
                           </div>
@@ -465,12 +465,12 @@ export const CurriculumSystemExplorer = () => {
                       </div>
 
                       {/* Card Action Link */}
-                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-black">
+                      <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold">
                         <span className="text-slate-700 dark:text-slate-300 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                          Explore Classes & Subjects
+                          Explore Curriculum
                         </span>
-                        <span className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-brand-600 group-hover:text-white text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-sm">
-                          <ArrowRight className="w-4 h-4" />
+                        <span className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 group-hover:bg-brand-600 group-hover:text-white text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 shadow-2xs">
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
                     </article>
@@ -484,8 +484,8 @@ export const CurriculumSystemExplorer = () => {
               LEVEL 2: CLASS CARDS (WHEN SYSTEM IS CLICKED)
               ───────────────────────────────────────────────────────────── */}
           {selectedSystem && !selectedClass && (
-            <section aria-labelledby="classes-heading" className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <section aria-labelledby="classes-heading" className="space-y-5 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5">
                 <div>
                   <button 
                     onClick={handleResetToSystems} 
@@ -494,27 +494,27 @@ export const CurriculumSystemExplorer = () => {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to All Systems</span>
                   </button>
-                  <h2 id="classes-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
-                    <span className="text-2xl">{selectedSystem.flag}</span>
+                  <h2 id="classes-heading" className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>{selectedSystem.flag}</span>
                     <span>{selectedSystem.name}: Select Class / Grade</span>
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-xl">
                     Select your academic tier to view subjects and start chapter assessments.
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1.5 rounded-xl text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                  <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1">
                     <span>{selectedSystem.flag}</span>
                     <span>{selectedSystem.country}</span>
                   </span>
-                  <div className="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <div className="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700">
                     {selectedSystem.classes?.length || 0} Academic Levels
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {(selectedSystem.classes || []).map(cls => {
                   const subjectCount = cls.subjects?.length || 0;
                   const chapterCount = cls.subjects?.reduce((sum, s) => sum + s.chapterCount, 0) || 0;
@@ -524,46 +524,46 @@ export const CurriculumSystemExplorer = () => {
                     <article
                       key={cls.id}
                       onClick={() => handleSelectClass(cls)}
-                      className="group relative p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-5 overflow-hidden"
+                      className="group relative p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 overflow-hidden"
                     >
-                      <div className="space-y-4">
+                      <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <div className="w-13 h-13 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center p-3 group-hover:scale-105 transition-transform shadow-sm">
-                            <GraduationCap className="w-7 h-7" />
+                          <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center p-2.5 group-hover:scale-105 transition-transform shadow-2xs">
+                            <GraduationCap className="w-5 h-5" />
                           </div>
-                          <span className="px-2.5 py-1 rounded-full text-xs font-black flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-sm">
+                          <span className="px-2 py-0.5 rounded-lg text-xs font-bold flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xs">
                             <span className="text-sm leading-none">{cls.flag || selectedSystem.flag}</span>
                             <span>{cls.country || selectedSystem.country}</span>
                           </span>
                         </div>
 
                         <div>
-                          <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
+                          <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-1.5">
                             <span>{cls.name}</span>
                           </h3>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
                             Curriculum standard containing comprehensive subjects and chapter tests.
                           </p>
                         </div>
 
                         {/* Metric Counter */}
-                        <div className="grid grid-cols-2 gap-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
+                        <div className="grid grid-cols-2 gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
                           <div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Subjects</span>
-                            <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white mt-0.5 block">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Subjects</span>
+                            <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5 block">
                               {subjectCount}
                             </span>
                           </div>
                           <div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Available MCQs</span>
-                            <span className="text-xs sm:text-sm font-black text-brand-600 dark:text-brand-400 mt-0.5 block font-mono">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Available MCQs</span>
+                            <span className="text-xs font-black text-brand-600 dark:text-brand-400 mt-0.5 block font-mono">
                               {totalQuestions.toLocaleString()}
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+                      <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
                         <span>{chapterCount} Chapters Ready</span>
                         <span className="text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-black">
                           View Subjects →
@@ -580,8 +580,8 @@ export const CurriculumSystemExplorer = () => {
               LEVEL 3: SUBJECTS (WHEN CLASS IS CLICKED)
               ───────────────────────────────────────────────────────────── */}
           {selectedClass && !selectedSubject && (
-            <section aria-labelledby="subjects-heading" className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <section aria-labelledby="subjects-heading" className="space-y-5 animate-fadeIn">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-3">
                 <div>
                   <button 
                     onClick={() => setSelectedClass(null)} 
@@ -590,49 +590,49 @@ export const CurriculumSystemExplorer = () => {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to Classes ({selectedSystem?.name})</span>
                   </button>
-                  <h2 id="subjects-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <h2 id="subjects-heading" className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
                     <span>{selectedClass.flag || selectedSystem?.flag}</span>
                     <span>{selectedClass.name} Subjects</span>
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-xl">
                     Select a subject to browse chapters and conduct standard 10 MCQs tests.
                   </p>
                 </div>
 
                 {/* Subject search bar with clear button */}
                 <div className="relative max-w-sm w-full">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                   <input
                     type="text"
                     placeholder="Search subject by title..."
                     value={subjectSearch}
                     onChange={(e) => setSubjectSearch(e.target.value)}
-                    className="w-full pl-10 pr-9 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm"
+                    className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xs"
                   />
                   {subjectSearch && (
                     <button
                       onClick={() => setSubjectSearch('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
               </div>
 
               {filteredSubjects.length === 0 ? (
-                <div className="py-16 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-3">
-                  <BookOpen className="w-12 h-12 text-slate-300 mx-auto" />
-                  <h4 className="text-base font-bold text-slate-800 dark:text-white">No Subjects Found</h4>
+                <div className="py-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-2">
+                  <BookOpen className="w-10 h-10 text-slate-300 mx-auto" />
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-white">No Subjects Found</h4>
                   <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                    We could not find any subjects matching "{subjectSearch}". Try searching with a different term.
+                    We could not find any subjects matching "{subjectSearch}".
                   </p>
-                  <button onClick={() => setSubjectSearch('')} className="text-xs text-brand-600 font-bold hover:underline pt-2">
+                  <button onClick={() => setSubjectSearch('')} className="text-xs text-brand-600 font-bold hover:underline pt-1">
                     Reset Subject Search
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
                   {filteredSubjects.map(sub => {
                     const visuals = getSubjectVisuals(sub.name);
 
@@ -640,38 +640,38 @@ export const CurriculumSystemExplorer = () => {
                       <article
                         key={sub.id}
                         onClick={() => handleSelectSubject(sub)}
-                        className="group relative p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4"
+                        className="group relative p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-3"
                       >
-                        <div className="space-y-3">
+                        <div className="space-y-2.5">
                           <div className="flex items-center justify-between">
-                            <div className="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+                            <div className="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
                               {visuals.icon}
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <span className="px-2 py-0.5 rounded-lg text-xs font-bold border flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-sm" title={sub.country || selectedSystem?.country}>
+                              <span className="px-1.5 py-0.5 rounded text-xs font-bold border flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-2xs" title={sub.country || selectedSystem?.country}>
                                 <span>{sub.flag || selectedSystem?.flag}</span>
                               </span>
-                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${visuals.badgeColor}`}>
+                              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${visuals.badgeColor}`}>
                                 {visuals.category}
                               </span>
                             </div>
                           </div>
 
                           <div>
-                            <h3 className="font-black text-sm sm:text-base text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-1" title={sub.name}>
+                            <h3 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-1" title={sub.name}>
                               {sub.name}
                             </h3>
-                            <span className="text-[11px] font-semibold text-slate-400 block mt-0.5">
-                              {sub.chapterCount} Chapters Available
+                            <span className="text-[10px] font-medium text-slate-400 block mt-0.5">
+                              {sub.chapterCount} Chapters
                             </span>
                           </div>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
-                          <span className="font-mono text-brand-600 dark:text-brand-400 font-bold">
+                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
+                          <span className="font-mono text-brand-600 dark:text-brand-400 text-xs">
                             {sub.questionCount} MCQs
                           </span>
-                          <span className="text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-black">
+                          <span className="text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-black text-[11px]">
                             Take Test →
                           </span>
                         </div>
@@ -687,8 +687,8 @@ export const CurriculumSystemExplorer = () => {
               LEVEL 4: CHAPTER NO WITH TITLE (WHEN SUBJECT IS CLICKED)
               ───────────────────────────────────────────────────────────── */}
           {selectedSubject && (
-            <section aria-labelledby="chapters-heading" className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <section aria-labelledby="chapters-heading" className="space-y-5 animate-fadeIn">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-3">
                 <div>
                   <button 
                     onClick={() => setSelectedSubject(null)} 
@@ -697,91 +697,91 @@ export const CurriculumSystemExplorer = () => {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to Subjects ({selectedClass?.name})</span>
                   </button>
-                  <h2 id="chapters-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <h2 id="chapters-heading" className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
                     <span>{selectedSubject.flag || selectedSystem?.flag}</span>
                     <span>{selectedSubject.name}: Chapter Assessments</span>
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
-                    Click any chapter to conduct a 10 MCQs assessment with options feedback and detailed explanations.
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-xl">
+                    Select a chapter to practice 10 MCQs with instant options feedback and explanations.
                   </p>
                 </div>
 
                 {/* Chapter search filter */}
                 <div className="relative max-w-sm w-full">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                   <input
                     type="text"
                     placeholder="Search chapter title or number..."
                     value={chapterSearch}
                     onChange={(e) => setChapterSearch(e.target.value)}
-                    className="w-full pl-10 pr-9 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm"
+                    className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xs"
                   />
                   {chapterSearch && (
                     <button
                       onClick={() => setChapterSearch('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
               </div>
 
               {filteredChapters.length === 0 ? (
-                <div className="py-16 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 space-y-3">
-                  <FileText className="w-12 h-12 text-slate-300 mx-auto" />
-                  <h4 className="text-base font-bold text-slate-800 dark:text-white">No Chapters Found</h4>
+                <div className="py-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-2">
+                  <FileText className="w-10 h-10 text-slate-300 mx-auto" />
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-white">No Chapters Found</h4>
                   <p className="text-xs text-slate-500 max-w-sm mx-auto">
                     No chapters matching "{chapterSearch}".
                   </p>
-                  <button onClick={() => setChapterSearch('')} className="text-xs text-brand-600 font-bold hover:underline pt-2">
+                  <button onClick={() => setChapterSearch('')} className="text-xs text-brand-600 font-bold hover:underline pt-1">
                     Clear Chapter Search
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
                   {filteredChapters.map(chap => (
                     <article
                       key={chap.no}
-                      className="group p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-4"
+                      className="group p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-3"
                     >
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start gap-3">
                         {/* Styled Chapter Number Badge */}
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-black text-sm flex flex-col items-center justify-center shrink-0 shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform">
-                          <span className="text-[9px] uppercase tracking-wider font-extrabold opacity-80">CH</span>
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-black text-xs flex flex-col items-center justify-center shrink-0 shadow-sm shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                          <span className="text-[8px] uppercase tracking-wider font-extrabold opacity-80">CH</span>
                           <span className="leading-none">{chap.no < 10 ? `0${chap.no}` : chap.no}</span>
                         </div>
 
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1 border border-slate-200 dark:border-slate-700 shadow-sm">
+                          <div className="flex items-center gap-1.5">
+                            <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1 border border-slate-200 dark:border-slate-700 shadow-2xs">
                               <span>{selectedSystem?.flag}</span>
                               <span>Chapter {chap.no}</span>
                             </span>
-                            <span className="text-[11px] font-semibold text-slate-400">
-                              {chap.count} MCQs in pool
+                            <span className="text-[10px] font-semibold text-slate-400">
+                              {chap.count} MCQs
                             </span>
                           </div>
 
-                          <h3 className="font-black text-sm sm:text-base text-slate-900 dark:text-white leading-snug mt-1.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                          <h3 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white leading-snug mt-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-2">
                             {chap.title}
                           </h3>
                         </div>
                       </div>
 
                       {/* Card Bottom CTA Strip */}
-                      <div className="pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>10 MCQs with Options & Feedback</span>
+                      <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">10 MCQs & Feedback</span>
                         </div>
 
                         <button
                           onClick={() => setActiveChapterForTest(chap)}
-                          className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-black text-xs transition-all flex items-center gap-2 shadow-md shadow-brand-500/25 hover:shadow-brand-500/40 group-hover:scale-105"
+                          className="py-1.5 px-3 rounded-lg bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-black text-xs transition-all flex items-center gap-1.5 shadow-sm shadow-brand-500/25 shrink-0"
                         >
-                          <Play className="w-3.5 h-3.5 fill-current" />
-                          <span>Conduct 10 MCQs</span>
+                          <Play className="w-3 h-3 fill-current" />
+                          <span>Conduct Test</span>
                         </button>
                       </div>
                     </article>

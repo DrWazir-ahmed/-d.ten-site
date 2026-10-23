@@ -121,47 +121,45 @@ export const Tests = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 animate-fadeIn">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 animate-fadeIn">
       
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 shadow-2xl border border-brand-800/50">
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-80 h-80 rounded-full bg-brand-500/10 blur-3xl pointer-events-none" />
-        <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-brand-300 text-xs font-black uppercase tracking-wider border border-white/10">
-            <ClipboardCheck className="w-4 h-4 text-brand-400" />
-            Standard Testing & Evaluation System
+      {/* Header Banner - Compact & Modern UI */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-6 shadow-xl border border-brand-800/40">
+        <div className="absolute top-0 right-0 -mt-6 -mr-6 w-48 h-48 rounded-full bg-brand-500/10 blur-2xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-brand-300 text-[10px] font-black uppercase tracking-wider border border-white/10">
+              <ClipboardCheck className="w-3.5 h-3.5 text-brand-400" />
+              Standard Testing & Evaluation System
+            </div>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white leading-tight">
+              Comprehensive Tests & Skill Assessments
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-300 leading-snug">
+              Chapter-wise 10 MCQs with instant options feedback across Cambridge (UK 🇬🇧), India CBSE (🇮🇳), US High School (🇺🇸), and Pakistan FBISE (🇵🇰: Matric, English, Math).
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            Comprehensive Tests & Skill Assessments
-          </h1>
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-            Take chapter-wise 10 MCQs tests with options & feedback across Cambridge (UK 🇬🇧), India CBSE (🇮🇳), US High School (🇺🇸), and Pakistan FBISE (🇵🇰: Matric, English, Math), 
-            or practice general standardized skill assessments.
-          </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-bold text-slate-300">
-            <span className="flex items-center gap-1.5 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 62,900+ Standard MCQs
+          <div className="flex flex-wrap md:flex-col lg:flex-row items-center gap-2 text-[11px] font-bold text-slate-300 shrink-0">
+            <span className="flex items-center gap-1.5 bg-black/30 px-2.5 py-1 rounded-lg border border-white/5 shadow-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 62,900+ Standard MCQs
             </span>
-            <span className="flex items-center gap-1.5 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
-              <CheckCircle2 className="w-4 h-4 text-cyan-400" /> 10 MCQs Chapter Tests
+            <span className="flex items-center gap-1.5 bg-black/30 px-2.5 py-1 rounded-lg border border-white/5 shadow-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" /> 10 MCQs Chapter Tests
             </span>
-            <span className="flex items-center gap-1.5 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
-              <CheckCircle2 className="w-4 h-4 text-purple-400" /> Instant Options & Explanations
-            </span>
-            <span className="flex items-center gap-1.5 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
-              <CheckCircle2 className="w-4 h-4 text-amber-400" /> Automated Scoring & History
+            <span className="flex items-center gap-1.5 bg-black/30 px-2.5 py-1 rounded-lg border border-white/5 shadow-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 text-purple-400" /> Instant Feedback
             </span>
           </div>
         </div>
       </div>
 
       {/* Main Testing System Switcher Tabs */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-2 bg-slate-100 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-1.5 bg-slate-100 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => setActiveViewTab('curriculum')}
-            className={`flex-1 sm:flex-none py-2.5 px-5 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 ${
+            className={`flex-1 sm:flex-none py-2 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 ${
               activeViewTab === 'curriculum'
                 ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -169,14 +167,14 @@ export const Tests = () => {
           >
             <Layers className="w-4 h-4" />
             <span>Curriculum Systems (🇬🇧 Cambridge &bull; 🇮🇳 CBSE &bull; 🇺🇸 US &bull; 🇵🇰 FBISE)</span>
-            <span className="px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-600 dark:text-brand-400 font-mono text-[10px]">
+            <span className="px-1.5 py-0.5 rounded-md bg-brand-500/10 text-brand-600 dark:text-brand-400 font-mono text-[10px]">
               62,900+ MCQs
             </span>
           </button>
 
           <button
             onClick={() => setActiveViewTab('standalone')}
-            className={`flex-1 sm:flex-none py-2.5 px-5 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 ${
+            className={`flex-1 sm:flex-none py-2 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 ${
               activeViewTab === 'standalone'
                 ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -287,10 +285,10 @@ export const Tests = () => {
                 return (
                   <div 
                     key={test.id}
-                    className="group flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl hover:border-brand-500/40 transition-all duration-300"
+                    className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-lg hover:border-brand-500/40 transition-all duration-300"
                   >
                     {/* Thumbnail / Header Visual */}
-                    <div className="relative h-44 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden border-b border-slate-100 dark:border-slate-800">
+                    <div className="relative h-32 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden border-b border-slate-100 dark:border-slate-800">
                       {test.thumbnail ? (
                         <img 
                           src={test.thumbnail} 
@@ -298,33 +296,33 @@ export const Tests = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                         />
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-100 via-indigo-50/50 to-brand-50/40 dark:from-slate-800 dark:via-slate-800/80 dark:to-brand-950/20">
-                          <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-700 shadow-md flex items-center justify-center text-brand-600 dark:text-brand-400 group-hover:scale-110 transition-transform">
+                        <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-slate-100 via-indigo-50/50 to-brand-50/40 dark:from-slate-800 dark:via-slate-800/80 dark:to-brand-950/20">
+                          <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-brand-600 dark:text-brand-400 group-hover:scale-110 transition-transform">
                             {getCategoryIcon(test.category)}
                           </div>
-                          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mt-2">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mt-1.5">
                             {test.category || 'Standard Test'}
                           </span>
                         </div>
                       )}
 
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                        <span className="px-2.5 py-1 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-[10px] font-black uppercase tracking-wider text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 flex items-center gap-1 shadow-sm">
+                      <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                        <span className="px-2 py-0.5 rounded-lg bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-[9px] font-black uppercase tracking-wider text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 flex items-center gap-1 shadow-xs">
                           {getCategoryIcon(test.category)}
                           {test.category || 'General'}
                         </span>
-                        <span className="px-2 py-0.5 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-xs font-bold text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 flex items-center gap-1 shadow-sm">
+                        <span className="px-2 py-0.5 rounded-lg bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-[10px] font-bold text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 flex items-center gap-1 shadow-xs">
                           <span>{test.countryFlag || '🌐'}</span>
-                          <span className="text-[10px] font-bold">{test.country || 'Global'}</span>
+                          <span>{test.country || 'Global'}</span>
                         </span>
                         {test.difficulty && (
-                          <span className="px-2 py-1 rounded-xl bg-slate-900/80 backdrop-blur-md text-[10px] font-bold uppercase text-white shadow-sm">
+                          <span className="px-1.5 py-0.5 rounded-lg bg-slate-900/80 backdrop-blur-md text-[9px] font-bold uppercase text-white shadow-xs">
                             {test.difficulty}
                           </span>
                         )}
                       </div>
 
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-2.5 right-2.5">
                         <Badge variant={test.membership === 'premium' ? 'warning' : 'success'}>
                           {test.membership === 'premium' ? 'Premium' : 'Free'}
                         </Badge>
@@ -332,9 +330,9 @@ export const Tests = () => {
                     </div>
 
                     {/* Card Content */}
-                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
-                      <div className="space-y-2">
-                        <h3 className="font-black text-lg text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-1">
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+                      <div className="space-y-1">
+                        <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-1">
                           {test.title}
                         </h3>
                         <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
@@ -343,44 +341,44 @@ export const Tests = () => {
                       </div>
 
                       {/* Standard Test Meta Metrics */}
-                      <div className="grid grid-cols-3 gap-2 py-3 border-y border-slate-100 dark:border-slate-800 text-center">
+                      <div className="grid grid-cols-3 gap-1.5 py-2 border-y border-slate-100 dark:border-slate-800 text-center">
                         <div>
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Questions</span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Questions</span>
                           <span className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1 mt-0.5">
-                            <HelpCircle className="w-3.5 h-3.5 text-brand-500" />
+                            <HelpCircle className="w-3 h-3 text-brand-500" />
                             {questionCount}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Duration</span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Duration</span>
                           <span className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1 mt-0.5">
-                            <Clock className="w-3.5 h-3.5 text-amber-500" />
+                            <Clock className="w-3 h-3 text-amber-500" />
                             {timeLimit > 0 ? `${timeLimit}m` : 'Untimed'}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Passing</span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Passing</span>
                           <span className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1 mt-0.5">
-                            <Award className="w-3.5 h-3.5 text-emerald-500" />
+                            <Award className="w-3 h-3 text-emerald-500" />
                             {passingScore}%
                           </span>
                         </div>
                       </div>
 
                       {negativeMarking > 0 && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg">
+                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-1 rounded-lg">
                           <ShieldAlert className="w-3 h-3" />
-                          <span>Negative marking of -{negativeMarking} pt per incorrect answer</span>
+                          <span>-{negativeMarking} pt penalty for wrong answers</span>
                         </div>
                       )}
 
                       {/* Launch Action */}
                       <button
                         onClick={() => handleLaunch(test)}
-                        className={`w-full py-2.5 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all shadow-sm ${
+                        className={`w-full py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all shadow-xs ${
                           isLocked
                             ? 'bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                            : 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/20 hover:shadow-brand-500/30'
+                            : 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-500/20'
                         }`}
                       >
                         <Play className="w-3.5 h-3.5 fill-current" />
