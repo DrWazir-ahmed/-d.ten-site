@@ -34,6 +34,7 @@ import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
 import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
+import { PythonKidsStudio } from '../../components/pythonKids/PythonKidsStudio';
 
 export const CoursePlayer = () => {
   const { id } = useParams();
@@ -399,7 +400,9 @@ export const CoursePlayer = () => {
             )}
 
             {/* Dynamic Lesson Type Display */}
-            {currentLesson.type === 'language_studio' || (course.id === 'course-polyglot-20-languages' && currentLesson.type !== 'quiz') ? (
+            {course.id === 'course-python-kids-pakistan' ? (
+              <PythonKidsStudio />
+            ) : currentLesson.type === 'language_studio' || (course.id === 'course-polyglot-20-languages' && currentLesson.type !== 'quiz') ? (
               <div className="space-y-6">
                 {currentLesson.content && (
                   <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-50 to-indigo-50/60 dark:from-slate-800/60 dark:to-brand-950/30 border border-brand-200/80 dark:border-brand-800/60">

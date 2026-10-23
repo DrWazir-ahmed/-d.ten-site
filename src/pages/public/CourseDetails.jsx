@@ -24,6 +24,7 @@ import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
+import { PythonKidsStudio } from '../../components/pythonKids/PythonKidsStudio';
 
 export const CourseDetails = () => {
   const { id } = useParams();
@@ -477,6 +478,24 @@ export const CourseDetails = () => {
                 </button>
               </div>
               <LanguageLearningStudio />
+            </div>
+          )}
+
+          {course.id === 'course-python-kids-pakistan' && (
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-extrabold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-amber-500" />
+                  Junior Python Code Studio (Playground & Lessons)
+                </h3>
+                <button
+                  onClick={handleEnrollOrContinue}
+                  className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
+                >
+                  Start Course & Learn →
+                </button>
+              </div>
+              <PythonKidsStudio />
             </div>
           )}
         </div>

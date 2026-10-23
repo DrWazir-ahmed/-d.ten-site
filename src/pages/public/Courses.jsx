@@ -239,7 +239,17 @@ export const Courses = () => {
                           <span>🌐</span>
                           <span>20 Languages</span>
                         </span>
-                        <span className="text-emerald-300 font-mono text-[10px]">250 Words • 100 Sentences</span>
+                        <span className="text-emerald-300 font-mono text-[10px]">500 Words • 300 Sentences</span>
+                      </div>
+                    )}
+
+                    {course.id === 'course-python-kids-pakistan' && (
+                      <div className="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md text-[11px] font-bold text-white flex items-center justify-between border border-white/10 shadow-sm">
+                        <span className="flex items-center gap-1 text-amber-300">
+                          <span>🤖</span>
+                          <span>Kids 6-12 Years</span>
+                        </span>
+                        <span className="text-emerald-300 font-bold text-[10px]">Urdu & English Voice • Live Code</span>
                       </div>
                     )}
                   </div>

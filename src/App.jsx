@@ -21,6 +21,7 @@ import { ContentHub } from './pages/public/ContentHub';
 import { Pricing } from './pages/public/Pricing';
 import { About } from './pages/public/About';
 import { Contact } from './pages/public/Contact';
+import { PythonKidsStudio } from './components/pythonKids/PythonKidsStudio';
 
 // Auth Pages
 import { Login } from './pages/auth/Login';
@@ -82,6 +83,7 @@ const AppContent = () => {
           <Route path="/content" element={<ContentHub />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/python-kids" element={<PythonKidsStudio standalone={true} />} />
 
           {/* Authentication Routes */}
           <Route path="/login" element={<Login />} />

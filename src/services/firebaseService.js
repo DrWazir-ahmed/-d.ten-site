@@ -472,6 +472,16 @@ export const getCourseById = async (id) => {
       }
     }
 
+    if (course.id === 'course-python-kids-pakistan' || course.title?.includes('Python for Kids')) {
+      const seedKids = INITIAL_COURSES.find(c => c.id === 'course-python-kids-pakistan');
+      if (seedKids) {
+        course = {
+          ...course,
+          ...seedKids
+        };
+      }
+    }
+
     if (course.id === 'course-14' || course.title === 'Active and Passive Voice Mastery') {
       const seedAp = INITIAL_COURSES.find(c => c.id === 'course-14');
       if (seedAp) {
