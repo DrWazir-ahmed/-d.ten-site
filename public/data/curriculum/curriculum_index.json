@@ -1,0 +1,4985 @@
+{
+  "generatedAt": "2026-10-23T02:53:51.414Z",
+  "totalQuestions": 41900,
+  "systems": [
+    {
+      "id": "Cambridge",
+      "name": "Cambridge",
+      "classes": [
+        {
+          "id": "A_Level",
+          "name": "A Level",
+          "subjects": [
+            {
+              "id": "Physics",
+              "name": "Physics",
+              "fileKey": "Cambridge__A_Level__Physics",
+              "chapterCount": 15,
+              "questionCount": 750,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Topic 1: Physical Quantities and Units",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Topic 2: Kinematics",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Topic 3: Dynamics",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Topic 4: Forces, Density and Pressure",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Topic 5: Work, Energy and Power",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Topic 6: Deformation of Solids",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Topic 7: Waves",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Topic 8: Superposition",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Topic 9: Electricity",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Topic 10: D.C. Circuits",
+                  "count": 50
+                },
+                {
+                  "no": 11,
+                  "title": "Topic 11: Particle Physics",
+                  "count": 50
+                },
+                {
+                  "no": 12,
+                  "title": "Topic 12: Motion in a Circle",
+                  "count": 50
+                },
+                {
+                  "no": 13,
+                  "title": "Topic 13: Gravitational Fields",
+                  "count": 50
+                },
+                {
+                  "no": 14,
+                  "title": "Topic 14: Temperature",
+                  "count": 50
+                },
+                {
+                  "no": 15,
+                  "title": "Topic 15: Ideal Gases",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Chemistry",
+              "name": "Chemistry",
+              "fileKey": "Cambridge__A_Level__Chemistry",
+              "chapterCount": 22,
+              "questionCount": 1100,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Topic 1: Atomic Structure",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Topic 2: Atoms, Molecules and Stoichiometry",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Topic 3: Chemical Bonding",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Topic 4: States of Matter",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Topic 5: Chemical Energetics",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Topic 6: Electrochemistry",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Topic 7: Equilibria",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Topic 8: Reaction Kinetics",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Topic 9: The Periodic Table: Chemical Periodicity",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Topic 10: Group 2",
+                  "count": 50
+                },
+                {
+                  "no": 11,
+                  "title": "Topic 11: Group 17",
+                  "count": 50
+                },
+                {
+                  "no": 12,
+                  "title": "Topic 12: Nitrogen and Sulfur",
+                  "count": 50
+                },
+                {
+                  "no": 13,
+                  "title": "Topic 13: An Introduction to AS Level Organic Chemistry",
+                  "count": 50
+                },
+                {
+                  "no": 14,
+                  "title": "Topic 14: Hydrocarbons",
+                  "count": 50
+                },
+                {
+                  "no": 15,
+                  "title": "Topic 15: Halogen Compounds",
+                  "count": 50
+                },
+                {
+                  "no": 16,
+                  "title": "Topic 16: Hydroxy Compounds",
+                  "count": 50
+                },
+                {
+                  "no": 17,
+                  "title": "Topic 17: Carbonyl Compounds",
+                  "count": 50
+                },
+                {
+                  "no": 18,
+                  "title": "Topic 18: Carboxylic Acids and Derivatives",
+                  "count": 50
+                },
+                {
+                  "no": 19,
+                  "title": "Topic 19: Nitrogen Compounds",
+                  "count": 50
+                },
+                {
+                  "no": 20,
+                  "title": "Topic 20: Polymerisation",
+                  "count": 50
+                },
+                {
+                  "no": 21,
+                  "title": "Topic 21: Organic Synthesis",
+                  "count": 50
+                },
+                {
+                  "no": 22,
+                  "title": "Topic 22: Analytical Techniques",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Mathematics",
+              "name": "Mathematics",
+              "fileKey": "Cambridge__A_Level__Mathematics",
+              "chapterCount": 17,
+              "questionCount": 850,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Topic 1: Quadratics",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Topic 2: Functions",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Topic 3: Coordinate Geometry",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Topic 4: Circular Measure",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Topic 5: Trigonometry",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Topic 6: Series",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Topic 7: Differentiation",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Topic 8: Integration",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Topic 9: Algebra",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Topic 10: Logarithmic and Exponential Functions",
+                  "count": 50
+                },
+                {
+                  "no": 11,
+                  "title": "Topic 11: Trigonometry (Advanced)",
+                  "count": 50
+                },
+                {
+                  "no": 12,
+                  "title": "Topic 12: Further Differentiation",
+                  "count": 50
+                },
+                {
+                  "no": 13,
+                  "title": "Topic 13: Further Integration",
+                  "count": 50
+                },
+                {
+                  "no": 14,
+                  "title": "Topic 14: Numerical Solutions of Equations",
+                  "count": 50
+                },
+                {
+                  "no": 15,
+                  "title": "Topic 15: Differential Equations",
+                  "count": 50
+                },
+                {
+                  "no": 16,
+                  "title": "Topic 16: Vectors",
+                  "count": 50
+                },
+                {
+                  "no": 17,
+                  "title": "Topic 17: Complex Numbers",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Computer_Science",
+              "name": "Computer Science",
+              "fileKey": "Cambridge__A_Level__Computer_Science",
+              "chapterCount": 12,
+              "questionCount": 600,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Topic 1: Information Representation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Topic 2: Communication and Networks",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Topic 3: Hardware",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Topic 4: Processor Fundamentals",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Topic 5: System Software",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Topic 6: Security, Privacy and Data Integrity",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Topic 7: Ethics and Ownership",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Topic 8: Database Concepts",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Topic 9: Algorithm Design and Problem-Solving",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Topic 10: Data Types and Structures",
+                  "count": 50
+                },
+                {
+                  "no": 11,
+                  "title": "Topic 11: Programming",
+                  "count": 50
+                },
+                {
+                  "no": 12,
+                  "title": "Topic 12: Software Development",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Information_Technology",
+              "name": "Information Technology",
+              "fileKey": "Cambridge__A_Level__Information_Technology",
+              "chapterCount": 12,
+              "questionCount": 600,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Data, Information, Knowledge and Processing",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Hardware and Software",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Monitoring and Control Systems",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Algorithms and Flowcharts",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "eSecurity",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "The Digital Divide",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Expert Systems",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Spreadsheets",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Modelling and Simulation",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Database and File Concepts",
+                  "count": 50
+                },
+                {
+                  "no": 11,
+                  "title": "Video and Audio Editing",
+                  "count": 50
+                },
+                {
+                  "no": 12,
+                  "title": "IT in Society and System Life Cycle",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Statistics",
+              "name": "Statistics",
+              "fileKey": "Cambridge__A_Level__Statistics",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Representation of Data",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Measures of Location and Dispersion",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Permutations and Combinations",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Probability",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Conditional Probability",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Discrete Random Variables",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Binomial Distribution",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "The Geometric Distribution",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "The Normal Distribution",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "The Poisson Distribution",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "English_Language",
+              "name": "English Language",
+              "fileKey": "Cambridge__A_Level__English_Language",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Text Analysis and Context",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Lexis, Semantics and Morphology",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Grammar and Syntax",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Literary, Figurative and Rhetorical Devices",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Directed Writing and Genre Conventions",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Creative and Narrative Writing",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Discursive and Argumentative Writing",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Language Change and Etymology",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Child Language Acquisition",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Language Diversity and Global English",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "English_–_Literature",
+              "name": "English – Literature",
+              "fileKey": "Cambridge__A_Level__English_–_Literature",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Poetry Forms and Structures",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Poetic Techniques and Sound Devices",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Prose and Narrative Voice",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Characterisation and Plot Architecture in Prose",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Drama Forms and Dramatic Techniques",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Shakespearean and Classical Drama",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Figurative Language, Symbolism and Allegory",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Literary Context and Themes",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Critical Literary Approaches and Theories",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Critical Essay Writing and Comparative Analysis",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "English_General_Paper",
+              "name": "English General Paper",
+              "fileKey": "Cambridge__A_Level__English_General_Paper",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Understanding Prompts and Essay Scope",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Logic, Critical Thinking and Argumentation",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Government, Politics and Global Relations",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Science, Technology and Ethics",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Environment, Climate and Sustainability",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Media, Communication and Information",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Arts, Culture and Heritage",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Education, Employment and Globalisation",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Reading Comprehension and Textual Inference",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Language, Register and Vocabulary in Context",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "English_–_Language_&_Literature",
+              "name": "English – Language & Literature",
+              "fileKey": "Cambridge__A_Level__English_–_Language_&_Literature",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Stylistic Analysis of Literary and Non-Literary Texts",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Syntax and Structural Cohesion in Prose",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Creative and Narrative Writing Craft",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Rhetoric and Persuasive Techniques",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Poetic Diction and Imagery",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Poetic Form, Meter and Sonic Architecture",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Literary Prose Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Dramatic Conventions and Dialogue Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Comparative Analysis of Texts",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Context, Audience and Reception",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Psychology",
+              "name": "Psychology",
+              "fileKey": "Cambridge__A_Level__Psychology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Research Methods and Experimental Design",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The Biological Approach",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Cognitive Approach",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "The Learning Approach",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "The Social Approach",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Issues and Debates in Psychological Research",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Clinical Psychology and Mental Health",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Consumer Psychology and Behaviour",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Health Psychology and Well-being",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Organisational Psychology and Workplace Behaviour",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Sociology",
+              "name": "Sociology",
+              "fileKey": "Cambridge__A_Level__Sociology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Socialisation, Culture and Identity",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Theories and Research Methods in Sociology",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Family and Households",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Education and Society",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Media and Mass Communication",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Religion and Belief Systems",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Social Inequality and Stratification",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Global Development and Globalisation",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Crime, Deviance and Social Control",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Power, Politics and the State",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Travel_&_Tourism",
+              "name": "Travel & Tourism",
+              "fileKey": "Cambridge__A_Level__Travel_&_Tourism",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Features and Nature of the Travel and Tourism Industry",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Structure of the Industry and Travel Providers",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Principles and Delivery of Customer Service",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Impacts of Travel and Tourism (Economic, Environmental, Socio-Cultural)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Travel and Tourism Marketing and Market Segmentation",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "The Marketing Mix in Travel and Tourism",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Destination Management and Sustainable Tourism",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Ecotourism and Environmental Protection",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Specialised Tourism (Cultural, Adventure, Heritage, Medical)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Business Tourism, Events, and Emerging Industry Trends",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Geography",
+              "name": "Geography",
+              "fileKey": "Cambridge__A_Level__Geography",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Hydrology and Fluvial Geomorphology",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Atmosphere, Weather and Climate",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Rocks, Weathering and Plate Tectonics",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Population Dynamics and Demographic Change",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Migration and Population Movement",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Settlement Dynamics and Urbanization",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Coastal Environments and Management",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Hazardous Environments and Natural Disasters",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Environmental Management and Energy Resources",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Global Interdependence, Trade and Economic Transition",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Economics",
+              "name": "Economics",
+              "fileKey": "Cambridge__A_Level__Economics",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Basic Economic Ideas and Resource Allocation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The Price System and the Microeconomy",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Government Microeconomic Intervention",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "The Macroeconomy",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Government Macroeconomic Intervention",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "International Economic Issues",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Theory of the Firm and Market Structures",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "The Labour Market",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Circular Flow, National Income and Multiplier",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Economic Growth, Development and Sustainability",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Islamic_Studies",
+              "name": "Islamic Studies",
+              "fileKey": "Cambridge__A_Level__Islamic_Studies",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Pre-Islamic Arabia and the Prophet Muhammad's Life in Makkah",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The Prophet Muhammad's Life in Madinah and Early Statehood",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Rightly Guided Caliphs (Khulafa-e-Rashidun)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "The Holy Qur'an: Revelation, Compilation and Teachings",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "The Hadith and Sunnah of the Prophet",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "The Articles of Faith (Iman)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Pillars of Islam (Ibadah)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Islamic Jurisprudence and Legal Sources (Usul al-Fiqh)",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Islamic Ethics, Society and Family Life",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Islam in the Modern World and Contemporary Issues",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Law",
+              "name": "Law",
+              "fileKey": "Cambridge__A_Level__Law",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Sources of English Law: Legislation and Delegated Legislation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Sources of English Law: Judicial Precedent and Law Reform",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Administration of Justice and Dispute Resolution",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Criminal Law: General Principles of Liability",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Criminal Law: Offences Against the Person",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Criminal Law: Property Offences and Defences",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Law of Contract: Formation of Contract",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Law of Contract: Terms, Vitiating Factors and Discharge",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Law of Tort: Negligence and General Defences",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Law of Tort: Specific Torts and Remedies",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "History",
+              "name": "History",
+              "fileKey": "Cambridge__A_Level__History",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The French Revolution and Napoleon (1774–1815)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The Industrial Revolution and Social Change in Europe (1750–1850)",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Nationalism and the Unification of Italy and Germany (1815–1871)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Origins of the First World War and its Aftermath (1890–1919)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "League of Nations and International Relations in the Interwar Era (1919–1939)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "The Rise of Dictatorships and Origins of World War II (1919–1939)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Second World War and Global Political Realignment (1939–1945)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "The Cold War: Origins, Development and Crises (1945–1962)",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "The Cold War: Détente, Confrontation and Collapse of the USSR (1963–1991)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Decolonisation and the Emergence of the Post-Colonial World",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Chinese_–_Language_&_Literature",
+              "name": "Chinese – Language & Literature",
+              "fileKey": "Cambridge__A_Level__Chinese_–_Language_&_Literature",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Modern Chinese Grammar, Syntax and Sentence Structure",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Lexicology, Idioms and Rhetorical Devices",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Reading Comprehension and Expository Texts",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Argumentative and Persuasive Writing Techniques",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Narrative and Descriptive Prose Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Classical Chinese Prose and Historical Texts",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Classical Chinese Poetry and Verse Forms",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Modern and Contemporary Chinese Literature",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Chinese Drama, Film and Cultural Texts",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Translation, Cultural Context and Societal Themes",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Accounting",
+              "name": "Accounting",
+              "fileKey": "Cambridge__A_Level__Accounting",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Accounting System and Financial Recording",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Financial Accounting: Accounting Concepts, Conventions and Regulations",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Preparation of Financial Statements for Sole Traders and Partnerships",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Financial Statements for Limited Companies",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Analysis and Communication of Accounting Information",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Control Systems and Incomplete Records",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Cost Classification, Materials, and Overhead Allocation",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Marginal Costing and Cost-Volume-Profit Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Budgeting and Cash Forecasting",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Standard Costing and Investment Appraisal",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Digital_Media_&_Design",
+              "name": "Digital Media & Design",
+              "fileKey": "Cambridge__A_Level__Digital_Media_&_Design",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Design Foundations, Visual Elements, and Creative Process",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Digital Photography, Image Capture, and Raster Manipulation",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Vector Graphics, Typography, and Visual Identity",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Graphic Design, Print Production, and Editorial Layout",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Interactive Media, Web Standards, and UI/UX Design",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "2D and 3D Animation, Motion Graphics, and Visual Effects",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Video Production, Cinematography, and Nonlinear Editing",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Audio Production, Sound Design, and Music Technology",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Game Design, Interactive Storytelling, and Immersive Media",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Media Industries, Legal Frameworks, Ethics, and Emerging Technologies",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "European_History",
+              "name": "European History",
+              "fileKey": "Cambridge__A_Level__European_History",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "France, 1774–1814: The Ancien Régime and the Causes of the French Revolution",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The French Revolution: From Constitutional Monarchy to Terror and Directory, 1789–1799",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Napoleonic Era: Rise, Empire, Reforms, and Fall, 1799–1815",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Restoration, the Concert of Europe, and the Conservative Order, 1815–1848",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "The Revolutions of 1848: The 'Springtime of the Peoples'",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Continental Industrialization and Mass Politics, 1830–1900",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Unification of Italy, 1848–1871",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "The Unification of Germany and the Bismarckian Empire, 1862–1890",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Imperialism, Great Power Rivalry, and the Road to World War I, 1890–1914",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "European Interwar Crises, Revolutions, and Dictatorships, 1919–1939",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Drama",
+              "name": "Drama",
+              "fileKey": "Cambridge__A_Level__Drama",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Classical Theatre Origins: Greek Tragedy, Comedy & Roman Theatre Traditions",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Renaissance & Elizabethan Theatre: Shakespeare, Jacobean Drama & Staging Practices",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Commedia dell'Arte, Molière & 17th–18th Century European Comedy of Manners",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "19th-Century Realism & Naturalism: Stanislavski's System, Ibsen & Chekhov",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Epic Theatre & Political Drama: Bertolt Brecht, Alienation (Verfremdungseffekt) & Piscator",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Theatre of Cruelty, Surrealism & the Avant-Garde: Antonin Artaud & Symbolism",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Theatre of the Absurd & Existentialist Drama: Samuel Beckett, Ionesco & Pinter",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Physical Theatre, Poor Theatre & Laboratory Theatre: Grotowski, Lecoq & Peter Brook",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Postmodern, Contemporary & Devising Practices: Augusto Boal, Forum Theatre & Verbatim Theatre",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Stage Craft, Directing & Scenography: Set, Lighting, Sound & Costume Design",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "French_–_Language_&_Literature",
+              "name": "French – Language & Literature",
+              "fileKey": "Cambridge__A_Level__French_–_Language_&_Literature",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "La Société Contemporaine: Famille, Jeunesse et Évolution Sociale",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "L'Éducation, le Monde du Travail et l'Économie Francophone",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "L'Environnement, la Transition Écologique et le Développement Durable",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Les Médias, la Communication Numérique et les Nouvelles Technologies",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "La Francophonie Mondiale: Diversité Culturelle et Échanges Transnationaux",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Le Théâtre Classique Français du XVIIe Siècle: Molière, Racine et Corneille",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Le Siècle des Lumières et la Pensée Philosophique: Voltaire, Rousseau et Diderot",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Le Romantisme et le Réalisme du XIXe Siècle: Victor Hugo, Balzac et Flaubert",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "La Poésie Moderne et Symboliste: Baudelaire, Rimbaud, Verlaine et Apollinaire",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "La Littérature du XXe Siècle, l'Existentialisme et l'Absurde: Camus, Sartre et Ionesco",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "German_–_Language_&_Literature",
+              "name": "German – Language & Literature",
+              "fileKey": "Cambridge__A_Level__German_–_Language_&_Literature",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Die Zeitgenössische Gesellschaft: Familie, Jugend und Sozialer Wandel",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Bildungssystem, Arbeitswelt und Deutsche Wirtschaft",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Umwelt, Klimaschutz und Nachhaltige Energiewende",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Medienlandschaft, Digitale Kommunikation und Künstliche Intelligenz",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Kultur, Identität und Integration in den Deutschsprachigen Ländern",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Aufklärung, Sturm und Drang: Lessing, der Junge Goethe und Schiller",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Die Weimarer Klassik: Goethe (Faust), Schiller und das Humanitätsideal",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Deutsche Romantik und Realismus: Eichendorff, Hoffmann, Fontane und Keller",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Die Literatur der Moderne und Weimarer Republik: Thomas Mann, Kafka und Rilke",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Das Theater des 20. Jahrhunderts und Nachkriegsliteratur: Brecht, Dürrenmatt und Böll",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Spanish_–_Language_&_Literature",
+              "name": "Spanish – Language & Literature",
+              "fileKey": "Cambridge__A_Level__Spanish_–_Language_&_Literature",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "La Sociedad Contemporánea: Familia, Juventud y Cambios Sociales en el Mundo Hispano",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Educación, Empleo, Economía y Desarrollo Social en España y Latinoamérica",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Medio Ambiente, Biodiversidad y Sostenibilidad Ecológica",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Medios de Comunicación, Cultura Digital y Redes Sociales",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Patrimonio Cultural, Tradiciones y Fiestas del Mundo Hispanohablante",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "El Siglo de Oro Español: Cervantes (Don Quijote), Lope de Vega y Calderón de la Barca",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Poesía y Prosa del Siglo XIX: Romanticismo y Realismo (Galdós, Bécquer y Clarín)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "La Generación del 98 y el Modernismo: Unamuno, Machado, Baroja y Rubén Darío",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "La Generación del 27 y el Teatro de Federico García Lorca",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "El \"Boom\" Latinoamericano y el Realismo Mágico: García Márquez, Borges, Cortázar y Vargas Llosa",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "O_Level",
+          "name": "O Level",
+          "subjects": [
+            {
+              "id": "Accounting",
+              "name": "Accounting",
+              "fileKey": "Cambridge__O_Level__Accounting",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Fundamentals of Accounting & The Accounting Equation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Sources and Recording of Business Transactions",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Ledger Accounting, The Trial Balance & Suspense Accounts",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Accounting Principles, Concepts & Policies",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Financial Statements of Sole Traders",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Depreciation and Disposal of Non-Current Assets",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Bank Reconciliation Statements & Control Accounts",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Accounting for Partnerships, Clubs & Service Businesses",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Incomplete Records & Accounting for Limited Companies",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Financial Analysis, Accounting Ratios & Interpretation",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Art_&_Design",
+              "name": "Art & Design",
+              "fileKey": "Cambridge__O_Level__Art_&_Design",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Visual Elements of Art & Design",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Drawing, Painting & Mark-Making Media",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Principles of Composition & Visual Design",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Observational Studies & Still Life Traditions",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "The Human Form: Life Drawing, Portraiture & Proportion",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Printmaking Processes & Graphic Media",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Three-Dimensional Design, Sculpture & Craft Media",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Photography, Digital Media & Graphic Communication",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Art Movements, Contextual Analysis & Historical Traditions",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "The Creative Design Process, Idea Development & Personal Response",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Business",
+              "name": "Business",
+              "fileKey": "Cambridge__O_Level__Business",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Understanding Business Activity",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Enterprise, Business Growth & Types of Business Organisation",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Marketing, Market Research & Market Segmentation",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "The Marketing Mix: The 4 Ps",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Motivating Employees & Leadership Styles",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Human Resource Management & Organisation Structure",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Production Methods & Operations Management",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Business Finance: Sources & Cash Flow Forecasting",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Financial Statements & Ratio Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "External Influences on Business Activity",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Commerce",
+              "name": "Commerce",
+              "fileKey": "Cambridge__O_Level__Commerce",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Production & The Scope of Commerce",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Home Trade: Retail Trade & Modern Retailing",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Home Trade: Wholesale Trade & Supply Chain Logistics",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Commercial Documents Used in Home Trade",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "International Trade: Imports, Exports & Global Markets",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Aids to Trade: Banking & Financial Services",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Aids to Trade: Transport & Logistics",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Aids to Trade: Warehousing & Inventory Control",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Aids to Trade: Commercial Insurance",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Advertising, Sales Promotion & Consumer Protection",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Computer_Science",
+              "name": "Computer Science",
+              "fileKey": "Cambridge__O_Level__Computer_Science",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Data Representation (Binary, Hex, Text, Sound, Images & Compression)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Data Transmission, Networking & Communication",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Hardware & Computer Architecture",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Software, Operating Systems & Language Translators",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "The Internet, Web Technologies & Cyber Security",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Automated Systems, Robotics & Artificial Intelligence",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Algorithm Design, Problem-Solving & Flowcharts",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Programming Concepts, Data Types & Data Structures",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Relational Databases & Structured Query Language (SQL)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Boolean Logic, Logic Gates & Truth Tables",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Economics",
+              "name": "Economics",
+              "fileKey": "Cambridge__O_Level__Economics",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Basic Economic Problem: Scarcity, Choice & Opportunity Cost",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The Allocation of Resources: Demand, Supply & Market Equilibrium",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Microeconomic Decision Makers: Money, Banking, Consumers & Workers",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Business Economics: Production, Costs, Revenues & Market Structures",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Price Elasticities: Demand (PED) & Supply (PES)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Government & the Macroeconomy: Fiscal, Monetary & Supply-Side Policies",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Macroeconomic Aims: Economic Growth, Employment & Inflation",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Living Standards, Poverty & Demographics",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "International Trade, Global Specialisation & Exchange Rates",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Balance of Payments & Current Account Stability",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Geography",
+              "name": "Geography",
+              "fileKey": "Cambridge__O_Level__Geography",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Population Dynamics, Migration & Demographics",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Settlement Patterns, Hierarchy & Urbanization",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Tectonic Hazards: Earthquakes and Volcanoes",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Rivers, Drainage Basins & Fluvial Landforms",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Coastal Processes, Marine Landforms & Management",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Weather, Climate & Meteorological Instruments",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Tropical Rainforests & Hot Deserts: Biomes & Ecosystems",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Economic Development, Global Inequalities & TNCs",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Agriculture, Food Production & Industrial Location",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Tourism, Energy Resources & Environmental Sustainability",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Food_&_Nutrition",
+              "name": "Food & Nutrition",
+              "fileKey": "Cambridge__O_Level__Food_&_Nutrition",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Nutrients: Proteins, Carbohydrates, Fats & Energy",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Vitamins & Mineral Elements: Functions & Deficiencies",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Water, Dietary Fibre & the Digestive System",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Nutritional Needs Across the Lifecycle & Meal Planning",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Food Commodities: Meat, Fish, Eggs & Dairy",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Cereals, Pulses, Fruits & Vegetables: Structure & Cookery",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Cooking Methods, Heat Transfer & Effects of Heat on Food",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Culinary Science & Raising Agents: Chemical, Biological & Mechanical",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Food Spoilage, Hygiene, Food Poisoning & Food Preservation",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Kitchen Design, Equipment & Consumer Food Management",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Environmental_Management",
+              "name": "Environmental Management",
+              "fileKey": "Cambridge__O_Level__Environmental_Management",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Rocks, Minerals and Their Exploitation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Energy and the Environment",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Agriculture and the Environment",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Water and Its Management",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Oceans and Fisheries",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Managing Natural Hazards",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Atmosphere and Human Activities",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Human Population Dynamics",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Ecosystems and Biodiversity Conservation",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Sustainable Resource Management and Global Agreements",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Fashion_&_Textiles",
+              "name": "Fashion & Textiles",
+              "fileKey": "Cambridge__O_Level__Fashion_&_Textiles",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Fibres and Their Properties: Natural & Synthetic",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Yarns and Fabric Construction",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Fabric Finishes and Modifications",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Colour Application: Dyes, Printing & Surface Decoration",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Garment Design, Style & Specification",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Patterns, Measurements and Fabric Preparation",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Sewing Equipment, Tools & Machinery",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Garment Construction Techniques & Seams",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Fastenings, Trimmings & Structural Components",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Fashion Industry, Sustainability & Consumer Care",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Statistics",
+              "name": "Statistics",
+              "fileKey": "Cambridge__O_Level__Statistics",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Data Collection, Sampling & Classification",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Tabulation & Representation of Data",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Statistical Diagrams for Grouped Data",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Measures of Central Tendency",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Measures of Dispersion",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Bivariate Data, Scatter Diagrams & Correlation",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Linear Regression & Lines of Best Fit",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Time Series & Moving Averages",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Index Numbers & Weighted Aggregates",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Probability & Sample Spaces",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Sociology",
+              "name": "Sociology",
+              "fileKey": "Cambridge__O_Level__Sociology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Theory & Methods",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Culture, Identity & Socialisation",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Social Stratification & Inequality",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Family & Households",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Education",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Crime, Deviance & Social Control",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Media",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Power, Politics & Participation",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Religion & Belief Systems",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Globalisation & Social Change",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Sanskrit",
+              "name": "Sanskrit",
+              "fileKey": "Cambridge__O_Level__Sanskrit",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Devanagari Script, Vowels, Consonants & Phonetics",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Noun Declensions & Vibhakti Cases",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Pronouns & Adjectival Agreement",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Verb Conjugations, Ganas & Present Tense (Lat Lakara)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Past Tenses (Lang Lakara), Future (Lrit) & Imperatives (Lot)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Sandhi Rules (Svara, Vyanjana, Visarga)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Samasa (Compound Words)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Classical Sanskrit Literature & Epics",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Vedic Heritage, Upanishads & Philosophical Concepts",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Translation, Sentence Syntax & Karaka Theory",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Literature_in_English",
+              "name": "Literature in English",
+              "fileKey": "Cambridge__O_Level__Literature_in_English",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Literary Terms, Figurative Language & Devices",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Poetic Forms, Meter, Rhythm & Stanzaic Structures",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Shakespearean Drama: Tragedies & Histories",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Shakespearean Drama: Comedies & Romances",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Modern Drama & Stagecraft (20th/21st Century)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "19th-Century Prose & Victorian Fiction",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "20th-Century & Postcolonial Prose",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "The Short Story: Structure, Voice & Technique",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Thematic Exploration: Conflict, Society, Identity & Power",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Critical Unseen Analysis & Essay Writing Skills",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "History",
+              "name": "History",
+              "fileKey": "Cambridge__O_Level__History",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Peace Treaties of 1919–1923",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The League of Nations in the 1920s and 1930s",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Collapse of Peace & Outbreak of WWII in 1939",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "The Origins & Escalation of the Cold War",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Containment in Action: Korea, Cuba & Vietnam",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Soviet Control over Eastern Europe (1948–1989)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Collapse of Soviet Power & End of the Cold War",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "The First World War (1914–1918)",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Germany 1918–1945: Weimar Republic to the Third Reich",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Russia / USSR 1917–1941: From Revolution to Stalinist Rule",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Science_–_Combined",
+              "name": "Science – Combined",
+              "fileKey": "Cambridge__O_Level__Science_–_Combined",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Biology: Cells, Movement of Substances & Biological Molecules",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Biology: Plant Nutrition, Transport & Ecology",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Biology: Human Physiology: Respiration, Circulation & Coordination",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Biology: Reproduction, Genetics & Disease",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Chemistry: States of Matter, Atoms, Bonding & Stoichiometry",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Chemistry: Acids, Bases, Salts & Qualitative Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Chemistry: The Periodic Table, Metals & Extraction",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Chemistry: Atmospheric Chemistry, Water Purification & Basic Organic Chemistry",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Physics: Motion, Forces, Energy, Work & Thermal Physics",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Physics: Waves, Sound, Light, Electricity & Magnetism",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Urdu_–_First_Language",
+              "name": "Urdu – First Language",
+              "fileKey": "Cambridge__O_Level__Urdu_–_First_Language",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Urdu Grammar: Parts of Speech (Asnaaf-e-Kalam)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Urdu Syntax & Sentence Construction",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Vocabulary, Idioms & Proverbs (Mahawarat-o-Zarbul Amsal)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Word Formation & Morphology (Sabiqe, Lahiqe, Wahid-Juma)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Rhetorical Devices & Poetic Mechanics (Sanaye Badaaye)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Classical Ghazal Tradition & Poetic Forms",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Modern Urdu Nazm & Renaissance Poetry",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Urdu Prose Genres: Afsana, Dastan & Drama",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Urdu Non-Fiction Prose & Insha-Pardazi",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Reading Comprehension, Unseen Text Analysis & Summary Skills",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Arabic",
+              "name": "Arabic",
+              "fileKey": "Cambridge__O_Level__Arabic",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Parts of Speech & Sentence Structure",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Noun Declension & Grammatical Cases",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Pronouns, Demonstratives & Relative Nouns",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Verb Conjugations & Tenses",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Derived Verb Forms & Measures",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "The Construct State & Adjectives",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Passive Voice & Participles",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Inna and Kaana and their Sisters",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Stylistics, Figures of Speech & Rhetoric",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Comprehension, Vocabulary & Translation",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "India_CBSE",
+      "name": "India CBSE",
+      "classes": [
+        {
+          "id": "Class_9",
+          "name": "Class 9",
+          "subjects": [
+            {
+              "id": "English",
+              "name": "English",
+              "fileKey": "India_CBSE__Class_9__English",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Reading Comprehension: Discursive Passages & Critical Evaluation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Reading Comprehension: Case-Based Factual Passages & Visual Data",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Creative Writing Skills: Descriptive Paragraphs & Character Sketches",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Creative Writing Skills: Diary Entries & Story Writing Architecture",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Grammar Mastery: Tenses, Modals & Subject-Verb Concord",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Grammar Mastery: Reported Speech, Commands, Requests & Determiners",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Literature (Beehive Prose): Inspiring Journeys & Science Fiction",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Literature (Beehive Prose): Human Drama, Humor & Intrigue",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Literature (Beehive Poetry): Nature, Metaphor & Philosophical Verse",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Literature (Moments Supplementary Reader): Compassion, Wit & Moral Tales",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Hindi",
+              "name": "Hindi",
+              "fileKey": "India_CBSE__Class_9__Hindi",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unseen Comprehension: Discursive Analysis & Textual Inference",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Morphology & Word Formation: Prefixes, Suffixes & Etymology (Upsarg & Pratyay)",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Compound Words & Semantic Synthesis (Samas)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Sentence Architecture & Transformation (Vakya Bhed)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Figurative Language & Poetics (Alankar)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Idiomatic Expressions, Proverbs & Colloquialisms (Muhavare & Lokoktiyan)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Applied Composition: Formal/Informal Letters & Official Representations",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Applied Composition: Paragraph Writing, Short Stories & Dialogue Craft",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Literary Prose & Thought: Inspiring Narratives, Satire & Social Realism",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Poetic Heritage & Folk Traditions: Devotional, Lyric & Ethical Verse (Dohas)",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Mathematics",
+              "name": "Mathematics",
+              "fileKey": "India_CBSE__Class_9__Mathematics",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Number Systems: Real Numbers, Rationalization & Laws of Exponents",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Polynomials: Factoring, Remainder & Factor Theorems & Identities",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Coordinate Geometry: The Cartesian Plane, Quadrants & Plotting Points",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Linear Equations in Two Variables: Solutions, Graphs & Equations of Lines",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Introduction to Euclid's Geometry: Axioms, Postulates & Deductive Proofs",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Lines and Angles: Transversals, Parallel Lines & Angle Sum Properties",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Triangles: Congruence Criteria (SAS, ASA, AAS, SSS, RHS) & Inequalities",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Quadrilaterals: Parallelograms, Rectangles, Rhombuses & Mid-Point Theorem",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Circles: Chords, Subtended Angles, Cyclic Quadrilaterals & Theorems",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Mensuration & Statistics: Heron's Formula, Surface Areas, Volumes & Data",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Mathematics_Advanced",
+              "name": "Mathematics Advanced",
+              "fileKey": "India_CBSE__Class_9__Mathematics_Advanced",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Advanced Number Theory: Surds, Nested Radicals & Modular Arithmetic Basics",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Higher Polynomial Algebra: Symmetric Polynomials, Vieta's Relations & Identities",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Systems of Non-Linear Equations & Advanced Coordinate Geometry",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Advanced Euclidean Geometry: Power of a Point, Cyclic Theorems & Collinearity",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Geometric Inequalities & Extremal Problems",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Advanced Trigonometric Foundations: Ratios, Standard Angles & Identities",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Solid Mensuration & Optimization: Composite Solids, Frustums & Ratio Scaling",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Combinatorics & Counting Principles: Permutations, Combinations & Pigeonhole",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Probability Theory & Stochastic Modeling: Independent Events & Expected Value",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Mathematical Modeling, Graph Theory Foundations & Algorithmic Problem Solving",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "Class_10",
+          "name": "Class 10",
+          "subjects": [
+            {
+              "id": "Hindi",
+              "name": "Hindi",
+              "fileKey": "India_CBSE__Class_10__Hindi",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unseen Reading Comprehension: Discursive Analysis, Factual Passages & Textual Inference (Apthit Bodh)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Sentence Architecture & Transformation: Simple, Compound & Complex Sentences (Rachna ke Aadhar par Vakya Bhed)",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Voice in Hindi Grammar: Active, Passive & Impersonal Voices (Vachya: Kartrivachya, Karmavachya, Bhavavachya)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Morphosyntactic Word Analysis: Parts of Speech & Grammatical Parsing (Pad Parichay)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Figures of Speech & Poetics: Shlesh, Utpreksha, Atishayokti & Manavikaran (Alankar)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Idioms, Proverbs & Expressive Phrasing: Meanings, Sentence Application & Contextual Usage (Muhavare)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Applied Composition: Formal & Informal Letter Writing, Email Writing & Official Correspondence (Patra & Email Lekhan)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Creative Writing Skills: Paragraph Writing, Notice, Message & Advertisement Writing (Anuchhed, Soochna, Sandesh & Vigyapan Lekhan)",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Core Literature Prose: Inspirational Narratives, Social Realism & Satire (Kshitij & Sparsh Gadhya Khand)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Poetic Heritage & Supplementary Literature: Devotional, Lyric, Ethical Verse & Cultural Tales (Kavya Khand, Kritika & Sanchayan)",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Urdu",
+              "name": "Urdu",
+              "fileKey": "India_CBSE__Class_10__Urdu",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unseen Reading Comprehension: Literary Prose Analysis & Inference (Ghair Darsi Iqtibas & Fahm-o-Idraak)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Parts of Speech & Morphology: Noun & Its Types (Ism-e-Zaat, Ism-e-Sifat, Ism-e-Marfa, Ism-e-Nakra)",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Pronouns, Adjectives & Word Formation: Types of Zameer, Sifat, Sabqe & Lahqe (Prefixes & Suffixes)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Verb, Tenses & Syntax: Fe'l-e-Maroof, Majhool, Lazim, Muta'addi, Zamane (Mazi, Haal, Mustaqbil) & Jumla",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Rhetoric & Figures of Speech: Tashbeeh, Isti'ara, Talmeeh, Tazad, Husn-e-Ta'leel & Sanaye-Badaye",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Genres of Urdu Poetry: Classical & Modern Forms (Ghazal, Nazm, Rubai, Qat'a, Masnavi, Marsiya & Qasida)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Genres of Urdu Prose: Fiction & Non-Fiction Forms (Dastan, Afsana, Novel, Drama, Inshaiya & Khaka)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Applied Composition: Formal Letters, Applications, Essays & Dialogue Writing (Khutoot, Darkhwast & Mazmoon Nigari)",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Masters of Urdu Literature & Texts: Ghalib, Mir, Iqbal, Faiz, Premchand, Sir Syed, Hali & Jaan Pehchan Selections",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Textual Interpretation, Poetic Analysis & Thematic Appreciation: Ash'ar ki Tashreeh, Markazi Khayal, Khulasa & Balaghat in Jaan Pehchan",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Sanskrit",
+              "name": "Sanskrit",
+              "fileKey": "India_CBSE__Class_10__Sanskrit",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unseen Reading Comprehension: Prose Analysis & Linguistic Evaluation (अपठितावबोधनम् - गद्यांशविश्लेषणम्)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Sandhi Prakarana: Vyanjana & Visarga Sandhi (सन्धि-प्रकरणम् - व्यञ्जनसन्धिः विसर्गसन्धिः च)",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Samasa Prakarana: Tatpurusha, Karmadharaya, Dvigu, Bahuvrihi, Dvandva & Avyayibhava (समास-प्रकरणम्)",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Pratyaya Prakarana: Taddhita (Matup, Thal, Tva) & Stree Pratyaya (Tap, Geep) (प्रत्यय-प्रकरणम्)",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Vachya Parivartana: Kartari, Karmani & Bhave Prayoga in Lat Lakara (वाच्य-परिवर्तनम् - लट्लकारे)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Ghatika / Samaya Lekhanam: Hour, Quarter past, Half past & Quarter to (घटिका / समय-लेखनम्)",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Avyaya Padani & Ashuddhi Shodhanam: Indeclinables & Grammatical Rectification (अव्ययपदानि अशुद्धिशोधनं च)",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Applied Composition: Patra Lekhanam, Chitra Varnanam, Samvada & Anuvada (रचनात्मक-कार्यम् - मञ्जूषाधारितम्)",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Shemushi Part 2 Prose & Drama: Shuchiparyavaranam, Buddhirbalavati, Shishulalanam & Sauhardam (शेमुषी भाग-२)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Shemushi Part 2 Poetry & Wisdom Verses: Subhashitani, Suktayah, Anvaya & Bhavartha (सुभाषितानि सूक्तयश्च)",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "English",
+              "name": "English",
+              "fileKey": "India_CBSE__Class_10__English",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Reading Comprehension: Discursive Passages - Analytical Reading, Inferences & Vocabulary",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Reading Comprehension: Case-Based Factual Passages - Data Interpretation, Statistical Analysis & Factual Inferences",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Creative Writing Skills: Formal Letters - Complaint, Inquiry, Editor & Placing Order",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Creative Writing Skills: Analytical Paragraph Writing - Data Synthesis, Trends & Comparative Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Grammar Mastery: Tenses, Modals & Subject-Verb Concord - Applied Rules, Error Correction & Gap Filling",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Grammar Mastery: Reported Speech & Determiners - Direct/Indirect Transformations, Dialogue Reporting & Quantifiers",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "First Flight Prose Part 1: A Letter to God, Nelson Mandela, Two Stories About Flying & Anne Frank",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "First Flight Prose Part 2: Glimpses of India, Mijbil the Otter, Madam Rides the Bus, Sermon at Benares & The Proposal",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "First Flight Poetry: Dust of Snow, Fire & Ice, Tiger in Zoo, Ball Poem, Amanda, Trees, Fog, Custard & Anne Gregory",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Footprints Without Feet Supplementary Reader: Masterworks of Character, Suspense & Transformation",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "US_High_School",
+      "name": "US High School",
+      "classes": [
+        {
+          "id": "9th",
+          "name": "9th",
+          "subjects": [
+            {
+              "id": "English-9",
+              "name": "English-9",
+              "fileKey": "US_High_School__9th__English-9",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Literary Elements & Narrative Structure",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Characterization & Point of View",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Theme, Central Idea & Objective Summary",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Figurative Language & Literary Devices",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Tone, Mood & Author's Style",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Informational Texts & Rhetorical Appeals",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Poetry Analysis & Poetic Forms",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Drama & Theatrical Conventions",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Vocabulary Acquisition & Context Clues",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Grammar, Mechanics & Sentence Architecture",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Algebra-I",
+              "name": "Algebra-I",
+              "fileKey": "US_High_School__9th__Algebra-I",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Foundations of Algebra & Real Numbers",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Solving Linear Equations",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Solving Linear Inequalities",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Relations & Functions",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Linear Functions & Graphing",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Systems of Linear Equations & Inequalities",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Exponents, Radicals & Exponential Functions",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Polynomials & Factoring",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Quadratic Functions & Equations",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Descriptive Statistics & Data Analysis",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Biology",
+              "name": "Biology",
+              "fileKey": "US_High_School__9th__Biology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Nature of Life & Scientific Inquiry",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Chemistry of Life & Biomolecules",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Cell Structure & Transport Mechanisms",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Cellular Energetics: Photosynthesis & Respiration",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Cell Division, Mitosis & Meiosis",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Mendelian Genetics & Heredity",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Molecular Genetics: DNA, RNA & Protein Synthesis",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Evolution by Natural Selection",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Ecology, Energy Flow & Biogeochemical Cycles",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Population Dynamics & Human Ecological Impact",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "World_History_Geography",
+              "name": "World History/Geography",
+              "fileKey": "US_High_School__9th__World_History_Geography",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Tools of Geography, Maps, Globes & Spatial Thinking",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Physical Geography, Landforms, Climate Zones & Earth's Resources",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Early River Valley Civilizations",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Classical Mediterranean Civilizations: Ancient Greece & Rome",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Major World Religions & Philosophies",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Post-Classical Era: Byzantine Empire & Islamic Golden Age",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Medieval Europe: Feudalism, Manorialism & Crusades",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Civilizations of the Americas & African Kingdoms",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Renaissance, Scientific Revolution & Age of Exploration",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Human Geography: Global Trade, Migration, Demographics & Urbanization",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Physical_Education",
+              "name": "Physical Education",
+              "fileKey": "US_High_School__9th__Physical_Education",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Five Health-Related Components of Fitness",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "FITT Principle, Overload, Progression & Specificity",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Aerobic vs Anaerobic & Target Heart Rates",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Musculoskeletal Anatomy, Biomechanics & Posture",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Warm-Ups, Cool-Downs, Injury Prevention & RICE",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Nutrition, Hydration, Energy Balance & Metabolism",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Team Sports Rules & Strategies",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Individual & Lifetime Activities",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Motor Skills, Coordination, Agility & Skill-Related Fitness",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Mental Health, Sportsmanship, Teamwork & Lifelong Wellness",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "World_Language",
+              "name": "World Language",
+              "fileKey": "US_High_School__9th__World_Language",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Saludos, Despedidas y Cortesía",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Números, Calendario y La Hora",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "La Escuela, Objetos y Artículos",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Pronombres y Verbos Ser / Estar",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "La Familia, La Casa y Los Adjetivos",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Verbos Regulares -AR y Actividades Diarias",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Comidas, Bebidas y Verbos -ER / -IR",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Verbos Irregulares Comunes",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "La Comunidad, Lugares y Preposiciones",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "El Clima, Pasatiempos y Tradiciones Culturales",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "10th",
+          "name": "10th",
+          "subjects": [
+            {
+              "id": "English-10",
+              "name": "English-10",
+              "fileKey": "US_High_School__10th__English-10",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Literary Analysis & Textual Evidence",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Rhetorical Devices & Persuasive Appeals",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "World & American Literature Traditions",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Poetry Analysis & Poetic Forms",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Drama & Dramatic Conventions (Macbeth Focus)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Informational Texts, Synthesis & Author's Bias",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Argumentative Writing & Counterclaims",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Research Writing & Advanced MLA Guidelines",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Advanced Grammar, Syntax & Sentence Variety",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Academic Vocabulary in Context & Etymology",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Geometry",
+              "name": "Geometry",
+              "fileKey": "US_High_School__10th__Geometry",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Geometric Foundations: Points, Lines, Planes, Angles & Segments",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Inductive/Deductive Reasoning & Proofs",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Parallel & Perpendicular Lines, Transversals & Slope",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Triangles, Congruence Postulates & CPCTC",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Relationships in Triangles: Medians, Altitudes & Inequalities",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Quadrilaterals & Polygons",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Similarity, Proportions & Dilations",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Right Triangles & Trigonometry",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Circles (Arcs, Chords, Angles, Tangents & Equations)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "2D Area, Perimeter & 3D Surface Area & Volume",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Chemistry",
+              "name": "Chemistry",
+              "fileKey": "US_High_School__10th__Chemistry",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Introduction to Chemistry, Matter & Measurement",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Atomic Structure, Subatomic Particles & Isotopes",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Periodic Table & Periodic Trends",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Chemical Bonding: Ionic, Covalent & Metallic",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Chemical Formulas & Nomenclature",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Chemical Reactions & Balancing Equations",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Mole Concept & Stoichiometry",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "States of Matter, Phase Changes & Gas Laws",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Solutions, Solubility & Concentration (Molarity)",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Acids, Bases, pH & Nuclear Chemistry",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "US_History",
+              "name": "US History",
+              "fileKey": "US_High_School__10th__US_History",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Early America, Colonization & The American Revolution",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Creating the Constitution & The Early Republic",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Westward Expansion, Manifest Destiny & Sectionalism",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "The Civil War & Reconstruction Era",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "The Gilded Age, Industrialization & The Progressive Era",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "American Imperialism, World War I & The Roaring Twenties",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Great Depression & The New Deal",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "World War II: Mobilization, Combat & The Homefront",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "The Cold War, Civil Rights Movement & 1960s Transformation",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Contemporary America: 1970s to the 21st Century",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Health_Education",
+              "name": "Health Education",
+              "fileKey": "US_High_School__10th__Health_Education",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Wellness, Personal Health & Decision Making",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Mental & Emotional Health, Stress & Coping",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Nutrition, Physical Fitness & Body Systems",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Substance Abuse Prevention: Tobacco, Alcohol & Drugs",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Human Growth, Development & Healthy Relationships",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Infectious & Non-Infectious Diseases",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "First Aid, CPR, Safety & Injury Prevention",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Environmental & Community Health",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Conflict Resolution, Violence Prevention & Cyber Safety",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Consumer Health, Healthcare Systems & Lifelong Wellness",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "World_Language-II",
+              "name": "World Language-II",
+              "fileKey": "US_High_School__10th__World_Language-II",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Present Tense Review, Ser vs Estar & Daily Routines (Reflexive Verbs)",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "The Preterite Tense: Regular & Irregular Past Actions",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "The Imperfect Tense, Childhood & Ongoing Past Actions",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Preterite vs Imperfect Narratives in the Past",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Travel, Vacations, Geography & Navigating the Airport",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Shopping, Clothing, Markets & Direct Object Pronouns",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Food, Dining, Restaurant Etiquette & Indirect Object Pronouns",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Health, The Body, Medical Care & Formal/Informal Commands",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Technology, Communications, Home & Future Intentions",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Hispanic Culture, Celebrations, Traditions & Arts",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Computer_Science_Essentials",
+              "name": "Computer Science Essentials",
+              "fileKey": "US_High_School__10th__Computer_Science_Essentials",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Computational Thinking, Algorithms & Flowcharts",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Computer Hardware, Architecture & Operating Systems",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Binary Code, Hexadecimal & Data Representation",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Programming Fundamentals: Variables, Data Types & I/O",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Control Flow: Conditionals, Boolean Logic & Selection",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Control Flow: Loops, Iteration & Repetition",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Modular Programming: Functions, Procedures & Scope",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Data Structures: Lists, Arrays & String Manipulation",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "The Internet, Networking Basics & Cloud Computing",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Cybersecurity, Digital Ethics & Societal Impacts of Computing",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Economics_&_Personal_Finance",
+              "name": "Economics & Personal Finance",
+              "fileKey": "US_High_School__10th__Economics_&_Personal_Finance",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Fundamental Economic Concepts, Scarcity & Decision Making",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Economic Systems, The Free Market & The US Economy",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Demand, Supply, Market Equilibrium & Prices",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Market Structures, Business Organizations & Labor Markets",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Macroeconomics, Fiscal Policy, Monetary Policy & The Federal Reserve",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Personal Income, Taxation, Paychecks & Budgeting",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Banking, Financial Services & Savings Accounts",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Credit, Debt Management, Consumer Loans & Credit Scores",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Investing, Wealth Building, Stocks, Bonds & Retirement Planning",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Insurance, Risk Management, Consumer Protection & Contracts",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "Elective",
+          "name": "Elective",
+          "subjects": [
+            {
+              "id": "Computer_Science",
+              "name": "Computer Science",
+              "fileKey": "US_High_School__Elective__Computer_Science",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Foundations of Computing & History of Information Age",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Computer Systems, Hardware Components & Motherboard Architecture",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Operating Systems, File Systems & Process Management",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Digital Data Representation: Bits, Bytes, Binary, Octal & Hexadecimal",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Logic Gates, Boolean Algebra & Digital Circuits",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Algorithms, Flowcharts, Pseudocode & Efficiency Basics",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Data Structures Foundations: Stacks, Queues, Arrays & Tables",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Computer Networks, Architecture, Topologies & The Internet",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Information Security, Encryption, Privacy & Digital Safety",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Computing Innovations, Future Technologies & Societal Impact",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Coding",
+              "name": "Coding",
+              "fileKey": "US_High_School__Elective__Coding",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Programming Foundations & Algorithmic Thinking",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Variables, Data Types, Operators & Expressions",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Input/Output Operations & String Processing",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Conditional Control Flow & Boolean Logic",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Iteration, Loops & Accumulator Patterns",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Modular Programming, Functions & Scope",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Data Collections: Lists, Tuples & Dictionaries",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Object-Oriented Programming Fundamentals",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Debugging, Defensive Coding & Software Testing",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Web Basics, APIs & Version Control with Git",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Artificial_Intelligence",
+              "name": "Artificial Intelligence",
+              "fileKey": "US_High_School__Elective__Artificial_Intelligence",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Introduction to Artificial Intelligence & Historical Milestones",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Machine Learning Fundamentals: Supervised, Unsupervised & Reinforcement",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Data for AI: Collection, Preprocessing, Feature Engineering & Privacy",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Artificial Neural Networks & Deep Learning Foundations",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Computer Vision: Image Recognition, Object Detection & CNNs",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Natural Language Processing (NLP), Speech & Sentiment Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Generative AI, Large Language Models (LLMs) & Prompt Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Robotics, Autonomous Agents & Sensor Fusion",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "AI Ethics, Algorithmic Bias, Safety & Governance",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "The Future of AI: Societal Impact, Careers & Lifelong Learning",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Technology",
+              "name": "Technology",
+              "fileKey": "US_High_School__Elective__Technology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Digital Literacy, Information Technology & Computing History",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Office Productivity Suites, Document Design & Spreadsheets",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Cloud Computing, Remote Collaboration & SaaS Tools",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Digital Media, Graphic Design, Audio & Video Production",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Web Publishing, Content Management Systems & Digital Marketing",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Mobile Technologies, Operating Systems & Wireless Communication",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "The Internet of Things (IoT), Smart Devices & Home Automation",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Emerging Technologies: 3D Printing, VR/AR & Autonomous Systems",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Cybersecurity Basics, Privacy, Digital Footprints & Cyber Ethics",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Green Computing, Global Technology Trends & Tech Careers",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Business",
+              "name": "Business",
+              "fileKey": "US_High_School__Elective__Business",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Foundations of Business & Economic Systems",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Business Ownership & Organizational Structures",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Management Principles & Organizational Leadership",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Human Resources, Workplace Culture & Labor Relations",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Marketing Principles, Target Markets & The 4 Ps",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Principles of Accounting",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Business Finance & Investment",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Business Law & Ethics",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Global Business & International Trade",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Digital Business & E-Commerce",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Entrepreneurship",
+              "name": "Entrepreneurship",
+              "fileKey": "US_High_School__Elective__Entrepreneurship",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Entrepreneurial Mindset & Opportunity Recognition",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Market Research & Feasibility Analysis",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Business Planning & Business Model Canvas",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Product Development & Value Proposition",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Startup Marketing, Sales & Customer Acquisition",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Startup Finance, Cash Flow & Unit Economics",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Funding, Pitching & Venture Capital",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Legal Structure, IP & Regulatory Compliance",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Launch, Operations & Scaling",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Social Entrepreneurship & Future Ventures",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Psychology",
+              "name": "Psychology",
+              "fileKey": "US_High_School__Elective__Psychology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "History, Approaches & Research Methods",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Biological Bases of Behavior & The Brain",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Sensation, Perception & Consciousness",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Learning Theories & Conditioning",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Memory, Cognition & Intelligence",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Developmental Psychology Across the Lifespan",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Motivation, Emotion & Stress",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Personality Theories & Individual Differences",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Psychological Disorders",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Psychological Treatments & Social Psychology",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Sociology",
+              "name": "Sociology",
+              "fileKey": "US_High_School__Elective__Sociology",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Sociological Perspective & Methods",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Culture, Norms & Values",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Socialization & Social Interaction",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Groups, Organizations & Social Structure",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Deviance, Crime & Social Control",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Social Stratification & Class Inequality",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Race, Ethnicity & Migration",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Gender, Sexuality & Age",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Social Institutions: Family, Education & Religion",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Population, Urbanization & Social Change",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Engineering",
+              "name": "Engineering",
+              "fileKey": "US_High_School__Elective__Engineering",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Engineering Design Process",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Engineering Mathematics & Applied Physics",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Mechanical Engineering Systems",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Civil & Structural Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Electrical & Electronics Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Chemical & Materials Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Aerospace & Flight Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Environmental & Sustainable Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Biomedical & Biomechanical Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Engineering Ethics, Safety & Global Impact",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Robotics",
+              "name": "Robotics",
+              "fileKey": "US_High_School__Elective__Robotics",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Introduction to Robotics & Automation",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Mechanical Subsystems, Linkages & Gears",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Electrical Motors, Actuators & Power Systems",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Sensor Integration & Environmental Perception",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Microcontrollers, Embedded Systems & Wiring",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Robot Programming & Feedback Control Loops",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Autonomous Navigation, Localization & Mapping",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Machine Vision & Object Recognition",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Industrial Robotics, Manufacturing & Cobots",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Human-Robot Interaction & Ethics",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "STEM",
+              "name": "STEM",
+              "fileKey": "US_High_School__Elective__STEM",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Interdisciplinary Foundations of STEM",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Environmental & Earth Systems Science",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Applied Mathematical Modeling & Statistics",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Information Technology & Computational Thinking",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Core Engineering Principles & Prototyping",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Biotechnology & Genetic Engineering",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Renewable Energy Technologies & Storage",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Materials Science & Nanotechnology",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Space Exploration & Astrobiology",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "STEM Ethics, Policy & Global Challenges",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Creative_Writing",
+              "name": "Creative Writing",
+              "fileKey": "US_High_School__Elective__Creative_Writing",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "The Creative Writer's Craft & Elements of Storytelling",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Character Development, Archetypes & Motivation",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Setting, Worldbuilding & Atmosphere",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Plot Architecture, Pacing, Conflict & Narrative Arcs",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Narrative Point of View, Voice & Perspective",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Dialogue, Subtext & Character Dynamics",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Poetry: Forms, Meter, Sound Devices & Figurative Language",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Flash Fiction & Short Story Mechanics",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Creative Nonfiction, Memoir & Personal Essay",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Revision, Self-Editing, Workshop Critique & Submitting for Publication",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Journalism",
+              "name": "Journalism",
+              "fileKey": "US_High_School__Elective__Journalism",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "History of Journalism, Press Freedom & The First Amendment",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "News Literacy, Defining News & The Elements of Newsworthiness",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Information Gathering, Source Evaluation & Interviewing Techniques",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Hard News Writing Mechanics & The Inverted Pyramid Structure",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Feature Writing, Human Interest Stories & Personality Profiles",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Editorial Writing, Columns, Reviews & Political Commentary",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Media Law, Defamation (Libel/Slander), Copyright & Journalistic Ethics",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Photojournalism, Visual Storytelling, Captions & Page Layout",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Broadcast News, Audio Storytelling & Podcasting Production",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Digital News, Data Journalism, Social Media Reporting & Verification",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Career",
+              "name": "Career",
+              "fileKey": "US_High_School__Elective__Career",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Self-Assessment: Interests, Skills, Values & Personality Profiles",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Career Exploration, Occupational Outlook & Industry Clusters",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Postsecondary Pathways: College, Trade School, Apprenticeships & Military",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Professional Resumes, Targeted Cover Letters & Portfolios",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Job Search Strategies, Networking & Digital Professional Branding (LinkedIn)",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Interview Preparation, Behavioral Techniques, Etiquette & Negotiation",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Workplace Professionalism, Ethics, Soft Skills & Time Management",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Team Dynamics, Business Communication & Conflict Resolution",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Employee Rights, Labor Laws, Workplace Safety (OSHA) & Benefits",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Career Adaptability, Financial Wellness & Lifelong Professional Growth",
+                  "count": 50
+                }
+              ]
+            },
+            {
+              "id": "Life_Skills",
+              "name": "Life Skills",
+              "fileKey": "US_High_School__Elective__Life_Skills",
+              "chapterCount": 10,
+              "questionCount": 500,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Personal Wellness, Nutrition, Sleep Hygiene & Healthy Lifestyles",
+                  "count": 50
+                },
+                {
+                  "no": 2,
+                  "title": "Mental Health Awareness, Stress Reduction & Emotional Resilience",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Interpersonal Communication, Active Listening & Healthy Relationships",
+                  "count": 50
+                },
+                {
+                  "no": 4,
+                  "title": "Decision-Making, Critical Thinking & Everyday Problem Solving",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Household Management, Culinary Basics, Food Safety & Meal Prep",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Home Maintenance, Domestic Safety & Emergency Preparedness",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Personal Finance Basics, Budgeting, Banking & Smart Consumer Choices",
+                  "count": 50
+                },
+                {
+                  "no": 8,
+                  "title": "Digital Citizenship, Cyber Safety, Privacy & Digital Wellbeing",
+                  "count": 50
+                },
+                {
+                  "no": 9,
+                  "title": "Civic Duties, Community Engagement, Volunteering & Voting Rights",
+                  "count": 50
+                },
+                {
+                  "no": 10,
+                  "title": "Navigating Adulthood: Transportation, Healthcare, Housing & Autonomy",
+                  "count": 50
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
