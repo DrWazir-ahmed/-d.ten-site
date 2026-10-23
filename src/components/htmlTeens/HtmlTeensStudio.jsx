@@ -746,8 +746,63 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 </div>
               </div>
 
+              {/* New Terms Introduction Grid (Beginner Friendly Ground Zero) */}
+              {currentLesson.newTerms && currentLesson.newTerms.length > 0 && (
+                <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-900/50 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+                      New Terms Introduced (نئے بنیادی الفاظ):
+                    </span>
+                    <span className="text-[11px] font-urdu text-indigo-300">
+                      پہلی بار سیکھنے والوں کے لیے
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {currentLesson.newTerms.map((item, idx) => (
+                      <div key={idx} className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-cyan-300 font-mono">
+                            {item.term}
+                          </span>
+                          <span className="text-xs font-urdu font-bold text-amber-300" dir="rtl">
+                            {item.urduTerm}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          {item.definition}
+                        </p>
+                        <p className="text-[11px] font-urdu text-amber-200/90 leading-relaxed" dir="rtl">
+                          {item.urduDefinition}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Beginner Analogy Card (How to easily understand) */}
+              {currentLesson.analogy && (
+                <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-900/40 grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+                  <div className="flex items-start gap-2.5 text-xs text-emerald-200">
+                    <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-emerald-300">💡 Easy Real-World Analogy: </strong>
+                      {currentLesson.analogy}
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5 text-xs text-emerald-200 font-urdu text-right" dir="rtl">
+                    <div>
+                      <strong className="text-emerald-300">آسان مثال سے سمجھیں: </strong>
+                      {currentLesson.urduAnalogy}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Bilingual Concept Explanation */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs sm:text-sm text-slate-300 leading-relaxed space-y-1">
                   <div className="font-bold text-blue-400 text-xs uppercase tracking-wider">
                     Core Technical Concept:
