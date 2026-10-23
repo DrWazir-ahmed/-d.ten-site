@@ -372,23 +372,27 @@ export const CoursePlayer = () => {
         <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
           
           {/* Main Content Area */}
-          <div className="flex-1 p-6 sm:p-8 overflow-y-auto">
+          <div className={`flex-1 overflow-y-auto ${course.id === 'course-html-teens-pakistan' || course.id === 'course-python-kids-pakistan' ? 'p-1 sm:p-2' : 'p-6 sm:p-8'}`}>
             
-            {/* Header info */}
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-100 dark:border-slate-800">
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 uppercase tracking-wider">
-                Module {activeLessonIndex + 1} • {currentLesson.type}
-              </span>
-              <div className="flex items-center gap-1 text-xs text-slate-400">
-                <Clock className="w-3.5 h-3.5" />
-                <span>{currentLesson.duration || "15 mins"}</span>
-              </div>
-            </div>
+            {/* Header info & Title (Hidden for self-contained interactive studios) */}
+            {course.id !== 'course-html-teens-pakistan' && course.id !== 'course-python-kids-pakistan' && (
+              <>
+                <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-100 dark:border-slate-800">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 uppercase tracking-wider">
+                    Module {activeLessonIndex + 1} • {currentLesson.type}
+                  </span>
+                  <div className="flex items-center gap-1 text-xs text-slate-400">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{currentLesson.duration || "15 mins"}</span>
+                  </div>
+                </div>
 
-            {/* Lesson Title */}
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">
-              {currentLesson.title}
-            </h2>
+                {/* Lesson Title */}
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">
+                  {currentLesson.title}
+                </h2>
+              </>
+            )}
 
             {/* Read Aloud Audio Bar for Students */}
             {readableLessonText && (
