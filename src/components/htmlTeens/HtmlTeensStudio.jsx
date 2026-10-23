@@ -37,7 +37,10 @@ import {
   Flame,
   FileCode,
   ShieldCheck,
-  RefreshCw
+  RefreshCw,
+  Lock,
+  Share2,
+  FolderTree
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { HTML_TEENS_COURSE } from '../../data/htmlTeensCourseData';
@@ -293,6 +296,11 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
   const totalLessonsCount = 21;
   const progressPercent = Math.min(100, Math.round((completedLessons.length / totalLessonsCount) * 100));
 
+  // Editor line count helper
+  const lineCount = useMemo(() => {
+    return Math.max(1, (userCode || '').split('\n').length);
+  }, [userCode]);
+
   // Slide Deck Definitions for Current Lesson
   const SLIDE_STEPS = [
     { id: 0, title: 'Concept Blueprint', urduTitle: 'تصور اور مثال', icon: Sparkles },
@@ -303,22 +311,22 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-[#0a0f1d] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white relative">
+    <div className="w-full min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white relative">
       
       {/* ─────────────────────────────────────────────────────────────
-          1. TOP GLOW ACCENT BAR & STICKY MODERN HEADER
+          1. TOP ACCENT STRIPE & GLASSMORPHISM HEADER
       ───────────────────────────────────────────────────────────── */}
-      <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 shadow-sm shadow-cyan-500/20 z-50 sticky top-0" />
+      <div className="h-0.5 w-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 shadow-sm shadow-cyan-500/20 z-50 sticky top-0" />
 
-      <header className="bg-slate-950/85 border-b border-slate-800/80 sticky top-1 z-40 backdrop-blur-xl px-4 sm:px-6 py-2.5 transition-all">
+      <header className="bg-gradient-to-r from-slate-950/90 via-slate-900/85 to-slate-950/90 border-b border-slate-800/80 sticky top-0.5 z-40 backdrop-blur-2xl shadow-xl shadow-black/20 px-4 sm:px-6 py-2.5 transition-all">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-3">
           
-          {/* Logo & Course Title & Progress */}
+          {/* Logo & Course Title & Mobile Progress */}
           <div className="flex items-center gap-3.5 w-full lg:w-auto justify-between lg:justify-start">
             <div className="flex items-center gap-3">
               <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-40 group-hover:opacity-75 transition duration-300" />
-                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-900 to-slate-950 border border-slate-700/80 flex items-center justify-center text-cyan-400 font-black shadow-inner text-base">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-2xl blur-sm opacity-50 group-hover:opacity-85 transition duration-300" />
+                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-950 via-slate-900 to-slate-950 border border-slate-700/80 flex items-center justify-center text-cyan-400 font-black shadow-inner text-base">
                   &lt;/&gt;
                 </div>
               </div>
@@ -327,7 +335,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 <div className="flex items-center gap-2">
                   <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight flex items-center gap-2">
                     <span>HTML5 Web Developer</span>
-                    <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-cyan-400 border border-cyan-500/30 uppercase">
+                    <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-emerald-500/10 text-cyan-400 border border-cyan-500/30 uppercase shadow-sm">
                       Teens 13–16
                     </span>
                   </h1>
@@ -346,32 +354,37 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             </div>
 
             {/* Quick Progress Badge on Mobile */}
-            <div className="flex lg:hidden items-center gap-2 bg-slate-900/90 border border-slate-800 px-2.5 py-1 rounded-xl text-xs">
-              <span className="text-[10px] text-slate-400 font-mono">{completedLessons.length}/21</span>
-              <div className="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div className="flex lg:hidden items-center gap-2 bg-slate-900/90 border border-slate-800 px-2.5 py-1 rounded-xl text-xs backdrop-blur-md">
+              <span className="text-[10px] text-slate-400 font-mono font-bold">{completedLessons.length}/21</span>
+              <div className="w-14 h-1.5 bg-slate-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-400 rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-400 rounded-full transition-all duration-700"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Center: Overall Progress Bar (Desktop) */}
-          <div className="hidden lg:flex items-center gap-3 bg-slate-900/70 border border-slate-800/80 rounded-2xl px-3.5 py-1.5">
+          {/* Center: Animated Progress Bar in Header (Desktop) */}
+          <div className="hidden lg:flex items-center gap-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl px-4 py-1.5 backdrop-blur-md shadow-inner">
             <div className="text-left">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400 gap-3">
-                <span>Course Progress</span>
-                <span className="text-cyan-400 font-mono font-extrabold">{progressPercent}%</span>
+              <div className="flex items-center justify-between text-[10px] font-extrabold uppercase tracking-widest text-slate-400 gap-4">
+                <span className="flex items-center gap-1 text-slate-400">
+                  <Flame className="w-3 h-3 text-cyan-400" />
+                  Course Progress
+                </span>
+                <span className="text-cyan-400 font-mono font-black">{progressPercent}%</span>
               </div>
-              <div className="w-36 h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1">
+              <div className="relative w-44 h-2 bg-slate-950/80 rounded-full overflow-hidden mt-1 border border-slate-800/80 p-0.5">
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-full transition-all duration-500 shadow-sm shadow-cyan-400/50"
+                  className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-full transition-all duration-700 ease-out shadow-sm shadow-cyan-400/50 relative overflow-hidden"
                   style={{ width: `${progressPercent}%` }}
-                />
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+                </div>
               </div>
             </div>
-            <span className="px-2 py-0.5 rounded-lg bg-slate-800/90 text-slate-300 font-mono text-[11px] font-bold">
+            <span className="px-2 py-0.5 rounded-lg bg-slate-800/80 text-cyan-300 font-mono text-[11px] font-extrabold border border-slate-700/60">
               {completedLessons.length}/21
             </span>
           </div>
@@ -382,7 +395,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             {/* Urdu Optional Toggle */}
             <button
               onClick={() => setShowUrdu(!showUrdu)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border hover:-translate-y-0.5 ${
                 showUrdu
                   ? 'bg-amber-500/10 text-amber-300 border-amber-500/40 hover:bg-amber-500/20 shadow-sm shadow-amber-500/10'
                   : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700'
@@ -396,10 +409,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             {/* Voice 1: Urdu Voice (Always Visible) */}
             <button
               onClick={() => speakingLanguage === 'ur' ? stopSpeaking() : speakText(currentLesson.urduVoice, 'ur')}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border hover:-translate-y-0.5 ${
                 speakingLanguage === 'ur'
-                  ? 'bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-400/40 animate-pulse'
-                  : 'bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-300 border-emerald-800/80 hover:border-emerald-700'
+                  ? 'bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-400/40'
+                  : 'bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-300 border-emerald-800/80 hover:border-emerald-700 shadow-sm'
               }`}
               title="سبق سنیں (اُردو آواز)"
             >
@@ -422,10 +435,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             {/* Voice 2: English Voice (Always Visible) */}
             <button
               onClick={() => speakingLanguage === 'en' ? stopSpeaking() : speakText(currentLesson.englishVoice, 'en')}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border hover:-translate-y-0.5 ${
                 speakingLanguage === 'en'
-                  ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-600/30 ring-2 ring-blue-400/40 animate-pulse'
-                  : 'bg-blue-950/40 hover:bg-blue-900/50 text-blue-300 border-blue-800/80 hover:border-blue-700'
+                  ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-600/30 ring-2 ring-blue-400/40'
+                  : 'bg-blue-950/40 hover:bg-blue-900/50 text-blue-300 border-blue-800/80 hover:border-blue-700 shadow-sm'
               }`}
               title="Listen in English"
             >
@@ -446,9 +459,9 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             {/* Final Exam Trigger */}
             <button
               onClick={() => setActiveView('exam')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-1.5 shadow-sm ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:-translate-y-0.5 ${
                 activeView === 'exam'
-                  ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-amber-400/20'
+                  ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-amber-400/30'
                   : 'bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20'
               }`}
             >
@@ -461,10 +474,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
       </header>
 
       {/* ─────────────────────────────────────────────────────────────
-          2. MODULE TRACK NAVIGATION CAROUSEL (7 CORE MODULES)
+          2. CARD-BASED MODULE CAROUSEL (GLASS EFFECTS & GRADIENTS)
       ───────────────────────────────────────────────────────────── */}
-      <nav className="bg-slate-950/70 border-b border-slate-800/60 px-4 sm:px-6 py-2 overflow-x-auto scrollbar-thin">
-        <div className="max-w-7xl mx-auto flex items-center gap-2 min-w-max">
+      <nav className="bg-slate-950/60 border-b border-slate-800/60 px-4 sm:px-6 py-2.5 overflow-x-auto scrollbar-thin backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto flex items-center gap-2.5 min-w-max">
           {HTML_TEENS_COURSE.modules.map((m) => {
             const isCurrentModule = activeModuleId === m.id && activeView !== 'exam';
             const moduleCompletedCount = m.lessons.filter(l => completedLessons.includes(l.id)).length;
@@ -480,23 +493,42 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   setLessonMode('slides');
                   setActiveSlide(0);
                 }}
-                className={`group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border ${
+                className={`group relative flex items-center gap-2.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all duration-300 border backdrop-blur-md ${
                   isCurrentModule
-                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-blue-400/80 shadow-md shadow-blue-500/20'
-                    : 'bg-slate-900/60 hover:bg-slate-800/80 text-slate-300 border-slate-800/80 hover:border-slate-700'
+                    ? 'bg-gradient-to-r from-blue-600/30 via-cyan-600/25 to-blue-600/30 text-white border-cyan-400/80 shadow-lg shadow-cyan-500/15 ring-1 ring-cyan-400/40 scale-[1.02]'
+                    : 'bg-slate-900/40 hover:bg-slate-850/70 text-slate-300 border-slate-800/80 hover:border-slate-700 hover:-translate-y-0.5 shadow-sm'
                 }`}
               >
-                <span className="text-sm">{m.badge}</span>
-                <span>M{m.id}: {m.title.split(':')[0]}</span>
-                {isAllCompleted ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                ) : (
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-md font-mono ${
-                    isCurrentModule ? 'bg-black/25 text-white' : 'bg-slate-950/80 text-slate-400'
-                  }`}>
-                    {moduleCompletedCount}/3
-                  </span>
-                )}
+                {/* Module Icon Badge */}
+                <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs shadow-inner ${
+                  isCurrentModule ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800/80 text-slate-300'
+                }`}>
+                  {m.badge}
+                </div>
+
+                {/* Module Details */}
+                <div className="text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] uppercase tracking-wider text-slate-400 font-mono font-semibold">
+                      M{m.id}
+                    </span>
+                    {isAllCompleted && <CheckCircle className="w-3 h-3 text-emerald-400" />}
+                  </div>
+                  <div className={`text-xs font-extrabold tracking-tight ${isCurrentModule ? 'text-white' : 'text-slate-200'}`}>
+                    {m.title.split(':')[0]}
+                  </div>
+                </div>
+
+                {/* Progress Fraction Chip */}
+                <div className={`ml-1 text-[10px] font-mono font-black px-2 py-0.5 rounded-lg border ${
+                  isAllCompleted 
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                    : isCurrentModule 
+                    ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/30' 
+                    : 'bg-slate-800/60 text-slate-400 border-slate-700/60'
+                }`}>
+                  {moduleCompletedCount}/3
+                </div>
               </button>
             );
           })}
@@ -510,7 +542,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
         {/* ─── VIEW 1: FINAL CERTIFICATION EXAM ─── */}
         {activeView === 'exam' && (
-          <div className="bg-gradient-to-b from-slate-950 to-slate-900/90 border border-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md">
+          <div className="bg-gradient-to-b from-slate-950 via-slate-900/90 to-slate-950 border border-slate-800/90 rounded-[28px] p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
             <div className="flex flex-col sm:flex-row items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -520,7 +552,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   </span>
                   <span className="text-xs text-slate-400 font-mono">10 Questions • 70% to Pass</span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-black text-white mt-2">
+                <h2 className="text-xl sm:text-2xl font-black text-white mt-2 tracking-tight">
                   {HTML_TEENS_COURSE.finalExam.title}
                 </h2>
                 {showUrdu && (
@@ -531,7 +563,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
               </div>
               <button
                 onClick={() => setActiveView('lesson')}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 Back to Lessons
@@ -544,7 +576,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 const selectedOpt = examAnswers[qIdx];
 
                 return (
-                  <div key={qIdx} className="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-3 transition-all hover:border-slate-700/90">
+                  <div key={qIdx} className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 space-y-3.5 transition-all hover:border-slate-700/90 backdrop-blur-md">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h4 className="text-sm sm:text-base font-bold text-slate-100 leading-snug">
@@ -573,7 +605,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                             btnStyle = "bg-rose-600/30 text-rose-200 border-rose-500";
                           }
                         } else if (isSelected) {
-                          btnStyle = "bg-blue-600 text-white border-blue-400 font-bold shadow-md shadow-blue-600/30";
+                          btnStyle = "bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-cyan-400 font-bold shadow-md shadow-blue-600/30 scale-[1.01]";
                         }
 
                         return (
@@ -607,7 +639,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             </div>
 
             {/* Exam Action Bar */}
-            <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
               {!examSubmitted ? (
                 <>
                   <div className="text-xs text-slate-400">
@@ -674,14 +706,14 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
         {/* ─── VIEW 2: MODULE END QUIZ ─── */}
         {activeView === 'quiz' && (
-          <div className="bg-gradient-to-b from-slate-950 to-slate-900/90 border border-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+          <div className="bg-gradient-to-b from-slate-950 via-slate-900/90 to-slate-950 border border-slate-800/90 rounded-[28px] p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-xl">
             <div className="flex flex-col sm:flex-row items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
               <div>
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-cyan-300 border border-blue-500/30 uppercase tracking-wider inline-flex items-center gap-1.5">
                   <HelpCircle className="w-3.5 h-3.5" />
                   Module {activeModuleId} Knowledge Check
                 </span>
-                <h2 className="text-xl font-black text-white mt-2">
+                <h2 className="text-xl font-black text-white mt-2 tracking-tight">
                   {currentModule.quiz.title}
                 </h2>
                 {showUrdu && (
@@ -692,7 +724,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
               </div>
               <button
                 onClick={() => setActiveView('lesson')}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 Return to Lesson
@@ -704,7 +736,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 const selectedOpt = quizAnswers[qIdx];
 
                 return (
-                  <div key={qIdx} className="p-4 sm:p-5 rounded-2xl bg-slate-900/70 border border-slate-800/80 space-y-3">
+                  <div key={qIdx} className="p-4 sm:p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 space-y-3 backdrop-blur-md">
                     <h4 className="text-sm font-bold text-slate-100">
                       {qIdx + 1}. {q.question}
                     </h4>
@@ -726,7 +758,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                             btnStyle = "bg-rose-600/30 text-rose-200 border-rose-500";
                           }
                         } else if (isSelected) {
-                          btnStyle = "bg-blue-600 text-white border-blue-400 font-bold shadow-md shadow-blue-600/20";
+                          btnStyle = "bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-cyan-400 font-bold shadow-md shadow-blue-600/20";
                         }
 
                         return (
@@ -762,7 +794,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   disabled={Object.keys(quizAnswers).length < currentModule.quiz.questions.length}
                   className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                     Object.keys(quizAnswers).length >= currentModule.quiz.questions.length
-                      ? 'bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-md shadow-blue-600/30'
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-md shadow-blue-600/30 hover:scale-[1.02]'
                       : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
                   }`}
                 >
@@ -791,7 +823,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                           setActiveSlide(0);
                           resetModuleQuiz();
                         }}
-                        className="px-4 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/25 transition-all flex items-center gap-1.5"
+                        className="px-4 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-md shadow-blue-600/25 transition-all flex items-center gap-1.5 hover:scale-[1.02]"
                       >
                         <span>Next Module</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -799,7 +831,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     ) : (
                       <button
                         onClick={() => setActiveView('exam')}
-                        className="px-4 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/25 transition-all flex items-center gap-1.5"
+                        className="px-4 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md shadow-amber-500/25 transition-all flex items-center gap-1.5 hover:scale-[1.02]"
                       >
                         <Trophy className="w-3.5 h-3.5" />
                         <span>Proceed to Final Exam</span>
@@ -817,7 +849,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
           <div className="space-y-4">
             
             {/* Sub-navigation: 3 Lessons Selector & Mode Switcher */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-2.5 sm:p-3 rounded-2xl bg-slate-950/80 border border-slate-800/80 backdrop-blur-md">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-slate-950/90 border border-slate-800/80 backdrop-blur-xl shadow-lg">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-slate-400 px-1 hidden sm:inline">
                   Lessons:
@@ -835,10 +867,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                           setLessonMode('slides');
                           setActiveSlide(0);
                         }}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border flex items-center gap-1.5 ${
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 border flex items-center gap-1.5 hover:-translate-y-0.5 ${
                           isSelected
-                            ? 'bg-blue-600 text-white border-blue-400 shadow-md shadow-blue-600/30'
-                            : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-800/80'
+                            ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-cyan-400 shadow-md shadow-blue-600/30'
+                            : 'bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-800/80'
                         }`}
                       >
                         {isDone && <Check className="w-3.5 h-3.5 text-emerald-400" />}
@@ -851,12 +883,12 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
               {/* Toggle Mode: Slides vs Code Studio */}
               <div className="flex items-center gap-2">
-                <div className="bg-slate-900/90 p-1 rounded-xl border border-slate-800 flex items-center gap-1">
+                <div className="bg-slate-900/90 p-1 rounded-xl border border-slate-800/90 flex items-center gap-1 shadow-inner">
                   <button
                     onClick={() => setLessonMode('slides')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
                       lessonMode === 'slides'
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/20'
                         : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -865,9 +897,9 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   </button>
                   <button
                     onClick={() => setLessonMode('editor')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
                       lessonMode === 'editor'
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm'
+                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/20'
                         : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -881,7 +913,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     setActiveView('quiz');
                     resetModuleQuiz();
                   }}
-                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-500/10 hover:bg-blue-500/20 text-cyan-300 border border-blue-500/30 transition-all flex items-center gap-1"
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-500/10 hover:bg-blue-500/20 text-cyan-300 border border-blue-500/30 transition-all flex items-center gap-1 hover:-translate-y-0.5"
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Quiz</span> {activeModuleId}
@@ -890,18 +922,28 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             </div>
 
             {/* ══════════════════════════════════════════════════════════════
-                MODE A: MODERN SLIDE DECK (5 INTERACTIVE SLIDES)
+                MODE A: MODERN SLIDE DECK (FROSTED GLASS & GRADIENT OVERLAYS)
             ══════════════════════════════════════════════════════════════ */}
             {lessonMode === 'slides' && (
-              <div className="bg-slate-950/90 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl flex flex-col min-h-[580px] backdrop-blur-md">
+              <div className={`relative border border-slate-800/90 rounded-[28px] overflow-hidden shadow-2xl flex flex-col min-h-[580px] backdrop-blur-2xl transition-all duration-500 ${
+                activeSlide === 0
+                  ? 'bg-gradient-to-br from-blue-950/30 via-slate-950/95 to-indigo-950/20'
+                  : activeSlide === 1
+                  ? 'bg-gradient-to-br from-indigo-950/30 via-slate-950/95 to-purple-950/20'
+                  : activeSlide === 2
+                  ? 'bg-gradient-to-br from-emerald-950/30 via-slate-950/95 to-teal-950/20'
+                  : activeSlide === 3
+                  ? 'bg-gradient-to-br from-cyan-950/30 via-slate-950/95 to-blue-950/20'
+                  : 'bg-gradient-to-br from-amber-950/30 via-slate-950/95 to-emerald-950/20'
+              }`}>
                 
                 {/* Modern Stepper Header */}
-                <div className="p-3.5 sm:p-4 bg-slate-900/80 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+                <div className="p-3.5 sm:p-4 bg-slate-950/70 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-500/20 text-cyan-400 border border-blue-500/30 uppercase font-mono">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-blue-500/20 text-cyan-400 border border-blue-500/30 uppercase font-mono">
                       Step {activeSlide + 1}/5
                     </span>
-                    <span className="text-xs sm:text-sm font-extrabold text-white">
+                    <span className="text-xs sm:text-sm font-extrabold text-white tracking-tight">
                       {SLIDE_STEPS[activeSlide].title}
                     </span>
                     {showUrdu && (
@@ -911,8 +953,8 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     )}
                   </div>
 
-                  {/* Stepper Wizard Indicator */}
-                  <div className="flex items-center gap-2">
+                  {/* Stepper Wizard Indicator with Connecting Lines */}
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     {SLIDE_STEPS.map((s, idx) => {
                       const StepIcon = s.icon;
                       const isActive = activeSlide === idx;
@@ -922,12 +964,12 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         <button
                           key={s.id}
                           onClick={() => setActiveSlide(idx)}
-                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all duration-200 border ${
+                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all duration-300 border hover:-translate-y-0.5 ${
                             isActive
-                              ? 'bg-blue-600 text-white border-blue-400 shadow-md shadow-blue-500/25 ring-2 ring-blue-500/20'
+                              ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-cyan-400 shadow-md shadow-blue-500/30 ring-2 ring-cyan-400/30 scale-105'
                               : isPast
-                              ? 'bg-slate-800/80 text-emerald-400 border-slate-700'
-                              : 'bg-slate-900/60 text-slate-500 border-slate-800 hover:text-slate-300'
+                              ? 'bg-slate-900/90 text-emerald-400 border-emerald-800/60'
+                              : 'bg-slate-950/60 text-slate-500 border-slate-800 hover:text-slate-300'
                           }`}
                           title={s.title}
                         >
@@ -941,7 +983,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   {/* Quick Jump to Code Editor */}
                   <button
                     onClick={() => setLessonMode('editor')}
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition-all"
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition-all hover:-translate-y-0.5"
                   >
                     <span>Open Editor</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -953,7 +995,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   
                   {/* SLIDE 0: CONCEPT BLUEPRINT & INTUITION */}
                   {activeSlide === 0 && (
-                    <div className="max-w-4xl mx-auto w-full space-y-6 animate-fadeIn">
+                    <div className="max-w-4xl mx-auto w-full space-y-6">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-cyan-300 border border-blue-500/30">
@@ -974,9 +1016,9 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         )}
                       </div>
 
-                      {/* Analogy Card */}
+                      {/* Analogy Card with Frosted Glass Panel */}
                       {currentLesson.analogy && (
-                        <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-slate-900/90 to-slate-900 border border-emerald-800/60 shadow-lg space-y-2.5">
+                        <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-slate-900/60 to-slate-900/80 border border-emerald-800/60 shadow-xl backdrop-blur-md space-y-2.5">
                           <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
                             <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
                             <span>Beginner Real-World Analogy (آسان مثال):</span>
@@ -994,7 +1036,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                       {/* Technical Concept */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/80 space-y-2 shadow-sm">
+                        <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2 shadow-sm backdrop-blur-md">
                           <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                             <Code className="w-3.5 h-3.5" />
                             Core Web Concept:
@@ -1005,7 +1047,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         </div>
 
                         {showUrdu ? (
-                          <div className="p-5 rounded-2xl bg-amber-950/20 border border-amber-900/40 space-y-2 font-urdu text-right shadow-sm" dir="rtl">
+                          <div className="p-5 rounded-2xl bg-amber-950/20 border border-amber-900/40 space-y-2 font-urdu text-right shadow-sm backdrop-blur-md" dir="rtl">
                             <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
                               تکنیکی تصور (اردو وضاحت):
                             </h4>
@@ -1014,7 +1056,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                             </p>
                           </div>
                         ) : (
-                          <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/80 space-y-2 shadow-sm">
+                          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2 shadow-sm backdrop-blur-md">
                             <h4 className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
                               <Globe className="w-3.5 h-3.5" />
                               Pakistani Teen Context:
@@ -1027,7 +1069,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                       </div>
 
                       {showUrdu && (
-                        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-950/40 to-slate-900 border border-blue-900/50 flex items-center gap-3 text-xs text-blue-200 shadow-sm">
+                        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-950/40 via-slate-900/60 to-slate-950 border border-blue-900/50 flex items-center gap-3 text-xs text-blue-200 shadow-sm backdrop-blur-md">
                           <span className="text-lg">🇵🇰</span>
                           <div>
                             <strong className="text-cyan-300">Pakistani Teen Context: </strong> 
@@ -1040,13 +1082,13 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                   {/* SLIDE 1: TECHNICAL TERMS GLOSSARY */}
                   {activeSlide === 1 && (
-                    <div className="max-w-4xl mx-auto w-full space-y-5 animate-fadeIn">
+                    <div className="max-w-4xl mx-auto w-full space-y-5">
                       <div className="text-center space-y-1.5">
                         <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center justify-center gap-1.5">
                           <BookOpen className="w-4 h-4 text-indigo-400" />
                           Vocabulary & Technical Terms
                         </span>
-                        <h3 className="text-xl sm:text-2xl font-black text-white">
+                        <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                           New Terms Introduced in this Lesson
                         </h3>
                         {showUrdu && (
@@ -1058,7 +1100,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {currentLesson.newTerms?.map((item, idx) => (
-                          <div key={idx} className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 space-y-2.5 hover:border-slate-700 transition-all shadow-sm">
+                          <div key={idx} className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2.5 hover:border-slate-700 transition-all shadow-md backdrop-blur-md hover:-translate-y-0.5">
                             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                               <span className="px-2.5 py-1 rounded-lg bg-blue-600/20 text-cyan-300 font-mono text-xs font-bold border border-blue-500/30">
                                 {item.term}
@@ -1085,7 +1127,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                   {/* SLIDE 2: CODE EXAMPLE 1 WITH LINE-BY-LINE EXPLANATION & MINI PREVIEW */}
                   {activeSlide === 2 && (
-                    <div className="max-w-5xl mx-auto w-full space-y-4 animate-fadeIn">
+                    <div className="max-w-5xl mx-auto w-full space-y-4">
                       {currentLesson.examples && currentLesson.examples[0] ? (
                         <>
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -1093,7 +1135,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-500/20 text-cyan-400 border border-blue-500/30 uppercase font-mono">
                                 Example 1 of 2 • Core Syntax
                               </span>
-                              <h3 className="text-lg sm:text-xl font-bold text-white mt-1">
+                              <h3 className="text-lg sm:text-xl font-bold text-white mt-1 tracking-tight">
                                 {currentLesson.examples[0].title}
                               </h3>
                               {showUrdu && (
@@ -1105,7 +1147,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                             <button
                               onClick={() => handleCopyExample(currentLesson.examples[0].code, 0)}
-                              className="self-start sm:self-auto px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all"
+                              className="self-start sm:self-auto px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all hover:-translate-y-0.5 shadow-sm"
                             >
                               {copiedExIndex === 0 ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                               <span>{copiedExIndex === 0 ? 'Copied' : 'Copy Code'}</span>
@@ -1114,13 +1156,16 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
                             {/* VS-Code Style Snippet */}
-                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-lg">
+                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-xl">
                               <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
                                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
                                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
                                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
-                                  <span className="ml-2 text-slate-400 font-bold">example1.html</span>
+                                  <span className="ml-2 text-slate-300 font-bold flex items-center gap-1">
+                                    <FileCode className="w-3.5 h-3.5 text-cyan-400" />
+                                    example1.html
+                                  </span>
                                 </div>
                                 <span className="text-cyan-400 font-mono text-[10px]">HTML5</span>
                               </div>
@@ -1130,7 +1175,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                             </div>
 
                             {/* Live Output Mini Render */}
-                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-lg">
+                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-xl">
                               <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                   <Globe className="w-3.5 h-3.5 text-emerald-400" />
@@ -1153,7 +1198,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                           </div>
 
                           {/* Explanation Box */}
-                          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 space-y-1 shadow-sm">
+                          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-1 shadow-sm backdrop-blur-md">
                             <h5 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
                               <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                               Why this code works (وضاحت):
@@ -1176,7 +1221,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                   {/* SLIDE 3: CODE EXAMPLE 2 WITH LINE-BY-LINE EXPLANATION & MINI PREVIEW */}
                   {activeSlide === 3 && (
-                    <div className="max-w-5xl mx-auto w-full space-y-4 animate-fadeIn">
+                    <div className="max-w-5xl mx-auto w-full space-y-4">
                       {currentLesson.examples && currentLesson.examples[1] ? (
                         <>
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -1184,7 +1229,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-teal-500/20 text-teal-300 border border-teal-500/30 uppercase font-mono">
                                 Example 2 of 2 • Pakistani Teen Project
                               </span>
-                              <h3 className="text-lg sm:text-xl font-bold text-white mt-1">
+                              <h3 className="text-lg sm:text-xl font-bold text-white mt-1 tracking-tight">
                                 {currentLesson.examples[1].title}
                               </h3>
                               {showUrdu && (
@@ -1196,7 +1241,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                             <button
                               onClick={() => handleCopyExample(currentLesson.examples[1].code, 1)}
-                              className="self-start sm:self-auto px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all"
+                              className="self-start sm:self-auto px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all hover:-translate-y-0.5 shadow-sm"
                             >
                               {copiedExIndex === 1 ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                               <span>{copiedExIndex === 1 ? 'Copied' : 'Copy Code'}</span>
@@ -1205,13 +1250,16 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
                             {/* VS-Code Style Snippet */}
-                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-lg">
+                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-xl">
                               <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
                                 <div className="flex items-center gap-1.5">
                                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
                                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
                                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
-                                  <span className="ml-2 text-slate-400 font-bold">project_showcase.html</span>
+                                  <span className="ml-2 text-slate-300 font-bold flex items-center gap-1">
+                                    <FileCode className="w-3.5 h-3.5 text-teal-400" />
+                                    project_showcase.html
+                                  </span>
                                 </div>
                                 <span className="text-teal-400 font-mono text-[10px]">HTML5</span>
                               </div>
@@ -1221,7 +1269,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                             </div>
 
                             {/* Live Output Mini Render */}
-                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-lg">
+                            <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-xl">
                               <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                   <Globe className="w-3.5 h-3.5 text-emerald-400" />
@@ -1244,7 +1292,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                           </div>
 
                           {/* Explanation Box */}
-                          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 space-y-1 shadow-sm">
+                          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-1 shadow-sm backdrop-blur-md">
                             <h5 className="text-xs font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
                               <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                               Why this code works (وضاحت):
@@ -1267,13 +1315,13 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                   {/* SLIDE 4: CODING CHALLENGE BRIEFING & LAUNCH ACTION */}
                   {activeSlide === 4 && (
-                    <div className="max-w-4xl mx-auto w-full space-y-6 text-center animate-fadeIn">
+                    <div className="max-w-4xl mx-auto w-full space-y-6 text-center">
                       <div className="space-y-2">
                         <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-widest inline-flex items-center gap-1.5 shadow-sm">
                           <Terminal className="w-3.5 h-3.5" />
                           Ready for Hands-On Practice!
                         </span>
-                        <h2 className="text-2xl sm:text-3xl font-black text-white">
+                        <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                           Time to Code in the Interactive Studio
                         </h2>
                         {showUrdu && (
@@ -1284,7 +1332,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                       </div>
 
                       {/* Challenge Details Card */}
-                      <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800/90 text-left space-y-3.5 shadow-xl">
+                      <div className="p-6 rounded-3xl bg-slate-900/70 border border-slate-800/90 text-left space-y-3.5 shadow-xl backdrop-blur-md">
                         <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
                           <Lightbulb className="w-4 h-4 text-amber-400" />
                           <span>Your Mission & Challenge:</span>
@@ -1321,11 +1369,11 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 </div>
 
                 {/* Slide Footer Controls Bar */}
-                <div className="p-3.5 sm:p-4 bg-slate-900/90 border-t border-slate-800/80 flex items-center justify-between">
+                <div className="p-3.5 sm:p-4 bg-slate-950/70 border-t border-slate-800/80 flex items-center justify-between backdrop-blur-md">
                   <button
                     disabled={activeSlide === 0}
                     onClick={() => setActiveSlide(prev => Math.max(0, prev - 1))}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 hover:-translate-y-0.5 ${
                       activeSlide === 0
                         ? 'bg-slate-900/60 text-slate-600 border border-slate-800/80 cursor-not-allowed'
                         : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 shadow-sm'
@@ -1342,7 +1390,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   {activeSlide < SLIDE_STEPS.length - 1 ? (
                     <button
                       onClick={() => setActiveSlide(prev => Math.min(SLIDE_STEPS.length - 1, prev + 1))}
-                      className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5"
+                      className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
                     >
                       <span>Next Slide</span>
                       <ChevronRight className="w-4 h-4" />
@@ -1350,7 +1398,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   ) : (
                     <button
                       onClick={() => setLessonMode('editor')}
-                      className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-md shadow-emerald-600/30 transition-all flex items-center gap-1.5"
+                      className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-md shadow-emerald-600/30 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
                     >
                       <span>Launch Code Studio</span>
                       <ArrowRight className="w-4 h-4" />
@@ -1362,17 +1410,17 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             )}
 
             {/* ══════════════════════════════════════════════════════════════
-                MODE B: THE CODE EDITOR & LIVE WEB SANDBOX SCREEN
+                MODE B: REFINED VS-CODE INSPIRED CODE STUDIO & LIVE PREVIEW
             ══════════════════════════════════════════════════════════════ */}
             {lessonMode === 'editor' && (
               <div className="space-y-4">
                 
                 {/* Editor Header Bar with Return to Slides button */}
-                <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800/90 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+                <div className="p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-slate-950/90 border border-slate-800/90 flex flex-wrap items-center justify-between gap-3 shadow-xl backdrop-blur-xl">
                   <div className="flex items-center gap-2.5">
                     <button
                       onClick={() => setLessonMode('slides')}
-                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600/20 hover:bg-blue-600/30 text-cyan-300 border border-blue-500/30 flex items-center gap-1.5 transition-all"
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600/20 hover:bg-blue-600/30 text-cyan-300 border border-blue-500/30 flex items-center gap-1.5 transition-all hover:-translate-y-0.5"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" />
                       <span>Review Presentation Slides</span>
@@ -1393,25 +1441,31 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 {/* ─── SPLIT WORKSPACE: LEFT EDITOR | RIGHT LIVE SANDBOX PREVIEW ─── */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   
-                  {/* LEFT PANE: HTML CODE EDITOR */}
-                  <div className="flex flex-col bg-slate-950 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl min-h-[520px]">
+                  {/* LEFT PANE: VS CODE-INSPIRED HTML EDITOR */}
+                  <div className="flex flex-col bg-[#0e131f] border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl min-h-[540px]">
                     
-                    {/* Editor Header */}
-                    <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
-                      <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-                        <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-                        <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-                        <span className="ml-2 font-mono text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                          <FileCode className="w-3.5 h-3.5 text-cyan-400" />
-                          index.html
-                        </span>
+                    {/* VS Code Tab Header */}
+                    <div className="flex items-center justify-between px-4 py-2 bg-slate-950 border-b border-slate-800/80 select-none">
+                      <div className="flex items-center gap-3">
+                        {/* macOS Window Controls */}
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-3 h-3 rounded-full bg-rose-500/90 inline-block hover:opacity-80 transition-opacity" />
+                          <span className="w-3 h-3 rounded-full bg-amber-500/90 inline-block hover:opacity-80 transition-opacity" />
+                          <span className="w-3 h-3 rounded-full bg-emerald-500/90 inline-block hover:opacity-80 transition-opacity" />
+                        </div>
+
+                        {/* Active File Tab */}
+                        <div className="flex items-center gap-1.5 px-3 py-1 bg-[#0e131f] border-t-2 border-cyan-400 border-x border-slate-800/60 rounded-t-lg text-xs font-mono font-bold text-slate-200">
+                          <FileCode className="w-3.5 h-3.5 text-orange-400" />
+                          <span>index.html</span>
+                          <span className="text-slate-500 text-[10px] ml-1">×</span>
+                        </div>
                       </div>
 
                       <div className="flex items-center gap-2">
                         <button
                           onClick={handleCopyCode}
-                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all flex items-center gap-1 hover:-translate-y-0.5"
                           title="Copy HTML to clipboard"
                         >
                           {copiedCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
@@ -1420,7 +1474,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                         <button
                           onClick={handleResetCode}
-                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all flex items-center gap-1 hover:-translate-y-0.5"
                           title="Reset code to lesson starter"
                         >
                           <RotateCcw className="w-3 h-3" />
@@ -1429,18 +1483,61 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                       </div>
                     </div>
 
-                    {/* Textarea Code Editor */}
-                    <div className="relative flex-1 bg-[#090d18] font-mono text-xs sm:text-sm">
+                    {/* VS Code Breadcrumb Bar */}
+                    <div className="px-4 py-1 bg-slate-950/60 border-b border-slate-900 text-[11px] font-mono text-slate-500 flex items-center gap-1.5 select-none">
+                      <span>workspace</span>
+                      <span>›</span>
+                      <span>src</span>
+                      <span>›</span>
+                      <span className="text-cyan-400 font-bold">index.html</span>
+                    </div>
+
+                    {/* Code Editor Body with Line Numbers Gutter */}
+                    <div className="relative flex-1 bg-[#0b0f19] flex font-mono text-xs sm:text-sm">
+                      {/* Line Numbers Gutter */}
+                      <div className="w-10 sm:w-12 py-4 bg-[#080c14] border-r border-slate-900/80 text-slate-600 select-none text-right pr-2 font-mono text-[11px] sm:text-xs leading-relaxed shrink-0">
+                        {Array.from({ length: lineCount }, (_, i) => (
+                          <div key={i + 1} className="h-6 leading-6 text-slate-600/80">
+                            {i + 1}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Textarea */}
                       <textarea
                         value={userCode}
                         onChange={(e) => setUserCode(e.target.value)}
                         spellCheck={false}
-                        className="w-full h-full min-h-[380px] p-4 bg-transparent text-cyan-200 leading-relaxed font-mono resize-none focus:outline-none border-none selection:bg-blue-600"
+                        className="flex-1 min-h-[380px] p-4 bg-transparent text-cyan-200 leading-6 font-mono resize-none focus:outline-none border-none selection:bg-blue-600"
                         placeholder="Enter your HTML5 code here..."
                       />
                     </div>
 
-                    {/* Coding Challenge & Solution Footer */}
+                    {/* VS Code Status Bar */}
+                    <div className="px-4 py-1.5 bg-slate-950 border-t border-slate-900 text-[11px] font-mono text-slate-400 flex items-center justify-between select-none">
+                      <div className="flex items-center gap-3">
+                        <span className="text-cyan-400 font-bold flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3 text-emerald-400" />
+                          HTML5
+                        </span>
+                        <span>Ln {lineCount}, Col 1</span>
+                        <span className="hidden sm:inline">Spaces: 2</span>
+                        <span className="hidden sm:inline">UTF-8</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {validation.errors.length === 0 ? (
+                          <span className="text-emerald-400 flex items-center gap-1 font-bold">
+                            <Check className="w-3 h-3" /> Syntax OK
+                          </span>
+                        ) : (
+                          <span className="text-rose-400 flex items-center gap-1 font-bold">
+                            <AlertCircle className="w-3 h-3" /> {validation.errors.length} Error{validation.errors.length > 1 ? 's' : ''}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Coding Challenge & Solution Drawer Footer */}
                     <div className="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3">
                       <div className="text-xs text-slate-300 leading-relaxed">
                         <strong className="text-amber-400">⚡ Code Challenge: </strong>
@@ -1451,7 +1548,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => setShowHint(!showHint)}
-                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1 hover:-translate-y-0.5"
                           >
                             <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                             <span>{showHint ? 'Hide Hint' : 'Show Hint'}</span>
@@ -1459,7 +1556,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                           <button
                             onClick={() => setShowSolution(!showSolution)}
-                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1 hover:-translate-y-0.5"
                           >
                             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
                             <span>{showSolution ? 'Hide Solution' : 'View Solution'}</span>
@@ -1468,7 +1565,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                         <button
                           onClick={() => markLessonComplete(currentLesson.id)}
-                          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 hover:-translate-y-0.5 ${
                             completedLessons.includes(currentLesson.id)
                               ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 shadow-sm'
                               : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/30'
@@ -1493,7 +1590,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                             <span>Solution Preview:</span>
                             <button
                               onClick={handleInsertSolution}
-                              className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold shadow-sm"
+                              className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold shadow-sm hover:-translate-y-0.5 transition-all"
                             >
                               Insert into Editor ➔
                             </button>
@@ -1508,26 +1605,37 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   </div>
 
                   {/* RIGHT PANE: LIVE SANDBOX WEB PREVIEW */}
-                  <div className="flex flex-col bg-slate-950 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl min-h-[520px]">
+                  <div className="flex flex-col bg-slate-950 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl min-h-[540px]">
                     
-                    {/* Browser Simulator Top Bar */}
+                    {/* Simulated Web Browser Chrome */}
                     <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
-                      <div className="flex items-center gap-2">
-                        <span className="p-1 rounded bg-slate-800 text-slate-400">
-                          <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                        </span>
-                        <span className="text-xs font-mono text-slate-400 truncate max-w-[180px] sm:max-w-xs">
-                          https://teen-dev.dten.pk/preview
-                        </span>
+                      <div className="flex items-center gap-2 flex-1 max-w-sm sm:max-w-md">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 flex-1 truncate">
+                          <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
+                          <span className="text-emerald-400 font-bold">https://</span>
+                          <span className="truncate">teen-dev.dten.pk/preview</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            // Quick refresh pulse
+                            const current = userCode;
+                            setUserCode(current + ' ');
+                            setTimeout(() => setUserCode(current), 50);
+                          }}
+                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-all"
+                          title="Reload Preview"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                        </button>
                       </div>
 
                       {/* Desktop / Mobile Switcher */}
-                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 ml-2">
                         <button
                           onClick={() => setPreviewDevice('desktop')}
                           className={`p-1.5 rounded-lg transition-all ${
                             previewDevice === 'desktop'
-                              ? 'bg-blue-600 text-white shadow-sm'
+                              ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-sm'
                               : 'text-slate-400 hover:text-slate-200'
                           }`}
                           title="Desktop View"
@@ -1538,7 +1646,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                           onClick={() => setPreviewDevice('mobile')}
                           className={`p-1.5 rounded-lg transition-all ${
                             previewDevice === 'mobile'
-                              ? 'bg-blue-600 text-white shadow-sm'
+                              ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-sm'
                               : 'text-slate-400 hover:text-slate-200'
                           }`}
                           title="Mobile Phone View"
@@ -1587,7 +1695,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     </div>
 
                     {/* Live Inspector Stats Footer */}
-                    <div className="px-4 py-2.5 bg-slate-900/90 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+                    <div className="px-4 py-2.5 bg-slate-900/90 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between select-none">
                       <div className="flex items-center gap-3 font-mono text-[11px]">
                         <span className="text-emerald-400 font-bold flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
@@ -1605,7 +1713,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-slate-950/90 border border-slate-800/90 shadow-lg">
+                <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-slate-950/90 border border-slate-800/90 shadow-xl backdrop-blur-xl">
                   <button
                     disabled={activeLessonIndex === 0 && activeModuleId === 1}
                     onClick={() => {
@@ -1618,7 +1726,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                       setLessonMode('slides');
                       setActiveSlide(0);
                     }}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 hover:-translate-y-0.5 ${
                       activeLessonIndex === 0 && activeModuleId === 1
                         ? 'bg-slate-900/60 text-slate-600 border border-slate-800/80 cursor-not-allowed'
                         : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
@@ -1630,7 +1738,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                   <button
                     onClick={() => setLessonMode('slides')}
-                    className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5 transition-all"
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5 transition-all hover:-translate-y-0.5"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Review Slides</span>
@@ -1648,7 +1756,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         setActiveView('exam');
                       }
                     }}
-                    className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5"
+                    className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
                   >
                     <span>{activeLessonIndex < 2 ? 'Next Lesson' : (activeModuleId < 7 ? 'Take Module Quiz' : 'Final Exam')}</span>
                     <ChevronRight className="w-4 h-4" />
