@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   X, 
   CheckCircle2, 
@@ -22,6 +22,19 @@ import { getChapter10MCQs } from '../../services/curriculumService';
 import { recordQuizResult } from '../../services/firebaseService';
 import { useAuth } from '../../context/AuthContext';
 import confetti from 'canvas-confetti';
+
+// Helper to detect Urdu/Arabic script text for bidirectional RTL rendering
+const isUrduOrRTL = (text) => {
+  if (!text) return false;
+  const str = String(text).trim();
+  const rtlChars = str.match(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g);
+  if (!rtlChars) return false;
+  const firstLetter = str.replace(/[^a-zA-Z\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g, '')[0];
+  if (firstLetter && /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(firstLetter)) {
+    return true;
+  }
+  return rtlChars.length > 2;
+};
 
 export const ChapterTestModal = ({ 
   isOpen, 
@@ -90,6 +103,19 @@ export const ChapterTestModal = ({
 
   const currentQ = questions[currentIndex];
   const userAns = currentQ ? answers[currentQ.id] : undefined;
+
+  const isQuestionRTL = useMemo(() => {
+    if (!currentQ) return false;
+    const subName = String(subject?.name || '').toLowerCase();
+    if (subName.includes('urdu') || isUrduOrRTL(subName)) {
+      if (isUrduOrRTL(currentQ.question) || (currentQ.options && currentQ.options.some(isUrduOrRTL))) {
+        return true;
+      }
+    }
+    if (isUrduOrRTL(currentQ.question)) return true;
+    if (currentQ.options && currentQ.options.some(isUrduOrRTL)) return true;
+    return false;
+  }, [currentQ, subject?.name]);
 
   const handleSelectOption = (qId, optionIdx) => {
     if (submitted) return;
@@ -349,14 +375,23 @@ export const ChapterTestModal = ({
                   </div>
 
                   {/* Question Text Box */}
-                  <div className="p-5 sm:p-6 rounded-3xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/90 dark:border-slate-800 shadow-sm">
-                    <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-relaxed">
+                  <div 
+                    dir={isQuestionRTL ? 'rtl' : 'ltr'}
+                    className={`p-5 sm:p-6 rounded-3xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/90 dark:border-slate-800 shadow-sm ${
+                      isQuestionRTL ? 'text-right' : 'text-left'
+                    }`}
+                  >
+                    <p className={`font-bold text-slate-900 dark:text-white ${
+                      isQuestionRTL 
+                        ? 'font-urdu text-lg sm:text-2xl leading-[2.3] tracking-wide' 
+                        : 'text-base sm:text-lg leading-relaxed'
+                    }`}>
                       {currentQ.question}
                     </p>
                   </div>
 
                   {/* 4 MCQ Options */}
-                  <div className="space-y-3">
+                  <div className="space-y-3" dir={isQuestionRTL ? 'rtl' : 'ltr'}>
                     {currentQ.options.map((optText, optIdx) => {
                       const optLetter = ['A', 'B', 'C', 'D'][optIdx];
                       const isSelected = userAns === optIdx;
@@ -386,26 +421,29 @@ export const ChapterTestModal = ({
                           key={optIdx}
                           type="button"
                           disabled={submitted}
+                          dir={isQuestionRTL ? 'rtl' : 'ltr'}
                           onClick={() => handleSelectOption(currentQ.id, optIdx)}
-                          className={`w-full p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all flex items-center justify-between gap-3 ${style}`}
+                          className={`w-full p-4 rounded-2xl border ${isQuestionRTL ? 'text-right' : 'text-left'} text-xs sm:text-sm font-medium transition-all flex items-center justify-between gap-3 ${style}`}
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
                             <span className={`w-8 h-8 rounded-xl font-black flex items-center justify-center shrink-0 text-xs shadow-sm transition-transform ${letterStyle}`}>
                               {optLetter}
                             </span>
-                            <span className="leading-snug">{optText}</span>
+                            <span className={`leading-snug ${isQuestionRTL ? 'font-urdu text-base sm:text-lg leading-relaxed' : ''}`}>
+                              {optText}
+                            </span>
                           </div>
 
                           {showFeedback && isCorrect && (
-                            <span className="flex items-center gap-1 text-emerald-600 font-black text-xs shrink-0">
+                            <span className="flex items-center gap-1.5 text-emerald-600 font-black text-xs shrink-0">
                               <CheckCircle2 className="w-5 h-5" />
-                              <span className="hidden sm:inline">Correct</span>
+                              <span className="hidden sm:inline">{isQuestionRTL ? 'درست' : 'Correct'}</span>
                             </span>
                           )}
                           {showFeedback && isSelected && !isCorrect && (
-                            <span className="flex items-center gap-1 text-rose-600 font-black text-xs shrink-0">
+                            <span className="flex items-center gap-1.5 text-rose-600 font-black text-xs shrink-0">
                               <XCircle className="w-5 h-5" />
-                              <span className="hidden sm:inline">Incorrect</span>
+                              <span className="hidden sm:inline">{isQuestionRTL ? 'غلط' : 'Incorrect'}</span>
                             </span>
                           )}
                         </button>
@@ -414,17 +452,27 @@ export const ChapterTestModal = ({
                   </div>
 
                   {/* Immediate or Submitted Feedback & Explanation Card */}
-                  {(submitted || (instantFeedback && userAns !== undefined)) && currentQ.explanation && (
-                    <div className="p-4 sm:p-5 rounded-3xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-500/30 text-xs space-y-2 animate-fadeIn shadow-sm">
-                      <div className="flex items-center gap-2 font-black text-amber-800 dark:text-amber-300 uppercase tracking-wider text-[11px]">
-                        <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
-                        <span>Explanation & Concept Feedback</span>
+                  {(submitted || (instantFeedback && userAns !== undefined)) && currentQ.explanation && (() => {
+                    const isExpRTL = isQuestionRTL || isUrduOrRTL(currentQ.explanation);
+                    return (
+                      <div 
+                        dir={isExpRTL ? 'rtl' : 'ltr'}
+                        className={`p-4 sm:p-5 rounded-3xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-500/30 text-xs space-y-2 animate-fadeIn shadow-sm ${
+                          isExpRTL ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 font-black text-amber-800 dark:text-amber-300 uppercase tracking-wider text-[11px]">
+                          <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
+                          <span>{isExpRTL ? 'وضاحت اور رہنمائی' : 'Explanation & Concept Feedback'}</span>
+                        </div>
+                        <p className={`text-slate-700 dark:text-slate-200 leading-relaxed text-xs sm:text-sm ${
+                          isExpRTL ? 'font-urdu text-sm sm:text-base leading-loose pr-6' : 'pl-6'
+                        }`}>
+                          {currentQ.explanation}
+                        </p>
                       </div>
-                      <p className="text-slate-700 dark:text-slate-200 leading-relaxed text-xs sm:text-sm pl-6">
-                        {currentQ.explanation}
-                      </p>
-                    </div>
-                  )}
+                    );
+                  })()}
 
                 </div>
               )}

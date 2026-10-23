@@ -24,6 +24,19 @@ import confetti from 'canvas-confetti';
 import { saveQuizResult } from '../../services/firebaseService';
 import { useAuth } from '../../context/AuthContext';
 
+// Helper to detect Urdu/Arabic script text for bidirectional RTL rendering
+const isUrduOrRTL = (text) => {
+  if (!text) return false;
+  const str = String(text).trim();
+  const rtlChars = str.match(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g);
+  if (!rtlChars) return false;
+  const firstLetter = str.replace(/[^a-zA-Z\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g, '')[0];
+  if (firstLetter && /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(firstLetter)) {
+    return true;
+  }
+  return rtlChars.length > 2;
+};
+
 export const StandardTestPlayer = ({
   testData,
   courseId,
@@ -774,47 +787,60 @@ export const StandardTestPlayer = ({
               </div>
 
               {/* Question Statement */}
-              <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-relaxed">
-                {q.question}
-              </h4>
+              {(() => {
+                const isQUrdu = isUrduOrRTL(q.question) || (q.options && q.options.some(isUrduOrRTL));
+                return (
+                  <>
+                    <h4 
+                      dir={isQUrdu ? 'rtl' : 'ltr'}
+                      className={`text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-relaxed ${
+                        isQUrdu ? 'text-right font-urdu text-base sm:text-xl leading-[2.3]' : ''
+                      }`}
+                    >
+                      {q.question}
+                    </h4>
 
-              {/* 1. MCQ RENDERER */}
-              {q.type === 'mcq' && (
-                <div className="space-y-2 pt-1">
-                  {(q.options || []).map((opt, optIdx) => {
-                    const isSelected = userAns === optIdx;
-                    let style = 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900';
-                    if (isSelected) {
-                      style = 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 text-brand-900 dark:text-brand-100 font-semibold shadow-xs';
-                    }
-                    if (submitted) {
-                      if (optIdx === q.correctAnswer) {
-                        style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-100 font-bold';
-                      } else if (isSelected) {
-                        style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-100 line-through';
-                      }
-                    }
+                    {/* 1. MCQ RENDERER */}
+                    {q.type === 'mcq' && (
+                      <div className="space-y-2 pt-1" dir={isQUrdu ? 'rtl' : 'ltr'}>
+                        {(q.options || []).map((opt, optIdx) => {
+                          const isSelected = userAns === optIdx;
+                          let style = 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900';
+                          if (isSelected) {
+                            style = 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 text-brand-900 dark:text-brand-100 font-semibold shadow-xs';
+                          }
+                          if (submitted) {
+                            if (optIdx === q.correctAnswer) {
+                              style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-100 font-bold';
+                            } else if (isSelected) {
+                              style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-100 line-through';
+                            }
+                          }
 
-                    return (
-                      <div
-                        key={optIdx}
-                        onClick={() => handleSelectMCQ(q.id, optIdx)}
-                        className={`p-3.5 rounded-2xl border text-xs sm:text-sm cursor-pointer transition flex items-center justify-between gap-3 ${style}`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-500 flex items-center justify-center shrink-0">
-                            {String.fromCharCode(65 + optIdx)}
-                          </span>
-                          <span>{opt}</span>
-                        </div>
-                        {submitted && optIdx === q.correctAnswer && (
-                          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                        )}
+                          return (
+                            <div
+                              key={optIdx}
+                              dir={isQUrdu ? 'rtl' : 'ltr'}
+                              onClick={() => handleSelectMCQ(q.id, optIdx)}
+                              className={`p-3.5 rounded-2xl border ${isQUrdu ? 'text-right' : 'text-left'} text-xs sm:text-sm cursor-pointer transition flex items-center justify-between gap-3 ${style}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-500 flex items-center justify-center shrink-0">
+                                  {String.fromCharCode(65 + optIdx)}
+                                </span>
+                                <span className={isQUrdu ? 'font-urdu text-sm sm:text-base leading-relaxed' : ''}>{opt}</span>
+                              </div>
+                              {submitted && optIdx === q.correctAnswer && (
+                                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
-              )}
+                    )}
+                  </>
+                );
+              })()}
 
               {/* 2. TRUE / FALSE RENDERER */}
               {q.type === 'true_false' && (

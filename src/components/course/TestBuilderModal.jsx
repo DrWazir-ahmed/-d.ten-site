@@ -23,6 +23,19 @@ import {
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
 
+// Helper to detect Urdu/Arabic script text for bidirectional RTL rendering
+const isUrduOrRTL = (text) => {
+  if (!text) return false;
+  const str = String(text).trim();
+  const rtlChars = str.match(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g);
+  if (!rtlChars) return false;
+  const firstLetter = str.replace(/[^a-zA-Z\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g, '')[0];
+  if (firstLetter && /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(firstLetter)) {
+    return true;
+  }
+  return rtlChars.length > 2;
+};
+
 export const TEST_CATEGORIES = [
   'Academic',
   'Life Skill',
@@ -695,10 +708,13 @@ export const TestBuilderModal = ({
                             </label>
                             <textarea
                               rows={2}
+                              dir={isUrduOrRTL(q.question) ? 'rtl' : 'ltr'}
                               value={q.question}
                               onChange={(e) => handleUpdateQuestion(qIdx, 'question', e.target.value)}
                               placeholder="Write your clear question or statement prompt..."
-                              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-xs"
+                              className={`w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-xs ${
+                                isUrduOrRTL(q.question) ? 'text-right font-urdu text-sm leading-relaxed' : ''
+                              }`}
                             />
                           </div>
 
@@ -719,6 +735,7 @@ export const TestBuilderModal = ({
                               <div className="space-y-2">
                                 {(q.options || []).map((opt, optIdx) => {
                                   const isCorrect = q.correctAnswer === optIdx;
+                                  const isOptUrdu = isUrduOrRTL(opt);
                                   return (
                                     <div
                                       key={optIdx}
@@ -740,10 +757,13 @@ export const TestBuilderModal = ({
                                       </span>
                                       <input
                                         type="text"
+                                        dir={isOptUrdu ? 'rtl' : 'ltr'}
                                         value={opt}
                                         onChange={(e) => handleUpdateOption(qIdx, optIdx, e.target.value)}
                                         placeholder={`Option ${String.fromCharCode(65 + optIdx)} text...`}
-                                        className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs"
+                                        className={`flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs ${
+                                          isOptUrdu ? 'text-right font-urdu text-sm' : ''
+                                        }`}
                                       />
                                       <button
                                         type="button"
@@ -1313,35 +1333,50 @@ export const TestBuilderModal = ({
                       <span className="text-xs font-semibold text-slate-400">{q.points || 1} pt</span>
                     </div>
 
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">{q.question}</h4>
+                    {(() => {
+                      const isQUrdu = isUrduOrRTL(q.question) || (q.options && q.options.some(isUrduOrRTL));
+                      return (
+                        <>
+                          <h4 
+                            dir={isQUrdu ? 'rtl' : 'ltr'}
+                            className={`text-sm font-bold text-slate-900 dark:text-white ${
+                              isQUrdu ? 'text-right font-urdu text-base sm:text-lg leading-[2.2]' : ''
+                            }`}
+                          >
+                            {q.question}
+                          </h4>
 
-                    {/* MCQ Interactive Preview */}
-                    {q.type === 'mcq' && (
-                      <div className="space-y-2 pt-1">
-                        {(q.options || []).map((opt, optIdx) => {
-                          const isSelected = previewAnswers[q.id] === optIdx;
-                          let style = 'border-slate-200 dark:border-slate-800 hover:border-slate-300';
-                          if (isSelected) style = 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300';
-                          if (previewSubmitted) {
-                            if (optIdx === q.correctAnswer) style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 font-bold';
-                            else if (isSelected) style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200';
-                          }
+                          {/* MCQ Interactive Preview */}
+                          {q.type === 'mcq' && (
+                            <div className="space-y-2 pt-1" dir={isQUrdu ? 'rtl' : 'ltr'}>
+                              {(q.options || []).map((opt, optIdx) => {
+                                const isSelected = previewAnswers[q.id] === optIdx;
+                                let style = 'border-slate-200 dark:border-slate-800 hover:border-slate-300';
+                                if (isSelected) style = 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-300';
+                                if (previewSubmitted) {
+                                  if (optIdx === q.correctAnswer) style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 font-bold';
+                                  else if (isSelected) style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200';
+                                }
 
-                          return (
-                            <div
-                              key={optIdx}
-                              onClick={() => !previewSubmitted && setPreviewAnswers({ ...previewAnswers, [q.id]: optIdx })}
-                              className={`p-3 rounded-xl border text-xs cursor-pointer transition flex items-center justify-between ${style}`}
-                            >
-                              <span>{String.fromCharCode(65 + optIdx)}. {opt}</span>
-                              {previewSubmitted && optIdx === q.correctAnswer && (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                              )}
+                                return (
+                                  <div
+                                    key={optIdx}
+                                    dir={isQUrdu ? 'rtl' : 'ltr'}
+                                    onClick={() => !previewSubmitted && setPreviewAnswers({ ...previewAnswers, [q.id]: optIdx })}
+                                    className={`p-3 rounded-xl border text-xs cursor-pointer transition flex items-center justify-between ${isQUrdu ? 'text-right' : ''} ${style}`}
+                                  >
+                                    <span className={isQUrdu ? 'font-urdu text-sm' : ''}>{String.fromCharCode(65 + optIdx)}. {opt}</span>
+                                    {previewSubmitted && optIdx === q.correctAnswer && (
+                                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                                    )}
+                                  </div>
+                                );
+                              })}
                             </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                          )}
+                        </>
+                      );
+                    })()}
 
                     {/* True / False Interactive Preview */}
                     {q.type === 'true_false' && (
