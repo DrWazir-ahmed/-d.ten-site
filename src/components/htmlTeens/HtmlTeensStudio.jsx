@@ -40,7 +40,8 @@ import {
   RefreshCw,
   Lock,
   Share2,
-  FolderTree
+  FolderTree,
+  CheckCheck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { HTML_TEENS_COURSE } from '../../data/htmlTeensCourseData';
@@ -311,21 +312,29 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white relative">
+    <div className="w-full min-h-screen bg-[#060913] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
       
       {/* ─────────────────────────────────────────────────────────────
-          1. TOP ACCENT STRIPE & GLASSMORPHISM HEADER
+          1. GLASSMORPHISM HEADER WITH GRADIENT ACCENT LINE & GLOW EFFECTS
       ───────────────────────────────────────────────────────────── */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 shadow-sm shadow-cyan-500/20 z-50 sticky top-0" />
+      {/* Top Gradient Accent Line with Glow */}
+      <div className="relative w-full z-50 sticky top-0">
+        <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 shadow-[0_0_16px_rgba(34,211,238,0.7)]" />
+      </div>
 
-      <header className="bg-gradient-to-r from-slate-950/90 via-slate-900/85 to-slate-950/90 border-b border-slate-800/80 sticky top-0.5 z-40 backdrop-blur-2xl shadow-xl shadow-black/20 px-4 sm:px-6 py-2.5 transition-all">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-3">
+      {/* Glassmorphism Header */}
+      <header className="relative bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-slate-950/90 border-b border-slate-800/80 sticky top-1 z-40 backdrop-blur-2xl shadow-2xl shadow-blue-950/20 px-4 sm:px-6 py-2.5 transition-all">
+        {/* Subtle Ambient Glow Effect Behind Header */}
+        <div className="absolute -top-16 left-1/4 w-72 h-32 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-16 right-1/4 w-72 h-32 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-3 relative z-10">
           
           {/* Logo & Course Title & Mobile Progress */}
           <div className="flex items-center gap-3.5 w-full lg:w-auto justify-between lg:justify-start">
             <div className="flex items-center gap-3">
               <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-2xl blur-sm opacity-50 group-hover:opacity-85 transition duration-300" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 rounded-2xl blur-md opacity-60 group-hover:opacity-90 transition duration-300" />
                 <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-950 via-slate-900 to-slate-950 border border-slate-700/80 flex items-center justify-center text-cyan-400 font-black shadow-inner text-base">
                   &lt;/&gt;
                 </div>
@@ -474,7 +483,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
       </header>
 
       {/* ─────────────────────────────────────────────────────────────
-          2. CARD-BASED MODULE CAROUSEL (GLASS EFFECTS & GRADIENTS)
+          2. CARD-BASED MODULE CAROUSEL (GLASS CARDS & COMPLETION INDICATORS)
       ───────────────────────────────────────────────────────────── */}
       <nav className="bg-slate-950/60 border-b border-slate-800/60 px-4 sm:px-6 py-2.5 overflow-x-auto scrollbar-thin backdrop-blur-xl">
         <div className="max-w-7xl mx-auto flex items-center gap-2.5 min-w-max">
@@ -500,8 +509,8 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 }`}
               >
                 {/* Module Icon Badge */}
-                <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs shadow-inner ${
-                  isCurrentModule ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800/80 text-slate-300'
+                <div className={`w-7 h-7 rounded-xl flex items-center justify-center text-sm shadow-inner transition-transform group-hover:scale-110 ${
+                  isCurrentModule ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30' : 'bg-slate-800/80 text-slate-300'
                 }`}>
                   {m.badge}
                 </div>
@@ -510,7 +519,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 <div className="text-left">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] uppercase tracking-wider text-slate-400 font-mono font-semibold">
-                      M{m.id}
+                      Module {m.id}
                     </span>
                     {isAllCompleted && <CheckCircle className="w-3 h-3 text-emerald-400" />}
                   </div>
@@ -519,10 +528,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   </div>
                 </div>
 
-                {/* Progress Fraction Chip */}
+                {/* Completion Indicator Chip */}
                 <div className={`ml-1 text-[10px] font-mono font-black px-2 py-0.5 rounded-lg border ${
                   isAllCompleted 
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-sm shadow-emerald-500/20'
                     : isCurrentModule 
                     ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/30' 
                     : 'bg-slate-800/60 text-slate-400 border-slate-700/60'
@@ -540,7 +549,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
       ───────────────────────────────────────────────────────────── */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-5">
 
-        {/* ─── VIEW 1: FINAL CERTIFICATION EXAM ─── */}
+        {/* ─── VIEW 1: FINAL CERTIFICATION EXAM (WITH GAUGE-STYLE SCORES) ─── */}
         {activeView === 'exam' && (
           <div className="bg-gradient-to-b from-slate-950 via-slate-900/90 to-slate-950 border border-slate-800/90 rounded-[28px] p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
             <div className="flex flex-col sm:flex-row items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
@@ -570,13 +579,16 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
               </button>
             </div>
 
-            {/* Questions List */}
+            {/* Questions List with Accent Borders */}
             <div className="space-y-5 my-6">
               {HTML_TEENS_COURSE.finalExam.questions.map((q, qIdx) => {
                 const selectedOpt = examAnswers[qIdx];
 
                 return (
-                  <div key={qIdx} className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 space-y-3.5 transition-all hover:border-slate-700/90 backdrop-blur-md">
+                  <div 
+                    key={qIdx} 
+                    className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 border-l-4 border-l-cyan-500 space-y-3.5 transition-all hover:border-slate-700/90 backdrop-blur-md shadow-lg"
+                  >
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h4 className="text-sm sm:text-base font-bold text-slate-100 leading-snug">
@@ -638,8 +650,8 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
               })}
             </div>
 
-            {/* Exam Action Bar */}
-            <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
+            {/* Exam Action Bar with Gauge-Style Score Meter */}
+            <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-6 backdrop-blur-md">
               {!examSubmitted ? (
                 <>
                   <div className="text-xs text-slate-400">
@@ -660,19 +672,45 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 </>
               ) : (
                 <>
-                  <div className="flex items-center gap-3.5">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg ${
-                      examScore >= HTML_TEENS_COURSE.finalExam.passingScore
-                        ? 'bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 shadow-emerald-500/30'
-                        : 'bg-gradient-to-tr from-rose-600 to-pink-500 text-white shadow-rose-500/30'
-                    }`}>
-                      {examScore}/10
+                  {/* Gauge-Style Circular Score Card */}
+                  <div className="flex items-center gap-5">
+                    {/* Circular Radial Gauge */}
+                    <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        {/* Background track circle */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          className="stroke-slate-800"
+                          strokeWidth="8"
+                          fill="transparent"
+                        />
+                        {/* Gauge meter progress circle */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          className={examScore >= HTML_TEENS_COURSE.finalExam.passingScore ? "stroke-emerald-400" : "stroke-rose-500"}
+                          strokeWidth="8"
+                          strokeDasharray={251.2}
+                          strokeDashoffset={251.2 - (251.2 * (examScore / 10))}
+                          strokeLinecap="round"
+                          fill="transparent"
+                          style={{ transition: 'stroke-dashoffset 1s ease-in-out' }}
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="text-lg font-black text-white font-mono">{examScore * 10}%</span>
+                        <span className="text-[10px] text-slate-400 font-mono">{examScore}/10</span>
+                      </div>
                     </div>
+
                     <div>
                       <h4 className="text-base font-extrabold text-white">
                         {examScore >= HTML_TEENS_COURSE.finalExam.passingScore ? '🎉 Congratulations! You Passed!' : 'Almost There! Try Again.'}
                       </h4>
-                      <p className="text-xs text-slate-400 mt-0.5">
+                      <p className="text-xs text-slate-400 mt-0.5 max-w-md">
                         {examScore >= HTML_TEENS_COURSE.finalExam.passingScore
                           ? 'You are now an officially certified Junior HTML5 Web Developer.'
                           : 'Review the lessons and re-take the exam to claim your diploma.'}
@@ -683,7 +721,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={resetFinalExam}
-                      className="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5"
+                      className="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       Retake Exam
@@ -704,7 +742,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
           </div>
         )}
 
-        {/* ─── VIEW 2: MODULE END QUIZ ─── */}
+        {/* ─── VIEW 2: MODULE END QUIZ (WITH ACCENT BORDERS & GAUGE SCORES) ─── */}
         {activeView === 'quiz' && (
           <div className="bg-gradient-to-b from-slate-950 via-slate-900/90 to-slate-950 border border-slate-800/90 rounded-[28px] p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-xl">
             <div className="flex flex-col sm:flex-row items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
@@ -736,7 +774,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 const selectedOpt = quizAnswers[qIdx];
 
                 return (
-                  <div key={qIdx} className="p-4 sm:p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 space-y-3 backdrop-blur-md">
+                  <div 
+                    key={qIdx} 
+                    className="p-4 sm:p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 border-l-4 border-l-blue-500 space-y-3 backdrop-blur-md shadow-md"
+                  >
                     <h4 className="text-sm font-bold text-slate-100">
                       {qIdx + 1}. {q.question}
                     </h4>
@@ -802,14 +843,40 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   <span>Grade My Quiz</span>
                 </button>
               ) : (
-                <div className="flex items-center gap-3 w-full justify-between">
-                  <div className="text-sm font-bold text-slate-200">
-                    Your Score: <span className="text-emerald-400 font-mono text-base font-black">{quizScore}</span> / {currentModule.quiz.questions.length}
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-between">
+                  {/* Gauge-style Result Meter for Quiz */}
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="38" className="stroke-slate-800" strokeWidth="8" fill="transparent" />
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="38"
+                          className={quizScore >= Math.ceil(currentModule.quiz.questions.length * 0.6) ? "stroke-emerald-400" : "stroke-amber-400"}
+                          strokeWidth="8"
+                          strokeDasharray={238.76}
+                          strokeDashoffset={238.76 - (238.76 * (quizScore / currentModule.quiz.questions.length))}
+                          strokeLinecap="round"
+                          fill="transparent"
+                        />
+                      </svg>
+                      <span className="absolute text-xs font-black text-white font-mono">{quizScore}/{currentModule.quiz.questions.length}</span>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-slate-200">
+                        Quiz Completed!
+                      </div>
+                      <div className="text-xs text-slate-400">
+                        Score: <span className="text-emerald-400 font-mono font-bold">{Math.round((quizScore / currentModule.quiz.questions.length) * 100)}%</span>
+                      </div>
+                    </div>
                   </div>
+
                   <div className="flex items-center gap-2">
                     <button
                       onClick={resetModuleQuiz}
-                      className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition-all"
+                      className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition-all hover:-translate-y-0.5"
                     >
                       Retry
                     </button>
@@ -922,23 +989,23 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             </div>
 
             {/* ══════════════════════════════════════════════════════════════
-                MODE A: MODERN SLIDE DECK (FROSTED GLASS & GRADIENT OVERLAYS)
+                MODE A: PROFESSIONAL SLIDE DECK (WIZARD STEPPER & GRADIENT BACKGROUNDS)
             ══════════════════════════════════════════════════════════════ */}
             {lessonMode === 'slides' && (
               <div className={`relative border border-slate-800/90 rounded-[28px] overflow-hidden shadow-2xl flex flex-col min-h-[580px] backdrop-blur-2xl transition-all duration-500 ${
                 activeSlide === 0
-                  ? 'bg-gradient-to-br from-blue-950/30 via-slate-950/95 to-indigo-950/20'
+                  ? 'bg-gradient-to-br from-blue-950/40 via-slate-950/95 to-indigo-950/30'
                   : activeSlide === 1
-                  ? 'bg-gradient-to-br from-indigo-950/30 via-slate-950/95 to-purple-950/20'
+                  ? 'bg-gradient-to-br from-indigo-950/40 via-slate-950/95 to-purple-950/30'
                   : activeSlide === 2
-                  ? 'bg-gradient-to-br from-emerald-950/30 via-slate-950/95 to-teal-950/20'
+                  ? 'bg-gradient-to-br from-emerald-950/40 via-slate-950/95 to-teal-950/30'
                   : activeSlide === 3
-                  ? 'bg-gradient-to-br from-cyan-950/30 via-slate-950/95 to-blue-950/20'
-                  : 'bg-gradient-to-br from-amber-950/30 via-slate-950/95 to-emerald-950/20'
+                  ? 'bg-gradient-to-br from-cyan-950/40 via-slate-950/95 to-blue-950/30'
+                  : 'bg-gradient-to-br from-amber-950/40 via-slate-950/95 to-emerald-950/30'
               }`}>
                 
-                {/* Modern Stepper Header */}
-                <div className="p-3.5 sm:p-4 bg-slate-950/70 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
+                {/* Modern Stepper Header with Connecting Progress Line */}
+                <div className="p-3.5 sm:p-4 bg-slate-950/80 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-blue-500/20 text-cyan-400 border border-blue-500/30 uppercase font-mono">
                       Step {activeSlide + 1}/5
@@ -953,8 +1020,8 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     )}
                   </div>
 
-                  {/* Stepper Wizard Indicator with Connecting Lines */}
-                  <div className="flex items-center gap-1.5 sm:gap-2">
+                  {/* Stepper Wizard Indicator */}
+                  <div className="relative flex items-center gap-1.5 sm:gap-2">
                     {SLIDE_STEPS.map((s, idx) => {
                       const StepIcon = s.icon;
                       const isActive = activeSlide === idx;
@@ -964,7 +1031,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         <button
                           key={s.id}
                           onClick={() => setActiveSlide(idx)}
-                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all duration-300 border hover:-translate-y-0.5 ${
+                          className={`relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all duration-300 border hover:-translate-y-0.5 ${
                             isActive
                               ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-cyan-400 shadow-md shadow-blue-500/30 ring-2 ring-cyan-400/30 scale-105'
                               : isPast
@@ -1174,7 +1241,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                               </pre>
                             </div>
 
-                            {/* Live Output Mini Render */}
+                            {/* Live Output Mini Render with Browser Frame */}
                             <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-xl">
                               <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
@@ -1268,7 +1335,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                               </pre>
                             </div>
 
-                            {/* Live Output Mini Render */}
+                            {/* Live Output Mini Render with Browser Frame */}
                             <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex flex-col shadow-xl">
                               <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
@@ -1604,33 +1671,41 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
 
                   </div>
 
-                  {/* RIGHT PANE: LIVE SANDBOX WEB PREVIEW */}
+                  {/* RIGHT PANE: LIVE SANDBOX WEB PREVIEW WITH BROWSER CHROME SIMULATION */}
                   <div className="flex flex-col bg-slate-950 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl min-h-[540px]">
                     
                     {/* Simulated Web Browser Chrome */}
                     <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
                       <div className="flex items-center gap-2 flex-1 max-w-sm sm:max-w-md">
-                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 flex-1 truncate">
+                        {/* Browser Chrome Navigation Dots */}
+                        <div className="flex items-center gap-1.5 mr-1 text-slate-500">
+                          <ChevronLeft className="w-4 h-4 cursor-pointer hover:text-slate-300 transition-colors" />
+                          <ChevronRight className="w-4 h-4 cursor-pointer hover:text-slate-300 transition-colors" />
+                        </div>
+
+                        {/* Address Bar */}
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 flex-1 truncate shadow-inner">
                           <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
                           <span className="text-emerald-400 font-bold">https://</span>
                           <span className="truncate">teen-dev.dten.pk/preview</span>
                         </div>
+
+                        {/* Reload Button */}
                         <button
                           onClick={() => {
-                            // Quick refresh pulse
                             const current = userCode;
                             setUserCode(current + ' ');
                             setTimeout(() => setUserCode(current), 50);
                           }}
                           className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-all"
-                          title="Reload Preview"
+                          title="Reload Live View"
                         >
                           <RefreshCw className="w-3.5 h-3.5" />
                         </button>
                       </div>
 
-                      {/* Desktop / Mobile Switcher */}
-                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 ml-2">
+                      {/* Desktop / Mobile Viewport Switcher */}
+                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 ml-2 shadow-inner">
                         <button
                           onClick={() => setPreviewDevice('desktop')}
                           className={`p-1.5 rounded-lg transition-all ${
@@ -1649,7 +1724,7 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                               ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-sm'
                               : 'text-slate-400 hover:text-slate-200'
                           }`}
-                          title="Mobile Phone View"
+                          title="Mobile Smartphone View"
                         >
                           <Smartphone className="w-3.5 h-3.5" />
                         </button>
