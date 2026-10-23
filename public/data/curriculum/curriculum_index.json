@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-23T02:53:51.414Z",
-  "totalQuestions": 41900,
+  "generatedAt": "2026-10-23T04:15:57.429Z",
+  "totalQuestions": 62943,
   "systems": [
     {
       "id": "Cambridge",
@@ -92,7 +92,9 @@
                   "title": "Topic 15: Ideal Gases",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Chemistry",
@@ -211,7 +213,9 @@
                   "title": "Topic 22: Analytical Techniques",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Mathematics",
@@ -305,7 +309,9 @@
                   "title": "Topic 17: Complex Numbers",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Computer_Science",
@@ -374,7 +380,9 @@
                   "title": "Topic 12: Software Development",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Information_Technology",
@@ -443,7 +451,9 @@
                   "title": "IT in Society and System Life Cycle",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Statistics",
@@ -502,7 +512,9 @@
                   "title": "The Poisson Distribution",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "English_Language",
@@ -561,7 +573,9 @@
                   "title": "Language Diversity and Global English",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "English_–_Literature",
@@ -620,7 +634,9 @@
                   "title": "Critical Essay Writing and Comparative Analysis",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "English_General_Paper",
@@ -679,7 +695,9 @@
                   "title": "Language, Register and Vocabulary in Context",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "English_–_Language_&_Literature",
@@ -738,7 +756,9 @@
                   "title": "Context, Audience and Reception",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Psychology",
@@ -797,7 +817,9 @@
                   "title": "Organisational Psychology and Workplace Behaviour",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Sociology",
@@ -856,7 +878,9 @@
                   "title": "Power, Politics and the State",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Travel_&_Tourism",
@@ -915,7 +939,9 @@
                   "title": "Business Tourism, Events, and Emerging Industry Trends",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Geography",
@@ -974,7 +1000,9 @@
                   "title": "Global Interdependence, Trade and Economic Transition",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Economics",
@@ -1033,7 +1061,9 @@
                   "title": "Economic Growth, Development and Sustainability",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Islamic_Studies",
@@ -1092,7 +1122,9 @@
                   "title": "Islam in the Modern World and Contemporary Issues",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Law",
@@ -1151,7 +1183,9 @@
                   "title": "Law of Tort: Specific Torts and Remedies",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "History",
@@ -1210,7 +1244,9 @@
                   "title": "Decolonisation and the Emergence of the Post-Colonial World",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Chinese_–_Language_&_Literature",
@@ -1269,7 +1305,9 @@
                   "title": "Translation, Cultural Context and Societal Themes",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Accounting",
@@ -1328,7 +1366,9 @@
                   "title": "Standard Costing and Investment Appraisal",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Digital_Media_&_Design",
@@ -1387,7 +1427,9 @@
                   "title": "Media Industries, Legal Frameworks, Ethics, and Emerging Technologies",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "European_History",
@@ -1446,7 +1488,9 @@
                   "title": "European Interwar Crises, Revolutions, and Dictatorships, 1919–1939",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Drama",
@@ -1505,7 +1549,9 @@
                   "title": "Stage Craft, Directing & Scenography: Set, Lighting, Sound & Costume Design",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "French_–_Language_&_Literature",
@@ -1564,7 +1610,9 @@
                   "title": "La Littérature du XXe Siècle, l'Existentialisme et l'Absurde: Camus, Sartre et Ionesco",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "German_–_Language_&_Literature",
@@ -1623,7 +1671,9 @@
                   "title": "Das Theater des 20. Jahrhunderts und Nachkriegsliteratur: Brecht, Dürrenmatt und Böll",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Spanish_–_Language_&_Literature",
@@ -1682,9 +1732,13 @@
                   "title": "El \"Boom\" Latinoamericano y el Realismo Mágico: García Márquez, Borges, Cortázar y Vargas Llosa",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             }
-          ]
+          ],
+          "country": "United Kingdom",
+          "flag": "🇬🇧"
         },
         {
           "id": "O_Level",
@@ -1747,7 +1801,9 @@
                   "title": "Financial Analysis, Accounting Ratios & Interpretation",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Art_&_Design",
@@ -1806,7 +1862,9 @@
                   "title": "The Creative Design Process, Idea Development & Personal Response",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Business",
@@ -1865,7 +1923,9 @@
                   "title": "External Influences on Business Activity",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Commerce",
@@ -1924,7 +1984,9 @@
                   "title": "Advertising, Sales Promotion & Consumer Protection",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Computer_Science",
@@ -1983,7 +2045,9 @@
                   "title": "Boolean Logic, Logic Gates & Truth Tables",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Economics",
@@ -2042,7 +2106,9 @@
                   "title": "Balance of Payments & Current Account Stability",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Geography",
@@ -2101,7 +2167,9 @@
                   "title": "Tourism, Energy Resources & Environmental Sustainability",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Food_&_Nutrition",
@@ -2160,7 +2228,9 @@
                   "title": "Kitchen Design, Equipment & Consumer Food Management",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Environmental_Management",
@@ -2219,7 +2289,9 @@
                   "title": "Sustainable Resource Management and Global Agreements",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Fashion_&_Textiles",
@@ -2278,7 +2350,9 @@
                   "title": "Fashion Industry, Sustainability & Consumer Care",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Statistics",
@@ -2337,7 +2411,9 @@
                   "title": "Probability & Sample Spaces",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Sociology",
@@ -2396,7 +2472,9 @@
                   "title": "Globalisation & Social Change",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Sanskrit",
@@ -2455,7 +2533,9 @@
                   "title": "Translation, Sentence Syntax & Karaka Theory",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Literature_in_English",
@@ -2514,7 +2594,9 @@
                   "title": "Critical Unseen Analysis & Essay Writing Skills",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "History",
@@ -2573,7 +2655,9 @@
                   "title": "Russia / USSR 1917–1941: From Revolution to Stalinist Rule",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Science_–_Combined",
@@ -2632,7 +2716,9 @@
                   "title": "Physics: Waves, Sound, Light, Electricity & Magnetism",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Urdu_–_First_Language",
@@ -2691,7 +2777,9 @@
                   "title": "Reading Comprehension, Unseen Text Analysis & Summary Skills",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             },
             {
               "id": "Arabic",
@@ -2750,11 +2838,17 @@
                   "title": "Comprehension, Vocabulary & Translation",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United Kingdom",
+              "flag": "🇬🇧"
             }
-          ]
+          ],
+          "country": "United Kingdom",
+          "flag": "🇬🇧"
         }
-      ]
+      ],
+      "country": "United Kingdom",
+      "flag": "🇬🇧"
     },
     {
       "id": "India_CBSE",
@@ -2821,7 +2915,9 @@
                   "title": "Literature (Moments Supplementary Reader): Compassion, Wit & Moral Tales",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             },
             {
               "id": "Hindi",
@@ -2880,7 +2976,9 @@
                   "title": "Poetic Heritage & Folk Traditions: Devotional, Lyric & Ethical Verse (Dohas)",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             },
             {
               "id": "Mathematics",
@@ -2939,7 +3037,9 @@
                   "title": "Mensuration & Statistics: Heron's Formula, Surface Areas, Volumes & Data",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             },
             {
               "id": "Mathematics_Advanced",
@@ -2998,9 +3098,13 @@
                   "title": "Mathematical Modeling, Graph Theory Foundations & Algorithmic Problem Solving",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             }
-          ]
+          ],
+          "country": "India",
+          "flag": "🇮🇳"
         },
         {
           "id": "Class_10",
@@ -3063,7 +3167,9 @@
                   "title": "Poetic Heritage & Supplementary Literature: Devotional, Lyric, Ethical Verse & Cultural Tales (Kavya Khand, Kritika & Sanchayan)",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             },
             {
               "id": "Urdu",
@@ -3122,7 +3228,9 @@
                   "title": "Textual Interpretation, Poetic Analysis & Thematic Appreciation: Ash'ar ki Tashreeh, Markazi Khayal, Khulasa & Balaghat in Jaan Pehchan",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             },
             {
               "id": "Sanskrit",
@@ -3181,7 +3289,9 @@
                   "title": "Shemushi Part 2 Poetry & Wisdom Verses: Subhashitani, Suktayah, Anvaya & Bhavartha (सुभाषितानि सूक्तयश्च)",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             },
             {
               "id": "English",
@@ -3240,11 +3350,17 @@
                   "title": "Footprints Without Feet Supplementary Reader: Masterworks of Character, Suspense & Transformation",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "India",
+              "flag": "🇮🇳"
             }
-          ]
+          ],
+          "country": "India",
+          "flag": "🇮🇳"
         }
-      ]
+      ],
+      "country": "India",
+      "flag": "🇮🇳"
     },
     {
       "id": "US_High_School",
@@ -3311,7 +3427,9 @@
                   "title": "Grammar, Mechanics & Sentence Architecture",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Algebra-I",
@@ -3370,7 +3488,9 @@
                   "title": "Descriptive Statistics & Data Analysis",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Biology",
@@ -3429,7 +3549,9 @@
                   "title": "Population Dynamics & Human Ecological Impact",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "World_History_Geography",
@@ -3488,7 +3610,9 @@
                   "title": "Human Geography: Global Trade, Migration, Demographics & Urbanization",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Physical_Education",
@@ -3547,7 +3671,9 @@
                   "title": "Mental Health, Sportsmanship, Teamwork & Lifelong Wellness",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "World_Language",
@@ -3606,9 +3732,13 @@
                   "title": "El Clima, Pasatiempos y Tradiciones Culturales",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             }
-          ]
+          ],
+          "country": "United States",
+          "flag": "🇺🇸"
         },
         {
           "id": "10th",
@@ -3671,7 +3801,9 @@
                   "title": "Academic Vocabulary in Context & Etymology",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Geometry",
@@ -3730,7 +3862,9 @@
                   "title": "2D Area, Perimeter & 3D Surface Area & Volume",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Chemistry",
@@ -3789,7 +3923,9 @@
                   "title": "Acids, Bases, pH & Nuclear Chemistry",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "US_History",
@@ -3848,7 +3984,9 @@
                   "title": "Contemporary America: 1970s to the 21st Century",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Health_Education",
@@ -3907,7 +4045,9 @@
                   "title": "Consumer Health, Healthcare Systems & Lifelong Wellness",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "World_Language-II",
@@ -3966,7 +4106,9 @@
                   "title": "Hispanic Culture, Celebrations, Traditions & Arts",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Computer_Science_Essentials",
@@ -4025,7 +4167,9 @@
                   "title": "Cybersecurity, Digital Ethics & Societal Impacts of Computing",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Economics_&_Personal_Finance",
@@ -4084,9 +4228,13 @@
                   "title": "Insurance, Risk Management, Consumer Protection & Contracts",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             }
-          ]
+          ],
+          "country": "United States",
+          "flag": "🇺🇸"
         },
         {
           "id": "Elective",
@@ -4149,7 +4297,9 @@
                   "title": "Computing Innovations, Future Technologies & Societal Impact",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Coding",
@@ -4208,7 +4358,9 @@
                   "title": "Web Basics, APIs & Version Control with Git",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Artificial_Intelligence",
@@ -4267,7 +4419,9 @@
                   "title": "The Future of AI: Societal Impact, Careers & Lifelong Learning",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Technology",
@@ -4326,7 +4480,9 @@
                   "title": "Green Computing, Global Technology Trends & Tech Careers",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Business",
@@ -4385,7 +4541,9 @@
                   "title": "Digital Business & E-Commerce",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Entrepreneurship",
@@ -4444,7 +4602,9 @@
                   "title": "Social Entrepreneurship & Future Ventures",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Psychology",
@@ -4503,7 +4663,9 @@
                   "title": "Psychological Treatments & Social Psychology",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Sociology",
@@ -4562,7 +4724,9 @@
                   "title": "Population, Urbanization & Social Change",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Engineering",
@@ -4621,7 +4785,9 @@
                   "title": "Engineering Ethics, Safety & Global Impact",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Robotics",
@@ -4680,7 +4846,9 @@
                   "title": "Human-Robot Interaction & Ethics",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "STEM",
@@ -4739,7 +4907,9 @@
                   "title": "STEM Ethics, Policy & Global Challenges",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Creative_Writing",
@@ -4798,7 +4968,9 @@
                   "title": "Revision, Self-Editing, Workshop Critique & Submitting for Publication",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Journalism",
@@ -4857,7 +5029,9 @@
                   "title": "Digital News, Data Journalism, Social Media Reporting & Verification",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Career",
@@ -4916,7 +5090,9 @@
                   "title": "Career Adaptability, Financial Wellness & Lifelong Professional Growth",
                   "count": 50
                 }
-              ]
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
             },
             {
               "id": "Life_Skills",
@@ -4974,6 +5150,1718 @@
                   "no": 10,
                   "title": "Navigating Adulthood: Transportation, Healthcare, Housing & Autonomy",
                   "count": 50
+                }
+              ],
+              "country": "United States",
+              "flag": "🇺🇸"
+            }
+          ],
+          "country": "United States",
+          "flag": "🇺🇸"
+        }
+      ],
+      "country": "United States",
+      "flag": "🇺🇸"
+    },
+    {
+      "id": "FBISE_Matric",
+      "name": "FBISE Pakistan - Matric",
+      "country": "Pakistan",
+      "flag": "🇵🇰",
+      "description": "Federal Board of Intermediate & Secondary Education (FBISE) - SSC Part-I & Part-II (Classes 9 & 10) Sciences & Humanities",
+      "classes": [
+        {
+          "id": "Class_10",
+          "name": "Class 10 (SSC Part-II)",
+          "country": "Pakistan",
+          "flag": "🇵🇰",
+          "subjects": [
+            {
+              "id": "Biology",
+              "name": "Biology",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Biology",
+              "chapterCount": 9,
+              "questionCount": 572,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 54
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 58
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 74
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 54
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 61
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 64
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 74
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 55
+                },
+                {
+                  "no": 9,
+                  "title": "Unit 9",
+                  "count": 78
+                }
+              ]
+            },
+            {
+              "id": "Chemistry",
+              "name": "Chemistry",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Chemistry",
+              "chapterCount": 8,
+              "questionCount": 472,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 60
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 82
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 46
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 50
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 50
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 65
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 69
+                }
+              ]
+            },
+            {
+              "id": "Computer_Science",
+              "name": "Computer Science",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Computer_Science",
+              "chapterCount": 7,
+              "questionCount": 301,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 24
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 64
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 52
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 30
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 30
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 50
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 51
+                }
+              ]
+            },
+            {
+              "id": "English",
+              "name": "English",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__English",
+              "chapterCount": 13,
+              "questionCount": 995,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 54
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 50
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 76
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 62
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 101
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 30
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 55
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 23
+                },
+                {
+                  "no": 9,
+                  "title": "Unit 9",
+                  "count": 97
+                },
+                {
+                  "no": 10,
+                  "title": "Unit 10",
+                  "count": 100
+                },
+                {
+                  "no": 11,
+                  "title": "Unit 11",
+                  "count": 160
+                },
+                {
+                  "no": 12,
+                  "title": "Unit 12",
+                  "count": 82
+                },
+                {
+                  "no": 13,
+                  "title": "Unit 13",
+                  "count": 105
+                }
+              ]
+            },
+            {
+              "id": "Mathematics",
+              "name": "Mathematics",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Mathematics",
+              "chapterCount": 11,
+              "questionCount": 369,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 34
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 54
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 39
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 27
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 42
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 48
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 60
+                },
+                {
+                  "no": 9,
+                  "title": "Unit 9",
+                  "count": 25
+                },
+                {
+                  "no": 10,
+                  "title": "Unit 10",
+                  "count": 15
+                },
+                {
+                  "no": 11,
+                  "title": "Unit 11",
+                  "count": 10
+                },
+                {
+                  "no": 13,
+                  "title": "Unit 13",
+                  "count": 15
+                }
+              ]
+            },
+            {
+              "id": "Pakistan_Studies_English_",
+              "name": "Pakistan Studies (English)",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Pakistan_Studies_English_",
+              "chapterCount": 4,
+              "questionCount": 371,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 96
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 99
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 96
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 80
+                }
+              ]
+            },
+            {
+              "id": "Pakistan_Studies_Urdu_",
+              "name": "Pakistan Studies (Urdu)",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Pakistan_Studies_Urdu_",
+              "chapterCount": 4,
+              "questionCount": 323,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 97
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 94
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 79
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 53
+                }
+              ]
+            },
+            {
+              "id": "Physics",
+              "name": "Physics",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_10__Physics",
+              "chapterCount": 9,
+              "questionCount": 555,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 78
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 59
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 77
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 73
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 65
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 51
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 55
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 55
+                },
+                {
+                  "no": 9,
+                  "title": "Unit 9",
+                  "count": 42
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "Class_9",
+          "name": "Class 9 (SSC Part-I)",
+          "country": "Pakistan",
+          "flag": "🇵🇰",
+          "subjects": [
+            {
+              "id": "Biology",
+              "name": "Biology",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Biology",
+              "chapterCount": 9,
+              "questionCount": 227,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 26
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 27
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 26
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 26
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 24
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 25
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 24
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 24
+                },
+                {
+                  "no": 9,
+                  "title": "Unit 9",
+                  "count": 25
+                }
+              ]
+            },
+            {
+              "id": "Chemistry",
+              "name": "Chemistry",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Chemistry",
+              "chapterCount": 8,
+              "questionCount": 273,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 30
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 30
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 32
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 30
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 36
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 39
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 38
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 38
+                }
+              ]
+            },
+            {
+              "id": "Computer_Science",
+              "name": "Computer Science",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Computer_Science",
+              "chapterCount": 7,
+              "questionCount": 169,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 25
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 21
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 25
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 23
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 25
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 25
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 25
+                }
+              ]
+            },
+            {
+              "id": "English",
+              "name": "English",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__English",
+              "chapterCount": 8,
+              "questionCount": 336,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 30
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 35
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 35
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 18
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 56
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 23
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 76
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 63
+                }
+              ]
+            },
+            {
+              "id": "Mathematics",
+              "name": "Mathematics",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Mathematics",
+              "chapterCount": 17,
+              "questionCount": 396,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 34
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 34
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 25
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 20
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 20
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 20
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 20
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 20
+                },
+                {
+                  "no": 9,
+                  "title": "Unit 9",
+                  "count": 25
+                },
+                {
+                  "no": 10,
+                  "title": "Unit 10",
+                  "count": 19
+                },
+                {
+                  "no": 11,
+                  "title": "Unit 11",
+                  "count": 20
+                },
+                {
+                  "no": 12,
+                  "title": "Unit 12",
+                  "count": 21
+                },
+                {
+                  "no": 13,
+                  "title": "Unit 13",
+                  "count": 20
+                },
+                {
+                  "no": 14,
+                  "title": "Unit 14",
+                  "count": 25
+                },
+                {
+                  "no": 15,
+                  "title": "Unit 15",
+                  "count": 25
+                },
+                {
+                  "no": 16,
+                  "title": "Unit 16",
+                  "count": 23
+                },
+                {
+                  "no": 17,
+                  "title": "Unit 17",
+                  "count": 25
+                }
+              ]
+            },
+            {
+              "id": "Pakistan_Studies_English_",
+              "name": "Pakistan Studies (English)",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Pakistan_Studies_English_",
+              "chapterCount": 4,
+              "questionCount": 113,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 25
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 25
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 30
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 33
+                }
+              ]
+            },
+            {
+              "id": "Pakistan_Studies_Urdu_",
+              "name": "Pakistan Studies (Urdu)",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Pakistan_Studies_Urdu_",
+              "chapterCount": 4,
+              "questionCount": 117,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 26
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 29
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 30
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 32
+                }
+              ]
+            },
+            {
+              "id": "Physics",
+              "name": "Physics",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Matric__Class_9__Physics",
+              "chapterCount": 8,
+              "questionCount": 267,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Unit 1",
+                  "count": 33
+                },
+                {
+                  "no": 2,
+                  "title": "Unit 2",
+                  "count": 32
+                },
+                {
+                  "no": 3,
+                  "title": "Unit 3",
+                  "count": 32
+                },
+                {
+                  "no": 4,
+                  "title": "Unit 4",
+                  "count": 32
+                },
+                {
+                  "no": 5,
+                  "title": "Unit 5",
+                  "count": 32
+                },
+                {
+                  "no": 6,
+                  "title": "Unit 6",
+                  "count": 37
+                },
+                {
+                  "no": 7,
+                  "title": "Unit 7",
+                  "count": 34
+                },
+                {
+                  "no": 8,
+                  "title": "Unit 8",
+                  "count": 35
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FBISE_English",
+      "name": "FBISE Pakistan - English",
+      "country": "Pakistan",
+      "flag": "🇵🇰",
+      "description": "Federal Board of Intermediate & Secondary Education (FBISE) - Secondary English Grammar, Tenses, Parts of Speech & Syntax",
+      "classes": [
+        {
+          "id": "Secondary_English",
+          "name": "Secondary English (Classes 9 & 10)",
+          "country": "Pakistan",
+          "flag": "🇵🇰",
+          "subjects": [
+            {
+              "id": "Tenses",
+              "name": "Tenses",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_English__Secondary_English__Tenses",
+              "chapterCount": 16,
+              "questionCount": 2037,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Present Indefinite Tense",
+                  "count": 120
+                },
+                {
+                  "no": 2,
+                  "title": "Present Continuous Tense",
+                  "count": 120
+                },
+                {
+                  "no": 3,
+                  "title": "Present Perfect Tense",
+                  "count": 180
+                },
+                {
+                  "no": 4,
+                  "title": "Present Perfect Continuous Tense",
+                  "count": 180
+                },
+                {
+                  "no": 5,
+                  "title": "Past Indefinite Tense",
+                  "count": 119
+                },
+                {
+                  "no": 6,
+                  "title": "Past Continuous Tense",
+                  "count": 120
+                },
+                {
+                  "no": 7,
+                  "title": "Past Perfect Tense",
+                  "count": 120
+                },
+                {
+                  "no": 8,
+                  "title": "Past Perfect Continuous Tense",
+                  "count": 151
+                },
+                {
+                  "no": 9,
+                  "title": "Future Indefinite Tense",
+                  "count": 120
+                },
+                {
+                  "no": 10,
+                  "title": "Future Continuous Tense",
+                  "count": 101
+                },
+                {
+                  "no": 11,
+                  "title": "Future Perfect Tense",
+                  "count": 118
+                },
+                {
+                  "no": 12,
+                  "title": "Future Perfect Continuous Tense",
+                  "count": 120
+                },
+                {
+                  "no": 13,
+                  "title": "Mixed Future Tenses",
+                  "count": 125
+                },
+                {
+                  "no": 14,
+                  "title": "Mixed Present Tenses",
+                  "count": 100
+                },
+                {
+                  "no": 15,
+                  "title": "Mixed Past Tenses",
+                  "count": 80
+                },
+                {
+                  "no": 16,
+                  "title": "Mixed All Tenses",
+                  "count": 163
+                }
+              ]
+            },
+            {
+              "id": "Parts_of_Speech",
+              "name": "Parts of Speech",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_English__Secondary_English__Parts_of_Speech",
+              "chapterCount": 16,
+              "questionCount": 1121,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Noun",
+                  "count": 82
+                },
+                {
+                  "no": 2,
+                  "title": "Pronoun",
+                  "count": 60
+                },
+                {
+                  "no": 3,
+                  "title": "Adjective",
+                  "count": 52
+                },
+                {
+                  "no": 4,
+                  "title": "Adverb",
+                  "count": 57
+                },
+                {
+                  "no": 5,
+                  "title": "Prepositions",
+                  "count": 106
+                },
+                {
+                  "no": 6,
+                  "title": "Conjunctions",
+                  "count": 122
+                },
+                {
+                  "no": 7,
+                  "title": "Interjection",
+                  "count": 61
+                },
+                {
+                  "no": 8,
+                  "title": "Articles",
+                  "count": 96
+                },
+                {
+                  "no": 9,
+                  "title": "Nouns",
+                  "count": 51
+                },
+                {
+                  "no": 10,
+                  "title": "Pronouns",
+                  "count": 51
+                },
+                {
+                  "no": 11,
+                  "title": "Adjectives",
+                  "count": 60
+                },
+                {
+                  "no": 12,
+                  "title": "Adverbs",
+                  "count": 59
+                },
+                {
+                  "no": 13,
+                  "title": "Interjections",
+                  "count": 58
+                },
+                {
+                  "no": 14,
+                  "title": "Determiners",
+                  "count": 55
+                },
+                {
+                  "no": 15,
+                  "title": "Quantifiers",
+                  "count": 59
+                },
+                {
+                  "no": 16,
+                  "title": "Punctuation",
+                  "count": 92
+                }
+              ]
+            },
+            {
+              "id": "Active_Passive_Voice",
+              "name": "Active & Passive Voice",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_English__Secondary_English__Active_Passive_Voice",
+              "chapterCount": 12,
+              "questionCount": 920,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Present Indefinite Tense",
+                  "count": 54
+                },
+                {
+                  "no": 2,
+                  "title": "Past Indefinite Tense",
+                  "count": 55
+                },
+                {
+                  "no": 3,
+                  "title": "Future Indefinite Tense",
+                  "count": 63
+                },
+                {
+                  "no": 4,
+                  "title": "Present Continuous Tense",
+                  "count": 56
+                },
+                {
+                  "no": 5,
+                  "title": "Past Continuous Tense",
+                  "count": 52
+                },
+                {
+                  "no": 6,
+                  "title": "Future Continuous Tense",
+                  "count": 30
+                },
+                {
+                  "no": 7,
+                  "title": "Present Perfect Tense",
+                  "count": 108
+                },
+                {
+                  "no": 8,
+                  "title": "Past Perfect Tense",
+                  "count": 104
+                },
+                {
+                  "no": 9,
+                  "title": "Future Perfect Tense",
+                  "count": 96
+                },
+                {
+                  "no": 10,
+                  "title": "Present Perfect Continuous Tense",
+                  "count": 95
+                },
+                {
+                  "no": 11,
+                  "title": "Past Perfect Continuous Tense",
+                  "count": 95
+                },
+                {
+                  "no": 12,
+                  "title": "Future Perfect Continuous Tense",
+                  "count": 112
+                }
+              ]
+            },
+            {
+              "id": "Direct_Indirect_Speech",
+              "name": "Direct & Indirect Speech",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_English__Secondary_English__Direct_Indirect_Speech",
+              "chapterCount": 5,
+              "questionCount": 798,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Affirmative",
+                  "count": 138
+                },
+                {
+                  "no": 2,
+                  "title": "Interrogative",
+                  "count": 200
+                },
+                {
+                  "no": 3,
+                  "title": "Imperative",
+                  "count": 180
+                },
+                {
+                  "no": 4,
+                  "title": "Optative",
+                  "count": 140
+                },
+                {
+                  "no": 5,
+                  "title": "Exclamatory",
+                  "count": 140
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FBISE_Math",
+      "name": "FBISE Pakistan - Math",
+      "country": "Pakistan",
+      "flag": "🇵🇰",
+      "description": "Federal Board of Intermediate & Secondary Education (FBISE) - Secondary Mathematics Complete Syllabi",
+      "classes": [
+        {
+          "id": "Secondary_Math",
+          "name": "Secondary Mathematics (Classes 9 & 10)",
+          "country": "Pakistan",
+          "flag": "🇵🇰",
+          "subjects": [
+            {
+              "id": "Number_System",
+              "name": "Number System",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Number_System",
+              "chapterCount": 7,
+              "questionCount": 563,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Natural Numbers",
+                  "count": 80
+                },
+                {
+                  "no": 2,
+                  "title": "Whole Numbers",
+                  "count": 80
+                },
+                {
+                  "no": 3,
+                  "title": "Integers",
+                  "count": 67
+                },
+                {
+                  "no": 4,
+                  "title": "Rational Numbers",
+                  "count": 80
+                },
+                {
+                  "no": 5,
+                  "title": "Irrational Numbers",
+                  "count": 100
+                },
+                {
+                  "no": 6,
+                  "title": "Real Numbers",
+                  "count": 80
+                },
+                {
+                  "no": 7,
+                  "title": "Place Value",
+                  "count": 76
+                }
+              ]
+            },
+            {
+              "id": "Arithmetic",
+              "name": "Arithmetic",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Arithmetic",
+              "chapterCount": 10,
+              "questionCount": 1422,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Addition",
+                  "count": 158
+                },
+                {
+                  "no": 2,
+                  "title": "Sutraction",
+                  "count": 80
+                },
+                {
+                  "no": 3,
+                  "title": "Multiplication",
+                  "count": 157
+                },
+                {
+                  "no": 4,
+                  "title": "Division",
+                  "count": 159
+                },
+                {
+                  "no": 5,
+                  "title": "Subtraction",
+                  "count": 76
+                },
+                {
+                  "no": 6,
+                  "title": "Factors and Multiples",
+                  "count": 160
+                },
+                {
+                  "no": 7,
+                  "title": "Prime & Composite Numbers",
+                  "count": 78
+                },
+                {
+                  "no": 8,
+                  "title": "HCF and LCM",
+                  "count": 239
+                },
+                {
+                  "no": 9,
+                  "title": "Squares & Cubes",
+                  "count": 155
+                },
+                {
+                  "no": 10,
+                  "title": "BODMAS",
+                  "count": 160
+                }
+              ]
+            },
+            {
+              "id": "Fractions_Decimals",
+              "name": "Fractions & Decimals",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Fractions_Decimals",
+              "chapterCount": 7,
+              "questionCount": 1105,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Proper, Improper & Mixed Fractions",
+                  "count": 157
+                },
+                {
+                  "no": 2,
+                  "title": "Equivalent Fractions",
+                  "count": 160
+                },
+                {
+                  "no": 3,
+                  "title": "Simplification",
+                  "count": 160
+                },
+                {
+                  "no": 4,
+                  "title": "Operations on Fractions",
+                  "count": 80
+                },
+                {
+                  "no": 5,
+                  "title": "Decimals and Place Values",
+                  "count": 240
+                },
+                {
+                  "no": 6,
+                  "title": "Decimal Operations",
+                  "count": 157
+                },
+                {
+                  "no": 7,
+                  "title": "Conversion Between Fractions and Decimals",
+                  "count": 151
+                }
+              ]
+            },
+            {
+              "id": "Percentages_Ratio_Proportion",
+              "name": "Percentages, Ratio & Proportion",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Percentages_Ratio_Proportion",
+              "chapterCount": 5,
+              "questionCount": 1054,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Percent",
+                  "count": 277
+                },
+                {
+                  "no": 2,
+                  "title": "Increase & Decrease Rate",
+                  "count": 286
+                },
+                {
+                  "no": 3,
+                  "title": "Profit & Loss",
+                  "count": 140
+                },
+                {
+                  "no": 4,
+                  "title": "Discount Calculation",
+                  "count": 191
+                },
+                {
+                  "no": 5,
+                  "title": "Ratio Calculation",
+                  "count": 160
+                }
+              ]
+            },
+            {
+              "id": "Algebra",
+              "name": "Algebra",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Algebra",
+              "chapterCount": 11,
+              "questionCount": 1462,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Variables",
+                  "count": 157
+                },
+                {
+                  "no": 2,
+                  "title": "Constants",
+                  "count": 156
+                },
+                {
+                  "no": 3,
+                  "title": "Coefficients",
+                  "count": 78
+                },
+                {
+                  "no": 4,
+                  "title": "Algebraic Addition",
+                  "count": 160
+                },
+                {
+                  "no": 5,
+                  "title": "Algebraic Subtraction",
+                  "count": 160
+                },
+                {
+                  "no": 6,
+                  "title": "Algebraic Multiplication",
+                  "count": 154
+                },
+                {
+                  "no": 7,
+                  "title": "Algebraic Division",
+                  "count": 99
+                },
+                {
+                  "no": 8,
+                  "title": "Linear Equations",
+                  "count": 159
+                },
+                {
+                  "no": 9,
+                  "title": "Formulas",
+                  "count": 80
+                },
+                {
+                  "no": 10,
+                  "title": "Factorization",
+                  "count": 146
+                },
+                {
+                  "no": 11,
+                  "title": "Identities",
+                  "count": 113
+                }
+              ]
+            },
+            {
+              "id": "Powers_Roots",
+              "name": "Powers & Roots",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Powers_Roots",
+              "chapterCount": 5,
+              "questionCount": 518,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Square Roots",
+                  "count": 80
+                },
+                {
+                  "no": 2,
+                  "title": "Cube Roots",
+                  "count": 80
+                },
+                {
+                  "no": 3,
+                  "title": "Laws of Exponents",
+                  "count": 135
+                },
+                {
+                  "no": 4,
+                  "title": "Exponents",
+                  "count": 68
+                },
+                {
+                  "no": 5,
+                  "title": "Surds",
+                  "count": 155
+                }
+              ]
+            },
+            {
+              "id": "Geometry",
+              "name": "Geometry",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Geometry",
+              "chapterCount": 8,
+              "questionCount": 832,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Lines and Angles",
+                  "count": 77
+                },
+                {
+                  "no": 2,
+                  "title": "Triangles",
+                  "count": 151
+                },
+                {
+                  "no": 3,
+                  "title": "Quadrilaterals",
+                  "count": 78
+                },
+                {
+                  "no": 4,
+                  "title": "Polygons",
+                  "count": 60
+                },
+                {
+                  "no": 5,
+                  "title": "Circle",
+                  "count": 146
+                },
+                {
+                  "no": 6,
+                  "title": "Perimeter",
+                  "count": 154
+                },
+                {
+                  "no": 7,
+                  "title": "Area",
+                  "count": 87
+                },
+                {
+                  "no": 8,
+                  "title": "Properties of Shapes",
+                  "count": 79
+                }
+              ]
+            },
+            {
+              "id": "Mensuration",
+              "name": "Mensuration",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Mensuration",
+              "chapterCount": 5,
+              "questionCount": 668,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Measurement of Shapes",
+                  "count": 179
+                },
+                {
+                  "no": 2,
+                  "title": "Area of Square, Rectangle & Triangle",
+                  "count": 100
+                },
+                {
+                  "no": 3,
+                  "title": "Area of Circle",
+                  "count": 100
+                },
+                {
+                  "no": 4,
+                  "title": "Volume of Cube, Cuboid & Cylinder",
+                  "count": 100
+                },
+                {
+                  "no": 5,
+                  "title": "Surface Area",
+                  "count": 189
+                }
+              ]
+            },
+            {
+              "id": "Coordinate_Geometry",
+              "name": "Coordinate Geometry",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Coordinate_Geometry",
+              "chapterCount": 4,
+              "questionCount": 469,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Cartesian Plane",
+                  "count": 142
+                },
+                {
+                  "no": 2,
+                  "title": "Plotting Points",
+                  "count": 138
+                },
+                {
+                  "no": 3,
+                  "title": "Distance Between Points",
+                  "count": 130
+                },
+                {
+                  "no": 4,
+                  "title": "Midpoint Formula",
+                  "count": 59
+                }
+              ]
+            },
+            {
+              "id": "Data_Handling_Statistics",
+              "name": "Data Handling & Statistics",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Data_Handling_Statistics",
+              "chapterCount": 7,
+              "questionCount": 871,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Line graphs",
+                  "count": 79
+                },
+                {
+                  "no": 2,
+                  "title": "Bar Graphs",
+                  "count": 80
+                },
+                {
+                  "no": 3,
+                  "title": "Pie Charts",
+                  "count": 81
+                },
+                {
+                  "no": 4,
+                  "title": "Histograms",
+                  "count": 80
+                },
+                {
+                  "no": 5,
+                  "title": "Mean",
+                  "count": 159
+                },
+                {
+                  "no": 6,
+                  "title": "Mode",
+                  "count": 234
+                },
+                {
+                  "no": 7,
+                  "title": "Median",
+                  "count": 158
+                }
+              ]
+            },
+            {
+              "id": "Probability",
+              "name": "Probability",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Probability",
+              "chapterCount": 4,
+              "questionCount": 379,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Basic Probability",
+                  "count": 120
+                },
+                {
+                  "no": 2,
+                  "title": "Outcomes",
+                  "count": 80
+                },
+                {
+                  "no": 3,
+                  "title": "Simple Probability Problems",
+                  "count": 80
+                },
+                {
+                  "no": 4,
+                  "title": "Experimental Probability",
+                  "count": 99
+                }
+              ]
+            },
+            {
+              "id": "Logical_Reasoning",
+              "name": "Logical Reasoning",
+              "country": "Pakistan",
+              "flag": "🇵🇰",
+              "fileKey": "FBISE_Math__Secondary_Math__Logical_Reasoning",
+              "chapterCount": 7,
+              "questionCount": 968,
+              "chapters": [
+                {
+                  "no": 1,
+                  "title": "Number Patterns",
+                  "count": 128
+                },
+                {
+                  "no": 2,
+                  "title": "Sequences",
+                  "count": 156
+                },
+                {
+                  "no": 3,
+                  "title": "Series",
+                  "count": 146
+                },
+                {
+                  "no": 4,
+                  "title": "Puzzles",
+                  "count": 157
+                },
+                {
+                  "no": 5,
+                  "title": "Direction Sense",
+                  "count": 144
+                },
+                {
+                  "no": 6,
+                  "title": "Blood Relations",
+                  "count": 159
+                },
+                {
+                  "no": 7,
+                  "title": "Word Problems",
+                  "count": 78
                 }
               ]
             }

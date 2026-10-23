@@ -67,8 +67,8 @@ export const CurriculumSystemExplorer = () => {
       };
     }
     return {
-      title: 'Standard Curriculum Tests & 41,900+ MCQs (Cambridge, CBSE, US)',
-      description: 'Comprehensive chapter-wise 10 MCQs testing system with options feedback across Cambridge, India CBSE, and US High School syllabi.'
+      title: 'Standard Curriculum Tests & 62,900+ MCQs (Cambridge, CBSE, US, FBISE Pakistan)',
+      description: 'Comprehensive chapter-wise 10 MCQs testing system with options feedback across Cambridge (UK), India CBSE, US High School, and Pakistan FBISE (Matric, English, Math) syllabi.'
     };
   }, [selectedSystem, selectedClass, selectedSubject]);
 
@@ -134,49 +134,99 @@ export const CurriculumSystemExplorer = () => {
   }, [selectedSubject, chapterSearch]);
 
   // System Aesthetic Theme Provider
-  const getSystemTheme = (name) => {
-    switch (name) {
-      case 'Cambridge':
-        return {
-          gradient: 'from-indigo-600 via-blue-600 to-indigo-900',
-          accent: 'text-indigo-600 dark:text-indigo-400',
-          badgeBg: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20',
-          glow: 'group-hover:border-indigo-500/50 group-hover:shadow-indigo-500/10',
-          icon: <GraduationCap className="w-7 h-7 text-white" />,
-          subtitle: 'International General Certificate of Secondary Education & Advanced Level',
-          tag: 'Cambridge Assessment International Education'
-        };
-      case 'India CBSE':
-        return {
-          gradient: 'from-emerald-600 via-teal-600 to-emerald-900',
-          accent: 'text-emerald-600 dark:text-emerald-400',
-          badgeBg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
-          glow: 'group-hover:border-emerald-500/50 group-hover:shadow-emerald-500/10',
-          icon: <BookOpen className="w-7 h-7 text-white" />,
-          subtitle: 'Central Board of Secondary Education Curriculum Standards',
-          tag: 'NCERT / CBSE Aligned Syllabi'
-        };
-      case 'US High School':
-        return {
-          gradient: 'from-blue-600 via-purple-600 to-blue-950',
-          accent: 'text-blue-600 dark:text-blue-400',
-          badgeBg: 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20',
-          glow: 'group-hover:border-blue-500/50 group-hover:shadow-blue-500/10',
-          icon: <Compass className="w-7 h-7 text-white" />,
-          subtitle: 'US Secondary High School Core Curriculum & Elective Tracks',
-          tag: 'Standardized US High School Framework'
-        };
-      default:
-        return {
-          gradient: 'from-brand-600 via-indigo-600 to-brand-900',
-          accent: 'text-brand-600 dark:text-brand-400',
-          badgeBg: 'bg-brand-500/10 text-brand-700 dark:text-brand-300 border-brand-500/20',
-          glow: 'group-hover:border-brand-500/50 group-hover:shadow-brand-500/10',
-          icon: <Layers className="w-7 h-7 text-white" />,
-          subtitle: 'Standardized Educational Curriculum',
-          tag: 'Curriculum Framework'
-        };
+  const getSystemTheme = (sys) => {
+    const name = typeof sys === 'string' ? sys : sys?.name || '';
+    const id = sys?.id || '';
+
+    if (id === 'Cambridge' || name === 'Cambridge') {
+      return {
+        flag: '🇬🇧',
+        country: 'United Kingdom',
+        gradient: 'from-indigo-600 via-blue-600 to-indigo-900',
+        accent: 'text-indigo-600 dark:text-indigo-400',
+        badgeBg: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20',
+        glow: 'group-hover:border-indigo-500/50 group-hover:shadow-indigo-500/10',
+        icon: <GraduationCap className="w-7 h-7 text-white" />,
+        subtitle: 'International General Certificate of Secondary Education & Advanced Level',
+        tag: 'Cambridge Assessment International Education'
+      };
     }
+    if (id === 'India_CBSE' || name === 'India CBSE') {
+      return {
+        flag: '🇮🇳',
+        country: 'India',
+        gradient: 'from-amber-600 via-orange-600 to-emerald-900',
+        accent: 'text-emerald-600 dark:text-emerald-400',
+        badgeBg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
+        glow: 'group-hover:border-emerald-500/50 group-hover:shadow-emerald-500/10',
+        icon: <BookOpen className="w-7 h-7 text-white" />,
+        subtitle: 'Central Board of Secondary Education Curriculum Standards',
+        tag: 'NCERT / CBSE Aligned Syllabi'
+      };
+    }
+    if (id === 'US_High_School' || name === 'US High School') {
+      return {
+        flag: '🇺🇸',
+        country: 'United States',
+        gradient: 'from-blue-600 via-purple-600 to-blue-950',
+        accent: 'text-blue-600 dark:text-blue-400',
+        badgeBg: 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20',
+        glow: 'group-hover:border-blue-500/50 group-hover:shadow-blue-500/10',
+        icon: <Compass className="w-7 h-7 text-white" />,
+        subtitle: 'US Secondary High School Core Curriculum & Elective Tracks',
+        tag: 'Standardized US High School Framework'
+      };
+    }
+    if (id === 'FBISE_Matric' || name.includes('Matric')) {
+      return {
+        flag: '🇵🇰',
+        country: 'Pakistan',
+        gradient: 'from-emerald-700 via-green-600 to-slate-900',
+        accent: 'text-emerald-600 dark:text-emerald-400',
+        badgeBg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
+        glow: 'group-hover:border-emerald-500/50 group-hover:shadow-emerald-500/10',
+        icon: <GraduationCap className="w-7 h-7 text-white" />,
+        subtitle: 'Federal Board SSC Part-I & Part-II (Classes 9 & 10) Science and Humanities Syllabi',
+        tag: 'FBISE Pakistan National Curriculum'
+      };
+    }
+    if (id === 'FBISE_English' || name.includes('English')) {
+      return {
+        flag: '🇵🇰',
+        country: 'Pakistan',
+        gradient: 'from-teal-700 via-emerald-600 to-cyan-950',
+        accent: 'text-teal-600 dark:text-teal-400',
+        badgeBg: 'bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20',
+        glow: 'group-hover:border-teal-500/50 group-hover:shadow-teal-500/10',
+        icon: <Languages className="w-7 h-7 text-white" />,
+        subtitle: 'FBISE English Grammar, Tenses, Parts of Speech, Active/Passive & Direct/Indirect Voice',
+        tag: 'FBISE Pakistan English Syllabus'
+      };
+    }
+    if (id === 'FBISE_Math' || name.includes('Math')) {
+      return {
+        flag: '🇵🇰',
+        country: 'Pakistan',
+        gradient: 'from-green-700 via-emerald-700 to-slate-950',
+        accent: 'text-green-600 dark:text-green-400',
+        badgeBg: 'bg-green-500/10 text-green-700 dark:text-green-300 border-green-500/20',
+        glow: 'group-hover:border-green-500/50 group-hover:shadow-green-500/10',
+        icon: <Calculator className="w-7 h-7 text-white" />,
+        subtitle: 'FBISE Secondary Mathematics: Algebra, Geometry, Arithmetic, Statistics & Probability',
+        tag: 'FBISE Pakistan Mathematics Syllabus'
+      };
+    }
+    return {
+      flag: sys?.flag || '🌐',
+      country: sys?.country || 'Curriculum',
+      gradient: 'from-brand-600 via-indigo-600 to-brand-900',
+      accent: 'text-brand-600 dark:text-brand-400',
+      badgeBg: 'bg-brand-500/10 text-brand-700 dark:text-brand-300 border-brand-500/20',
+      glow: 'group-hover:border-brand-500/50 group-hover:shadow-brand-500/10',
+      icon: <Layers className="w-7 h-7 text-white" />,
+      subtitle: 'Standardized Educational Curriculum',
+      tag: 'Curriculum Framework'
+    };
   };
 
   // Subject Category Categorizer for visual badges & icons
@@ -266,6 +316,7 @@ export const CurriculumSystemExplorer = () => {
                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
+                <span>{selectedSystem.flag}</span>
                 <span>{selectedSystem.name}</span>
               </button>
             </>
@@ -282,6 +333,7 @@ export const CurriculumSystemExplorer = () => {
                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
+                <span>{selectedClass.flag || selectedSystem?.flag}</span>
                 <span>{selectedClass.name}</span>
               </button>
             </>
@@ -292,6 +344,7 @@ export const CurriculumSystemExplorer = () => {
               <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
               <span className="px-3.5 py-1.5 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 font-extrabold flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5" />
+                <span>{selectedSubject.flag || selectedSystem?.flag}</span>
                 <span>{selectedSubject.name}</span>
               </span>
             </>
@@ -301,7 +354,7 @@ export const CurriculumSystemExplorer = () => {
         {/* Global pool count */}
         <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-slate-400">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>41,900+ Standard MCQs Verified</span>
+          <span>{(indexData.totalQuestions || 62943).toLocaleString()}+ Standard MCQs Verified</span>
         </div>
       </nav>
 
@@ -338,9 +391,9 @@ export const CurriculumSystemExplorer = () => {
               </div>
 
               {/* Systems Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {indexData.systems.map(sys => {
-                  const theme = getSystemTheme(sys.name);
+                  const theme = getSystemTheme(sys);
                   const totalClasses = sys.classes?.length || 0;
                   const totalSubjects = sys.classes?.reduce((sum, c) => sum + (c.subjects?.length || 0), 0);
                   const totalChapters = sys.classes?.reduce((sum, c) => 
@@ -360,22 +413,28 @@ export const CurriculumSystemExplorer = () => {
                       <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${theme.gradient}`} />
 
                       <div className="space-y-4">
-                        {/* Header icon + tag */}
+                        {/* Header icon + country flag pill + tag */}
                         <div className="flex items-start justify-between gap-3">
                           <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg shadow-brand-500/20 group-hover:scale-105 group-hover:rotate-1 transition-transform`}>
                             {theme.icon}
                           </div>
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${theme.badgeBg}`}>
-                            {totalClasses} Classes
-                          </span>
+                          <div className="flex flex-col items-end gap-1.5">
+                            <span className="px-3 py-1 rounded-full text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-sm">
+                              <span className="text-base leading-none">{sys.flag || theme.flag}</span>
+                              <span>{sys.country || theme.country}</span>
+                            </span>
+                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border ${theme.badgeBg}`}>
+                              {totalClasses} {totalClasses === 1 ? 'Class' : 'Classes'}
+                            </span>
+                          </div>
                         </div>
 
                         <div>
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
                             {theme.tag}
                           </span>
-                          <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                            {sys.name}
+                          <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
+                            <span>{sys.name}</span>
                           </h3>
                           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">
                             {theme.subtitle}
@@ -435,16 +494,23 @@ export const CurriculumSystemExplorer = () => {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to All Systems</span>
                   </button>
-                  <h2 id="classes-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                    {selectedSystem.name}: Select Class / Grade
+                  <h2 id="classes-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
+                    <span className="text-2xl">{selectedSystem.flag}</span>
+                    <span>{selectedSystem.name}: Select Class / Grade</span>
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
                     Select your academic tier to view subjects and start chapter assessments.
                   </p>
                 </div>
 
-                <div className="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl">
-                  {selectedSystem.classes?.length || 0} Academic Levels
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1.5 rounded-xl text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                    <span>{selectedSystem.flag}</span>
+                    <span>{selectedSystem.country}</span>
+                  </span>
+                  <div className="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                    {selectedSystem.classes?.length || 0} Academic Levels
+                  </div>
                 </div>
               </div>
 
@@ -465,14 +531,15 @@ export const CurriculumSystemExplorer = () => {
                           <div className="w-13 h-13 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center p-3 group-hover:scale-105 transition-transform shadow-sm">
                             <GraduationCap className="w-7 h-7" />
                           </div>
-                          <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                            Academic Level
+                          <span className="px-2.5 py-1 rounded-full text-xs font-black flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-sm">
+                            <span className="text-sm leading-none">{cls.flag || selectedSystem.flag}</span>
+                            <span>{cls.country || selectedSystem.country}</span>
                           </span>
                         </div>
 
                         <div>
-                          <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                            {cls.name}
+                          <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
+                            <span>{cls.name}</span>
                           </h3>
                           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                             Curriculum standard containing comprehensive subjects and chapter tests.
@@ -523,8 +590,9 @@ export const CurriculumSystemExplorer = () => {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to Classes ({selectedSystem?.name})</span>
                   </button>
-                  <h2 id="subjects-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                    {selectedClass.name} Subjects
+                  <h2 id="subjects-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>{selectedClass.flag || selectedSystem?.flag}</span>
+                    <span>{selectedClass.name} Subjects</span>
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
                     Select a subject to browse chapters and conduct standard 10 MCQs tests.
@@ -579,9 +647,14 @@ export const CurriculumSystemExplorer = () => {
                             <div className="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                               {visuals.icon}
                             </div>
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${visuals.badgeColor}`}>
-                              {visuals.category}
-                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="px-2 py-0.5 rounded-lg text-xs font-bold border flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-sm" title={sub.country || selectedSystem?.country}>
+                                <span>{sub.flag || selectedSystem?.flag}</span>
+                              </span>
+                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${visuals.badgeColor}`}>
+                                {visuals.category}
+                              </span>
+                            </div>
                           </div>
 
                           <div>
@@ -624,8 +697,9 @@ export const CurriculumSystemExplorer = () => {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Back to Subjects ({selectedClass?.name})</span>
                   </button>
-                  <h2 id="chapters-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                    {selectedSubject.name}: Chapter Assessments
+                  <h2 id="chapters-heading" className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>{selectedSubject.flag || selectedSystem?.flag}</span>
+                    <span>{selectedSubject.name}: Chapter Assessments</span>
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
                     Click any chapter to conduct a 10 MCQs assessment with options feedback and detailed explanations.
@@ -680,8 +754,9 @@ export const CurriculumSystemExplorer = () => {
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-black uppercase tracking-wider text-slate-500">
-                              Chapter {chap.no}
+                            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1 border border-slate-200 dark:border-slate-700 shadow-sm">
+                              <span>{selectedSystem?.flag}</span>
+                              <span>Chapter {chap.no}</span>
                             </span>
                             <span className="text-[11px] font-semibold text-slate-400">
                               {chap.count} MCQs in pool

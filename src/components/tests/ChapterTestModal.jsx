@@ -174,6 +174,7 @@ export const ChapterTestModal = ({
             </span>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">
+                <span className="text-sm">{system?.flag}</span>
                 <span>{system?.name}</span>
                 <span>&bull;</span>
                 <span>{className?.name}</span>

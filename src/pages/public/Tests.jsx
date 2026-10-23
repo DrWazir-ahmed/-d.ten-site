@@ -135,13 +135,13 @@ export const Tests = () => {
             Comprehensive Tests & Skill Assessments
           </h1>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-            Take chapter-wise 10 MCQs tests with options & feedback across Cambridge, India CBSE, and US High School systems, 
+            Take chapter-wise 10 MCQs tests with options & feedback across Cambridge (UK 🇬🇧), India CBSE (🇮🇳), US High School (🇺🇸), and Pakistan FBISE (🇵🇰: Matric, English, Math), 
             or practice general standardized skill assessments.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-bold text-slate-300">
             <span className="flex items-center gap-1.5 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 41,900+ Standard MCQs
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 62,900+ Standard MCQs
             </span>
             <span className="flex items-center gap-1.5 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
               <CheckCircle2 className="w-4 h-4 text-cyan-400" /> 10 MCQs Chapter Tests
@@ -168,9 +168,9 @@ export const Tests = () => {
             }`}
           >
             <Layers className="w-4 h-4" />
-            <span>Curriculum Systems (Cambridge &bull; CBSE &bull; US)</span>
+            <span>Curriculum Systems (🇬🇧 Cambridge &bull; 🇮🇳 CBSE &bull; 🇺🇸 US &bull; 🇵🇰 FBISE)</span>
             <span className="px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-600 dark:text-brand-400 font-mono text-[10px]">
-              41,900+ MCQs
+              62,900+ MCQs
             </span>
           </button>
 
@@ -312,6 +312,10 @@ export const Tests = () => {
                         <span className="px-2.5 py-1 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-[10px] font-black uppercase tracking-wider text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 flex items-center gap-1 shadow-sm">
                           {getCategoryIcon(test.category)}
                           {test.category || 'General'}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-xs font-bold text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 flex items-center gap-1 shadow-sm">
+                          <span>{test.countryFlag || '🌐'}</span>
+                          <span className="text-[10px] font-bold">{test.country || 'Global'}</span>
                         </span>
                         {test.difficulty && (
                           <span className="px-2 py-1 rounded-xl bg-slate-900/80 backdrop-blur-md text-[10px] font-bold uppercase text-white shadow-sm">
