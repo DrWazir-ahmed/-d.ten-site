@@ -482,6 +482,16 @@ export const getCourseById = async (id) => {
       }
     }
 
+    if (course.id === 'course-html-teens-pakistan' || course.title?.includes('HTML5 Web Developer')) {
+      const seedTeens = INITIAL_COURSES.find(c => c.id === 'course-html-teens-pakistan');
+      if (seedTeens) {
+        course = {
+          ...course,
+          ...seedTeens
+        };
+      }
+    }
+
     if (course.id === 'course-14' || course.title === 'Active and Passive Voice Mastery') {
       const seedAp = INITIAL_COURSES.find(c => c.id === 'course-14');
       if (seedAp) {

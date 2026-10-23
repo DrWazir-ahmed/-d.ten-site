@@ -35,6 +35,7 @@ import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
 import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
 import { PythonKidsStudio } from '../../components/pythonKids/PythonKidsStudio';
+import { HtmlTeensStudio } from '../../components/htmlTeens/HtmlTeensStudio';
 
 export const CoursePlayer = () => {
   const { id } = useParams();
@@ -400,7 +401,9 @@ export const CoursePlayer = () => {
             )}
 
             {/* Dynamic Lesson Type Display */}
-            {course.id === 'course-python-kids-pakistan' ? (
+            {course.id === 'course-html-teens-pakistan' ? (
+              <HtmlTeensStudio />
+            ) : course.id === 'course-python-kids-pakistan' ? (
               <PythonKidsStudio />
             ) : currentLesson.type === 'language_studio' || (course.id === 'course-polyglot-20-languages' && currentLesson.type !== 'quiz') ? (
               <div className="space-y-6">

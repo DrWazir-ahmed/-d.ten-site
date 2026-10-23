@@ -7,6 +7,7 @@ import { TENSES_COURSE_DATA } from './tensesCourseData';
 import { ACTIVE_PASSIVE_COURSE_DATA } from './activePassiveCourseData';
 import { POLYGLOT_COURSE_DATA } from './polyglotCourseData';
 import { PYTHON_KIDS_COURSE } from './pythonKidsCourseData';
+import { HTML_TEENS_COURSE } from './htmlTeensCourseData';
 import { FBISE_ISLAMIAT_ITEM } from './fbiseIslamiatVocab';
 import { ACTIVE_PASSIVE_PDF_ITEM } from './activePassivePdfData';
 import { TENSES_PDF_ITEM } from './tensesPdfData';
@@ -70,6 +71,7 @@ export const INITIAL_CATEGORIES = {
 };
 
 export const INITIAL_COURSES = [
+  HTML_TEENS_COURSE,
   PYTHON_KIDS_COURSE,
   POLYGLOT_COURSE_DATA,
   {

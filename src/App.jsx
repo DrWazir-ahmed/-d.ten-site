@@ -22,6 +22,7 @@ import { Pricing } from './pages/public/Pricing';
 import { About } from './pages/public/About';
 import { Contact } from './pages/public/Contact';
 import { PythonKidsStudio } from './components/pythonKids/PythonKidsStudio';
+import { HtmlTeensStudio } from './components/htmlTeens/HtmlTeensStudio';
 
 // Auth Pages
 import { Login } from './pages/auth/Login';
@@ -84,6 +85,7 @@ const AppContent = () => {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/python-kids" element={<PythonKidsStudio standalone={true} />} />
+          <Route path="/html-teens" element={<HtmlTeensStudio standalone={true} />} />
 
           {/* Authentication Routes */}
           <Route path="/login" element={<Login />} />

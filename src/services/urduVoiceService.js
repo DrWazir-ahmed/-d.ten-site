@@ -129,6 +129,7 @@ export function isUrduSpeaking() {
 export async function speakUrduFahad({
   text,
   lessonId = null,
+  courseType = 'pythonKids', // 'pythonKids' | 'htmlTeens'
   onStart = () => {},
   onEnd = () => {},
   onError = () => {},
@@ -138,7 +139,9 @@ export async function speakUrduFahad({
 
   // ─── OPTION 1: Static Pre-recorded Studio Audio for Lessons ────────
   if (lessonId) {
-    const audioUrl = `/audio/pythonKids/${lessonId}_fahad.mp3`;
+    const audioUrl = courseType === 'htmlTeens'
+      ? `/audio/htmlTeens/${lessonId}_urdu.mp3`
+      : `/audio/pythonKids/${lessonId}_fahad.mp3`;
     try {
       const audio = new Audio(audioUrl);
       activeAudio = audio;
@@ -155,7 +158,7 @@ export async function speakUrduFahad({
       };
 
       audio.onerror = async () => {
-        console.info(`[FahadVoice] Pre-recorded audio not found for ${lessonId}, falling back...`);
+        console.info(`[UrduVoice] Pre-recorded audio not found for ${lessonId} (${courseType}), falling back...`);
         activeAudio = null;
         await fallbackToLiveOrWebSpeech(text, onStart, onEnd, onError);
       };

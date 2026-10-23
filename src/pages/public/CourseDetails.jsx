@@ -25,6 +25,7 @@ import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
 import { PythonKidsStudio } from '../../components/pythonKids/PythonKidsStudio';
+import { HtmlTeensStudio } from '../../components/htmlTeens/HtmlTeensStudio';
 
 export const CourseDetails = () => {
   const { id } = useParams();
@@ -496,6 +497,24 @@ export const CourseDetails = () => {
                 </button>
               </div>
               <PythonKidsStudio />
+            </div>
+          )}
+
+          {course.id === 'course-html-teens-pakistan' && (
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-extrabold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-blue-500" />
+                  HTML5 Web Developer Studio (Editor, Live Preview & Projects)
+                </h3>
+                <button
+                  onClick={handleEnrollOrContinue}
+                  className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  Launch Web Studio →
+                </button>
+              </div>
+              <HtmlTeensStudio />
             </div>
           )}
         </div>

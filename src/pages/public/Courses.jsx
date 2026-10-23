@@ -252,6 +252,16 @@ export const Courses = () => {
                         <span className="text-emerald-300 font-bold text-[10px]">Urdu & English Voice • Live Code</span>
                       </div>
                     )}
+
+                    {course.id === 'course-html-teens-pakistan' && (
+                      <div className="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md text-[11px] font-bold text-white flex items-center justify-between border border-white/10 shadow-sm">
+                        <span className="flex items-center gap-1 text-cyan-300">
+                          <span>💻</span>
+                          <span>Teens 13-16 Years</span>
+                        </span>
+                        <span className="text-emerald-300 font-bold text-[10px]">HTML5 Live Studio • Web Projects</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Body Content */}
