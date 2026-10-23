@@ -39,6 +39,7 @@ import {
   SENTENCE_CATEGORIES 
 } from '../../data/languagesData';
 import { LanguageAssessmentTest } from './LanguageAssessmentTest';
+import { speakUrduFahad, stopUrduSpeech } from '../../services/urduVoiceService';
 
 export const LanguageLearningStudio = ({ 
   initialNative = 'ur', 
@@ -110,7 +111,10 @@ export const LanguageLearningStudio = ({
         }
       });
 
-    return () => { isMounted = false; };
+    return () => { 
+      isMounted = false; 
+      stopUrduSpeech();
+    };
   }, []);
 
   // Update learned items on language pair switch
@@ -231,8 +235,22 @@ export const LanguageLearningStudio = ({
     ? Math.min(100, Math.round((moduleLearnedCount / moduleItems.length) * 100))
     : 0;
 
-  // Web Speech API Text-to-Speech
+  // Web Speech API / Fahad Urdu Text-to-Speech
   const speakText = (text, langObj, idKey) => {
+    stopUrduSpeech();
+
+    // If Urdu is requested, use Fahad Motivational Speaker voice service
+    if (langObj?.id === 'ur' || langObj?.speechCode?.toLowerCase().startsWith('ur')) {
+      setSpeakingId(idKey);
+      speakUrduFahad({
+        text,
+        onStart: () => setSpeakingId(idKey),
+        onEnd: () => setSpeakingId(null),
+        onError: () => setSpeakingId(null),
+      });
+      return;
+    }
+
     if (!window.speechSynthesis) {
       alert('Speech Synthesis is not supported in this browser.');
       return;
@@ -243,7 +261,7 @@ export const LanguageLearningStudio = ({
       setSpeakingId(idKey);
 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = langObj.speechCode || 'en-US';
+      utterance.lang = langObj?.speechCode || 'en-US';
       utterance.rate = 0.88;
       utterance.pitch = 1.0;
 

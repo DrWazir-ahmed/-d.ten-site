@@ -91,6 +91,28 @@ export const ReadAloudPlayer = ({
     const loadVoices = () => {
       const allVoices = window.speechSynthesis.getVoices() || [];
       if (allVoices.length > 0) {
+        const isUrduText = /[\u0600-\u06FF]/.test(text || '');
+
+        if (isUrduText) {
+          // Prioritize Fahad / Salman Neural / Urdu voices
+          const urduVoices = allVoices.filter(v => {
+            const l = (v.lang || '').toLowerCase();
+            const n = (v.name || '').toLowerCase();
+            return l.startsWith('ur') || l.includes('urdu') || n.includes('salman') || n.includes('asad') || l.startsWith('hi');
+          });
+          const availableVoices = urduVoices.length > 0 ? urduVoices : allVoices;
+          setVoices(availableVoices);
+
+          // Find Salman Neural (the base voice of Fahad Motivational Speaker)
+          const preferredIdx = availableVoices.findIndex(v => 
+            v.name.toLowerCase().includes('salman') || 
+            v.name.toLowerCase().includes('asad') ||
+            (v.lang && v.lang.toLowerCase().startsWith('ur'))
+          );
+          setSelectedVoiceIndex(preferredIdx !== -1 ? preferredIdx : 0);
+          return;
+        }
+
         // Prioritize English voices (US, GB, or natural voices)
         const englishVoices = allVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
         const availableVoices = englishVoices.length > 0 ? englishVoices : allVoices;
@@ -162,9 +184,17 @@ export const ReadAloudPlayer = ({
     const utterance = new SpeechSynthesisUtterance(sentence);
     utterance.rate = rate;
 
-    if (voices[selectedVoiceIndex]) {
-      utterance.voice = voices[selectedVoiceIndex];
-      utterance.lang = voices[selectedVoiceIndex].lang || 'en-US';
+    const chosenVoice = voices[selectedVoiceIndex];
+    if (chosenVoice) {
+      utterance.voice = chosenVoice;
+      utterance.lang = chosenVoice.lang || 'en-US';
+      
+      // If voice is Urdu or Salman (Fahad profile), apply Fahad's energetic motivational pitch
+      const isUrduVoice = (chosenVoice.lang && chosenVoice.lang.toLowerCase().startsWith('ur')) ||
+                          chosenVoice.name.toLowerCase().includes('salman');
+      if (isUrduVoice) {
+        utterance.pitch = 1.08; // Fahad +8Hz motivational timbre
+      }
     }
 
     utterance.onstart = () => {

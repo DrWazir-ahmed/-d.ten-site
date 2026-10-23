@@ -29,6 +29,7 @@ import confetti from 'canvas-confetti';
 import { PYTHON_KIDS_COURSE } from '../../data/pythonKidsCourseData';
 import { PythonKidInterpreter } from './PythonInterpreter';
 import { PythonKidsCertificate } from './PythonKidsCertificate';
+import { speakUrduFahad, stopUrduSpeech, FAHAD_VOICE_CONFIG } from '../../services/urduVoiceService';
 
 export const PythonKidsStudio = ({ standalone = false }) => {
   // Navigation State
@@ -129,17 +130,29 @@ export const PythonKidsStudio = ({ standalone = false }) => {
     }, 150);
   };
 
-  // Text to Speech for English and Urdu voices
+  // Text to Speech for English and Fahad Motivational Urdu voice
   const speakText = (text, langCode) => {
-    if (!window.speechSynthesis) return;
+    stopSpeaking();
 
-    window.speechSynthesis.cancel();
-    setSpeakingLanguage(langCode);
+    if (langCode === 'ur') {
+      setSpeakingLanguage('ur');
+      speakUrduFahad({
+        text,
+        lessonId: currentLesson?.id,
+        onStart: () => setSpeakingLanguage('ur'),
+        onEnd: () => setSpeakingLanguage(null),
+        onError: () => setSpeakingLanguage(null),
+      });
+      return;
+    }
+
+    if (!window.speechSynthesis) return;
+    setSpeakingLanguage('en');
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = langCode === 'ur' ? 'ur-PK' : 'en-US';
-    utterance.rate = 0.9;
-    utterance.pitch = 1.1; // cheerful voice for kids
+    utterance.lang = 'en-US';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.05;
 
     utterance.onend = () => setSpeakingLanguage(null);
     utterance.onerror = () => setSpeakingLanguage(null);
@@ -148,7 +161,8 @@ export const PythonKidsStudio = ({ standalone = false }) => {
   };
 
   const stopSpeaking = () => {
-    if (window.speechSynthesis) {
+    stopUrduSpeech();
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
     setSpeakingLanguage(null);
@@ -569,32 +583,43 @@ export const PythonKidsStudio = ({ standalone = false }) => {
               </div>
 
               {/* Dual Voice Audio Buttons */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => speakingLanguage === 'ur' ? stopSpeaking() : speakText(currentLesson.urduVoice, 'ur')}
                   className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
                     speakingLanguage === 'ur'
-                      ? 'bg-emerald-600 text-white border-emerald-700 shadow-md animate-pulse'
-                      : 'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                      ? 'bg-emerald-600 text-white border-emerald-700 shadow-md ring-2 ring-emerald-400 animate-pulse'
+                      : 'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 border-emerald-300 dark:border-emerald-700'
                   }`}
-                  title="Listen in Urdu"
+                  title="فہد (موٹیویشنل اسپیکر) کی آواز میں اردو سبق سنیں"
                 >
-                  <Volume2 className="w-4 h-4" />
-                  <span className="font-urdu text-xs">اردو میں سنیں</span>
+                  <Volume2 className={`w-4 h-4 ${speakingLanguage === 'ur' ? 'animate-bounce text-yellow-300' : 'text-emerald-600'}`} />
+                  <span className="font-urdu text-xs">
+                    {speakingLanguage === 'ur' ? 'روکیں (Stop)' : '🎙️ فہد (موٹیویشنل وائس)'}
+                  </span>
                 </button>
 
                 <button
                   onClick={() => speakingLanguage === 'en' ? stopSpeaking() : speakText(currentLesson.englishVoice, 'en')}
                   className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
                     speakingLanguage === 'en'
-                      ? 'bg-brand-600 text-white border-brand-700 shadow-md animate-pulse'
+                      ? 'bg-brand-600 text-white border-brand-700 shadow-md ring-2 ring-brand-400 animate-pulse'
                       : 'bg-brand-50 hover:bg-brand-100 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 border-brand-200 dark:border-brand-800'
                   }`}
                   title="Listen in English"
                 >
-                  <Volume2 className="w-4 h-4" />
-                  <span>Listen in English</span>
+                  <Volume2 className={`w-4 h-4 ${speakingLanguage === 'en' ? 'animate-bounce' : ''}`} />
+                  <span>{speakingLanguage === 'en' ? 'Stop Audio' : '🔊 English Voice'}</span>
                 </button>
+
+                {/* Fahad Voice Agent Indicator Pill */}
+                <span 
+                  className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
+                  title="Powered by Urdu Voice Over Agent - Fahad Motivational Profile (+8Hz pitch, +6% rate)"
+                >
+                  <Sparkles className="w-3 h-3 text-amber-500" />
+                  <span className="font-urdu">آواز: فہد موٹیویشنل</span>
+                </span>
               </div>
             </div>
 
