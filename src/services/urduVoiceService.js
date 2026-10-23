@@ -10,14 +10,14 @@
 
 export const FAHAD_VOICE_CONFIG = {
   id: "ur-IN-FahadMotiv",
-  name: "فہد (Fahad - موٹیویشنل اسپیکر)",
-  title: "Fahad (Motivational Speaker Male)",
+  name: "اُردو آواز",
+  title: "Urdu Voice (Motivational)",
   baseVoice: "ur-IN-SalmanNeural",
   pitchOffsetHz: 8,
   rateOffsetPercent: 6,
   webSpeechPitch: 1.08, // Maps +8Hz to Web Speech API pitch scale
   webSpeechRate: 1.06,  // Maps +6% to Web Speech API rate scale
-  badge: "مردانہ • موٹیویشنل و پرجوش",
+  badge: "اُردو آواز",
   description: "پرجوش اور ترغیبی انداز - موٹیویشنل تقاریر، رہنمائی، کوڈنگ سیشن اور پریزنٹیشنز",
   sample: "کامیابی کا راز مسلسل محنت اور تجسس میں ہے! کوڈنگ سیکھنا ایک شاندار ایڈونچر ہے۔",
 };

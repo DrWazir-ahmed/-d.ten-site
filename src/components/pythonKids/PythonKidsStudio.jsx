@@ -591,11 +591,11 @@ export const PythonKidsStudio = ({ standalone = false }) => {
                       ? 'bg-emerald-600 text-white border-emerald-700 shadow-md ring-2 ring-emerald-400 animate-pulse'
                       : 'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 border-emerald-300 dark:border-emerald-700'
                   }`}
-                  title="فہد (موٹیویشنل اسپیکر) کی آواز میں اردو سبق سنیں"
+                  title="سبق سنیں (اُردو آواز)"
                 >
                   <Volume2 className={`w-4 h-4 ${speakingLanguage === 'ur' ? 'animate-bounce text-yellow-300' : 'text-emerald-600'}`} />
                   <span className="font-urdu text-xs">
-                    {speakingLanguage === 'ur' ? 'روکیں (Stop)' : '🎙️ فہد (موٹیویشنل وائس)'}
+                    {speakingLanguage === 'ur' ? 'روکیں (Stop)' : '🎙️ اُردو آواز'}
                   </span>
                 </button>
 
@@ -611,15 +611,6 @@ export const PythonKidsStudio = ({ standalone = false }) => {
                   <Volume2 className={`w-4 h-4 ${speakingLanguage === 'en' ? 'animate-bounce' : ''}`} />
                   <span>{speakingLanguage === 'en' ? 'Stop Audio' : '🔊 English Voice'}</span>
                 </button>
-
-                {/* Fahad Voice Agent Indicator Pill */}
-                <span 
-                  className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
-                  title="Powered by Urdu Voice Over Agent - Fahad Motivational Profile (+8Hz pitch, +6% rate)"
-                >
-                  <Sparkles className="w-3 h-3 text-amber-500" />
-                  <span className="font-urdu">آواز: فہد موٹیویشنل</span>
-                </span>
               </div>
             </div>
 
