@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   ClipboardCheck, 
   Sparkles, 
@@ -23,19 +23,25 @@ import {
   BookOpen
 } from 'lucide-react';
 import { getTests } from '../../services/firebaseService';
+import { getCurriculumIndex, searchCurriculumTests } from '../../services/curriculumService';
 import { Badge } from '../../components/common/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
 import { CurriculumSystemExplorer } from '../../components/tests/CurriculumSystemExplorer';
+import { ChapterTestModal } from '../../components/tests/ChapterTestModal';
 import { useSEO } from '../../hooks/useSEO';
 
 export const Tests = () => {
   const { isPremium } = useAuth();
   const [activeViewTab, setActiveViewTab] = useState('curriculum'); // 'curriculum' (default) or 'standalone'
   const [tests, setTests] = useState([]);
+  const [curriculumIndex, setCurriculumIndex] = useState({ systems: [] });
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [instantSearchQuery, setInstantSearchQuery] = useState('');
+  const [activeCurriculumTest, setActiveCurriculumTest] = useState(null);
+  const searchContainerRef = useRef(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [membershipFilter, setMembershipFilter] = useState('all');
@@ -66,16 +72,37 @@ export const Tests = () => {
     const load = async () => {
       setLoading(true);
       try {
-        const data = await getTests();
-        setTests(data || []);
+        const [testsData, curData] = await Promise.all([
+          getTests(),
+          getCurriculumIndex()
+        ]);
+        setTests(testsData || []);
+        setCurriculumIndex(curData || { systems: [] });
       } catch (err) {
-        console.error('Error loading standard tests:', err);
+        console.error('Error loading standard tests or curriculum:', err);
       } finally {
         setLoading(false);
       }
     };
     load();
   }, []);
+
+  // Close instant search dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+        setInstantSearchQuery('');
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Instant Curriculum Tests Search computation
+  const curriculumSearchResults = useMemo(() => {
+    if (!instantSearchQuery || instantSearchQuery.trim().length < 2) return [];
+    return searchCurriculumTests(curriculumIndex.systems || [], instantSearchQuery, 50);
+  }, [curriculumIndex.systems, instantSearchQuery]);
 
   const filteredTests = useMemo(() => {
     return tests.filter(test => {
@@ -123,68 +150,169 @@ export const Tests = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 animate-fadeIn">
       
-      {/* Header Banner - Compact & Modern UI */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-6 shadow-xl border border-brand-800/40">
-        <div className="absolute top-0 right-0 -mt-6 -mr-6 w-48 h-48 rounded-full bg-brand-500/10 blur-2xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-brand-300 text-[10px] font-black uppercase tracking-wider border border-white/10">
-              <ClipboardCheck className="w-3.5 h-3.5 text-brand-400" />
-              Standard Testing & Evaluation System
+      {/* ─────────────────────────────────────────────────────────────
+          UNIFIED HALF-SIZE HEADER WITH INTEGRATED INSTANT TEST SEARCH
+          ───────────────────────────────────────────────────────────── */}
+      <header className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-3.5 sm:p-4 shadow-lg border border-slate-800">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          
+          {/* Left: Branding & Core Meta */}
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center shrink-0 shadow-md shadow-brand-500/20">
+              <ClipboardCheck className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white leading-tight">
-              Comprehensive Tests & Skill Assessments
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-snug">
-              Chapter-wise 10 MCQs with instant options feedback across Cambridge (UK 🇬🇧), India CBSE (🇮🇳), US High School (🇺🇸), and Pakistan FBISE (🇵🇰: Matric, English, Math).
-            </p>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
+                  Assessments & Tests Hub
+                </h1>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-black uppercase tracking-wider">
+                  62,900+ MCQs
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 truncate mt-0.5">
+                Instant chapter tests across 🇬🇧 Cambridge &bull; 🇮🇳 CBSE &bull; 🇺🇸 US &bull; 🇵🇰 FBISE &bull; 🌐 Universal
+              </p>
+            </div>
           </div>
 
-          <div className="flex flex-wrap md:flex-col lg:flex-row items-center gap-2 text-[11px] font-bold text-slate-300 shrink-0">
-            <span className="flex items-center gap-1.5 bg-black/30 px-2.5 py-1 rounded-lg border border-white/5 shadow-xs">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 62,900+ Standard MCQs
+          {/* Right: Instant Search Bar (Finds tests instantly by country, class, subject) */}
+          <div ref={searchContainerRef} className="relative w-full md:w-80 lg:w-96 shrink-0">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={instantSearchQuery}
+                onChange={(e) => setInstantSearchQuery(e.target.value)}
+                placeholder="Search test by subject, class, unit..."
+                className="w-full pl-9 pr-8 py-2 rounded-xl bg-white/10 hover:bg-white/15 focus:bg-slate-900 border border-white/15 focus:border-brand-500 text-xs text-white placeholder-slate-400 focus:outline-none transition shadow-inner"
+              />
+              {instantSearchQuery && (
+                <button
+                  onClick={() => setInstantSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-0.5"
+                  title="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Instant Search Results Dropdown Panel */}
+            {instantSearchQuery.trim().length >= 2 && (
+              <div className="absolute right-0 left-0 md:left-auto md:w-[480px] mt-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 max-h-[420px] overflow-y-auto p-2.5 space-y-2 animate-fadeIn text-slate-900 dark:text-slate-100">
+                <div className="flex items-center justify-between px-2 py-1 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <span>Found {curriculumSearchResults.length} {curriculumSearchResults.length === 1 ? 'Test' : 'Tests'}</span>
+                  <button 
+                    onClick={() => setInstantSearchQuery('')}
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-semibold"
+                  >
+                    Close ✕
+                  </button>
+                </div>
+
+                {curriculumSearchResults.length === 0 ? (
+                  <div className="p-6 text-center text-xs text-slate-400 space-y-1">
+                    <p className="font-bold text-slate-700 dark:text-slate-300">No matching tests found</p>
+                    <p>Try searching for a subject like "Physics", "Math", "Tenses", "Biology" or a class like "Class 9".</p>
+                  </div>
+                ) : (
+                  curriculumSearchResults.map((item) => (
+                    <div
+                      key={item.id}
+                      className="group p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 hover:bg-brand-50/50 dark:hover:bg-brand-950/40 border border-slate-200/80 dark:border-slate-700/80 hover:border-brand-500/50 transition-all flex items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0 flex-1 space-y-1">
+                        {/* Meta Row: Country, Class, Subject */}
+                        <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-bold">
+                          {/* Country */}
+                          <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center gap-1 text-slate-700 dark:text-slate-300 shadow-2xs">
+                            <span>{item.flag}</span>
+                            <span>{item.country}</span>
+                          </span>
+
+                          {/* Class */}
+                          <span className="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            {item.className}
+                          </span>
+
+                          {/* Subject */}
+                          <span className="px-1.5 py-0.5 rounded bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                            {item.subjectName}
+                          </span>
+                        </div>
+
+                        {/* Chapter Title */}
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                          Chapter {item.chapterNo}: {item.chapterTitle}
+                        </h4>
+                      </div>
+
+                      {/* Instant Action: Take Test */}
+                      <button
+                        onClick={() => {
+                          setActiveCurriculumTest({
+                            system: item.system,
+                            className: item.classItem,
+                            subject: item.subject,
+                            chapter: item.chapter
+                          });
+                          setInstantSearchQuery('');
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-black text-xs transition shadow-sm hover:scale-105 shrink-0 flex items-center gap-1 cursor-pointer"
+                      >
+                        <Play className="w-3 h-3 fill-white" />
+                        <span>Take Test</span>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Integrated View Tabs Row */}
+        <div className="mt-3 pt-2.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 p-1 bg-black/20 rounded-xl border border-white/10">
+            <button
+              onClick={() => setActiveViewTab('curriculum')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                activeViewTab === 'curriculum'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 text-brand-600" />
+              <span>Curriculum & Universal Systems</span>
+              <span className="px-1.5 py-0.2 rounded-md bg-brand-500/10 text-brand-600 font-mono text-[10px]">
+                62,900+
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveViewTab('standalone')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                activeViewTab === 'standalone'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>General & Standalone Tests</span>
+            </button>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-3 text-[11px] font-semibold text-slate-300">
+            <span className="flex items-center gap-1 text-emerald-400">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Instant Feedback
             </span>
-            <span className="flex items-center gap-1.5 bg-black/30 px-2.5 py-1 rounded-lg border border-white/5 shadow-xs">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" /> 10 MCQs Chapter Tests
-            </span>
-            <span className="flex items-center gap-1.5 bg-black/30 px-2.5 py-1 rounded-lg border border-white/5 shadow-xs">
-              <CheckCircle2 className="w-3.5 h-3.5 text-purple-400" /> Instant Feedback
+            <span className="flex items-center gap-1 text-cyan-400">
+              <CheckCircle2 className="w-3.5 h-3.5" /> 10 MCQs Random Pool
             </span>
           </div>
         </div>
-      </div>
-
-      {/* Main Testing System Switcher Tabs */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-1.5 bg-slate-100 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <button
-            onClick={() => setActiveViewTab('curriculum')}
-            className={`flex-1 sm:flex-none py-2 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 ${
-              activeViewTab === 'curriculum'
-                ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Curriculum Systems (🇬🇧 Cambridge &bull; 🇮🇳 CBSE &bull; 🇺🇸 US &bull; 🇵🇰 FBISE)</span>
-            <span className="px-1.5 py-0.5 rounded-md bg-brand-500/10 text-brand-600 dark:text-brand-400 font-mono text-[10px]">
-              62,900+ MCQs
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveViewTab('standalone')}
-            className={`flex-1 sm:flex-none py-2 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 ${
-              activeViewTab === 'standalone'
-                ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>General & Standalone Tests</span>
-          </button>
-        </div>
-      </div>
+      </header>
 
       {/* VIEW 1: CURRICULUM SYSTEMS EXPLORER (Requested Excel Sheet1 Drill-Down) */}
       {activeViewTab === 'curriculum' ? (
@@ -431,6 +559,18 @@ export const Tests = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Instant Search Direct Chapter Test Modal */}
+      {activeCurriculumTest && (
+        <ChapterTestModal
+          isOpen={Boolean(activeCurriculumTest)}
+          onClose={() => setActiveCurriculumTest(null)}
+          system={activeCurriculumTest.system}
+          className={activeCurriculumTest.className}
+          subject={activeCurriculumTest.subject}
+          chapter={activeCurriculumTest.chapter}
+        />
       )}
 
       {/* Premium Gate Modal */}

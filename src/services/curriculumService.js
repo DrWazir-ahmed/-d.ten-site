@@ -72,3 +72,62 @@ export const getChapter10MCQs = async (fileKey, chapterNo, randomize = true) => 
     return [];
   }
 };
+
+/**
+ * Fast search across all curriculum systems, classes, subjects, and chapters
+ * @param {Array} systems - array of curriculum system objects
+ * @param {string} query - search query string
+ * @param {number} limit - maximum results (default 60)
+ */
+export const searchCurriculumTests = (systems = [], query = '', limit = 60) => {
+  if (!query || query.trim().length < 2) return [];
+  const q = query.toLowerCase().trim();
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const results = [];
+
+  for (const sys of systems) {
+    const sysName = (sys.name || '').toLowerCase();
+    const country = (sys.country || '').toLowerCase();
+
+    for (const cls of (sys.classes || [])) {
+      const clsName = (cls.name || '').toLowerCase();
+
+      for (const sub of (cls.subjects || [])) {
+        const subName = (sub.name || '').toLowerCase();
+        const fileKey = sub.fileKey;
+
+        for (const chap of (sub.chapters || [])) {
+          const chapTitle = (chap.title || `Chapter ${chap.no}`).toLowerCase();
+          const targetStr = `${sysName} ${country} ${clsName} ${subName} ${chapTitle} chapter ${chap.no} unit ${chap.no}`;
+
+          const matches = tokens.every(token => targetStr.includes(token));
+
+          if (matches) {
+            results.push({
+              id: `${fileKey}__${chap.no}`,
+              systemId: sys.id,
+              systemName: sys.name,
+              country: sys.country,
+              flag: sys.flag,
+              classId: cls.id,
+              className: cls.name,
+              subjectId: sub.id,
+              subjectName: sub.name,
+              fileKey,
+              chapterNo: chap.no,
+              chapterTitle: chap.title,
+              questionCount: chap.count || 10,
+              system: sys,
+              classItem: cls,
+              subject: sub,
+              chapter: chap
+            });
+
+            if (results.length >= limit) return results;
+          }
+        }
+      }
+    }
+  }
+  return results;
+};

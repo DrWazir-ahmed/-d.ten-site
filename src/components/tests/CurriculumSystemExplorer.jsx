@@ -67,8 +67,8 @@ export const CurriculumSystemExplorer = () => {
       };
     }
     return {
-      title: 'Standard Curriculum Tests & 62,900+ MCQs (Cambridge, CBSE, US, FBISE Pakistan)',
-      description: 'Comprehensive chapter-wise 10 MCQs testing system with options feedback across Cambridge (UK), India CBSE, US High School, and Pakistan FBISE (Matric, English, Math) syllabi.'
+      title: 'Standard Curriculum Tests & 62,900+ MCQs (Cambridge, CBSE, US, FBISE Pakistan, Universal English & Math)',
+      description: 'Comprehensive chapter-wise 10 MCQs testing system with options feedback across Cambridge (UK), India CBSE, US High School, Pakistan FBISE (Matric), and Universal English & Mathematics.'
     };
   }, [selectedSystem, selectedClass, selectedSubject]);
 
@@ -190,30 +190,30 @@ export const CurriculumSystemExplorer = () => {
         tag: 'FBISE Pakistan National Curriculum'
       };
     }
-    if (id === 'FBISE_English' || name.includes('English')) {
+    if (id === 'Universal_English' || id === 'FBISE_English' || id === 'English' || name.toLowerCase().includes('english')) {
       return {
-        flag: '🇵🇰',
-        country: 'Pakistan',
+        flag: '🌐',
+        country: 'Universal',
         gradient: 'from-teal-700 via-emerald-600 to-cyan-950',
         accent: 'text-teal-600 dark:text-teal-400',
         badgeBg: 'bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20',
         glow: 'group-hover:border-teal-500/50 group-hover:shadow-teal-500/10',
         icon: <Languages className="w-7 h-7 text-white" />,
-        subtitle: 'FBISE English Grammar, Tenses, Parts of Speech, Active/Passive & Direct/Indirect Voice',
-        tag: 'FBISE Pakistan English Syllabus'
+        subtitle: 'Universal English Grammar, Tenses, Parts of Speech, Active/Passive & Direct/Indirect Voice',
+        tag: 'Universal English Curriculum'
       };
     }
-    if (id === 'FBISE_Math' || name.includes('Math')) {
+    if (id === 'Universal_Math' || id === 'FBISE_Math' || id === 'Math' || id === 'Mathematics' || name.toLowerCase().includes('math')) {
       return {
-        flag: '🇵🇰',
-        country: 'Pakistan',
-        gradient: 'from-green-700 via-emerald-700 to-slate-950',
-        accent: 'text-green-600 dark:text-green-400',
-        badgeBg: 'bg-green-500/10 text-green-700 dark:text-green-300 border-green-500/20',
-        glow: 'group-hover:border-green-500/50 group-hover:shadow-green-500/10',
+        flag: '🌐',
+        country: 'Universal',
+        gradient: 'from-sky-700 via-blue-600 to-indigo-950',
+        accent: 'text-sky-600 dark:text-sky-400',
+        badgeBg: 'bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/20',
+        glow: 'group-hover:border-sky-500/50 group-hover:shadow-sky-500/10',
         icon: <Calculator className="w-7 h-7 text-white" />,
-        subtitle: 'FBISE Secondary Mathematics: Algebra, Geometry, Arithmetic, Statistics & Probability',
-        tag: 'FBISE Pakistan Mathematics Syllabus'
+        subtitle: 'Universal Secondary Mathematics: Algebra, Geometry, Arithmetic, Statistics & Probability',
+        tag: 'Universal Mathematics Curriculum'
       };
     }
     return {
@@ -285,78 +285,73 @@ export const CurriculumSystemExplorer = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* ─────────────────────────────────────────────────────────────
-          AESTHETIC BREADCRUMB NAVIGATION & STATUS BAR
+          AESTHETIC BREADCRUMB NAVIGATION & STATUS BAR (ACTIVE ON DRILL-DOWN)
           ───────────────────────────────────────────────────────────── */}
-      <nav aria-label="Curriculum Navigation" className="flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm backdrop-blur-md">
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold">
-          
+      {selectedSystem && (
+        <nav aria-label="Curriculum Navigation" className="flex flex-wrap items-center justify-between gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm backdrop-blur-md">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold">
+            
+            <button
+              onClick={handleResetToSystems}
+              className="px-2.5 py-1 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>All Systems</span>
+            </button>
+
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <button
+              onClick={() => {
+                setSelectedClass(null);
+                setSelectedSubject(null);
+              }}
+              className={`px-3 py-1 rounded-xl transition flex items-center gap-1.5 ${
+                selectedSystem && !selectedClass
+                  ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <span>{selectedSystem.flag}</span>
+              <span>{selectedSystem.name}</span>
+            </button>
+
+            {selectedClass && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <button
+                  onClick={() => setSelectedSubject(null)}
+                  className={`px-3 py-1 rounded-xl transition flex items-center gap-1.5 ${
+                    selectedClass && !selectedSubject
+                      ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span>{selectedClass.flag || selectedSystem?.flag}</span>
+                  <span>{selectedClass.name}</span>
+                </button>
+              </>
+            )}
+
+            {selectedSubject && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="px-3 py-1 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 font-extrabold flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>{selectedSubject.flag || selectedSystem?.flag}</span>
+                  <span>{selectedSubject.name}</span>
+                </span>
+              </>
+            )}
+          </div>
+
           <button
             onClick={handleResetToSystems}
-            className={`px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${
-              !selectedSystem 
-                ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/25' 
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-            }`}
+            className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
           >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Curriculum Systems</span>
+            Switch System
           </button>
-
-          {selectedSystem && (
-            <>
-              <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
-              <button
-                onClick={() => {
-                  setSelectedClass(null);
-                  setSelectedSubject(null);
-                }}
-                className={`px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${
-                  selectedSystem && !selectedClass
-                    ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/25'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <span>{selectedSystem.flag}</span>
-                <span>{selectedSystem.name}</span>
-              </button>
-            </>
-          )}
-
-          {selectedClass && (
-            <>
-              <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
-              <button
-                onClick={() => setSelectedSubject(null)}
-                className={`px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${
-                  selectedClass && !selectedSubject
-                    ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white shadow-md shadow-brand-500/25'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <span>{selectedClass.flag || selectedSystem?.flag}</span>
-                <span>{selectedClass.name}</span>
-              </button>
-            </>
-          )}
-
-          {selectedSubject && (
-            <>
-              <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
-              <span className="px-3.5 py-1.5 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 font-extrabold flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5" />
-                <span>{selectedSubject.flag || selectedSystem?.flag}</span>
-                <span>{selectedSubject.name}</span>
-              </span>
-            </>
-          )}
-        </div>
-
-        {/* Global pool count */}
-        <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-slate-400">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>{(indexData.totalQuestions || 62943).toLocaleString()}+ Standard MCQs Verified</span>
-        </div>
-      </nav>
+        </nav>
+      )}
 
       {loading ? (
         <div className="py-24 text-center space-y-4 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -407,52 +402,55 @@ export const CurriculumSystemExplorer = () => {
                     <article
                       key={sys.id}
                       onClick={() => handleSelectSystem(sys)}
-                      className={`group relative rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 overflow-hidden ${theme.glow}`}
+                      className={`group relative rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-3.5 overflow-hidden ${theme.glow}`}
                     >
                       {/* Decorative top gradient accent bar */}
                       <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${theme.gradient}`} />
 
-                      <div className="space-y-3">
-                        {/* Header icon + country flag pill + tag */}
-                        <div className="flex items-start justify-between gap-2.5">
-                          <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform shrink-0`}>
-                            {React.cloneElement(theme.icon, { className: 'w-5 h-5 text-white' })}
+                      <div className="space-y-2.5">
+                        {/* Header icon + Title + Country flag pill inside top right */}
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-sm shrink-0`}>
+                              {React.cloneElement(theme.icon, { className: 'w-4 h-4 text-white' })}
+                            </div>
+                            <div className="min-w-0">
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block truncate leading-none">
+                                {theme.tag}
+                              </span>
+                              <h3 className="text-base font-black text-slate-900 dark:text-white leading-tight mt-0.5 truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                                {sys.name}
+                              </h3>
+                            </div>
                           </div>
-                          <div className="flex flex-col items-end gap-1">
-                            <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-2xs">
+
+                          <div className="flex flex-col items-end gap-1 shrink-0">
+                            <span className="px-2 py-0.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700 flex items-center gap-1 shadow-2xs">
                               <span className="text-sm leading-none">{sys.flag || theme.flag}</span>
-                              <span className="text-[11px]">{sys.country || theme.country}</span>
+                              <span className="text-[11px] font-semibold">{sys.country || theme.country}</span>
                             </span>
-                            <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${theme.badgeBg}`}>
+                            <span className={`px-1.5 py-0.2 rounded text-[9px] font-black uppercase tracking-wider border ${theme.badgeBg}`}>
                               {totalClasses} {totalClasses === 1 ? 'Class' : 'Classes'}
                             </span>
                           </div>
                         </div>
 
-                        <div>
-                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
-                            {theme.tag}
-                          </span>
-                          <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                            <span>{sys.name}</span>
-                          </h3>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug line-clamp-2">
-                            {theme.subtitle}
-                          </p>
-                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">
+                          {theme.subtitle}
+                        </p>
 
                         {/* Metric Counter Strip */}
                         <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800/80 text-center">
                           <div>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Subjects</span>
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Classes</span>
                             <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5 block">
-                              {totalSubjects}
+                              {totalClasses}
                             </span>
                           </div>
                           <div>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Chapters</span>
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Subjects</span>
                             <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5 block">
-                              {totalChapters}
+                              {totalSubjects}
                             </span>
                           </div>
                           <div>
@@ -465,7 +463,7 @@ export const CurriculumSystemExplorer = () => {
                       </div>
 
                       {/* Card Action Link */}
-                      <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold">
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold">
                         <span className="text-slate-700 dark:text-slate-300 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
                           Explore Curriculum
                         </span>
@@ -524,27 +522,27 @@ export const CurriculumSystemExplorer = () => {
                     <article
                       key={cls.id}
                       onClick={() => handleSelectClass(cls)}
-                      className="group relative p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 overflow-hidden"
+                      className="group relative p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-3 overflow-hidden"
                     >
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center p-2.5 group-hover:scale-105 transition-transform shadow-2xs">
-                            <GraduationCap className="w-5 h-5" />
+                      <div className="space-y-2.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                              <GraduationCap className="w-4 h-4" />
+                            </div>
+                            <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors truncate">
+                              {cls.name}
+                            </h3>
                           </div>
-                          <span className="px-2 py-0.5 rounded-lg text-xs font-bold flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xs">
+                          <span className="px-2 py-0.5 rounded-lg text-xs font-bold flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shrink-0">
                             <span className="text-sm leading-none">{cls.flag || selectedSystem.flag}</span>
-                            <span>{cls.country || selectedSystem.country}</span>
+                            <span className="text-[11px] font-semibold">{cls.country || selectedSystem.country}</span>
                           </span>
                         </div>
 
-                        <div>
-                          <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                            <span>{cls.name}</span>
-                          </h3>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
-                            Curriculum standard containing comprehensive subjects and chapter tests.
-                          </p>
-                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                          Curriculum standard containing comprehensive subjects and chapter tests.
+                        </p>
 
                         {/* Metric Counter */}
                         <div className="grid grid-cols-2 gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
@@ -563,7 +561,7 @@ export const CurriculumSystemExplorer = () => {
                         </div>
                       </div>
 
-                      <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
                         <span>{chapterCount} Chapters Ready</span>
                         <span className="text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-black">
                           View Subjects →
@@ -648,8 +646,9 @@ export const CurriculumSystemExplorer = () => {
                               {visuals.icon}
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <span className="px-1.5 py-0.5 rounded text-xs font-bold border flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-2xs" title={sub.country || selectedSystem?.country}>
-                                <span>{sub.flag || selectedSystem?.flag}</span>
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-2xs">
+                                <span>{sub.flag || selectedClass?.flag || selectedSystem?.flag}</span>
+                                <span className="text-[9px]">{sub.country || selectedClass?.country || selectedSystem?.country}</span>
                               </span>
                               <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${visuals.badgeColor}`}>
                                 {visuals.category}
@@ -756,6 +755,7 @@ export const CurriculumSystemExplorer = () => {
                           <div className="flex items-center gap-1.5">
                             <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1 border border-slate-200 dark:border-slate-700 shadow-2xs">
                               <span>{selectedSystem?.flag}</span>
+                              <span className="hidden sm:inline">{selectedSystem?.country} &bull;</span>
                               <span>Chapter {chap.no}</span>
                             </span>
                             <span className="text-[10px] font-semibold text-slate-400">

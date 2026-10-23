@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T04:15:57.429Z",
+  "generatedAt": "2026-10-23T06:26:38.976Z",
   "totalQuestions": 62943,
   "systems": [
     {
@@ -6015,24 +6015,24 @@
       ]
     },
     {
-      "id": "FBISE_English",
-      "name": "FBISE Pakistan - English",
-      "country": "Pakistan",
-      "flag": "🇵🇰",
-      "description": "Federal Board of Intermediate & Secondary Education (FBISE) - Secondary English Grammar, Tenses, Parts of Speech & Syntax",
+      "id": "Universal_English",
+      "name": "Universal English",
+      "country": "Universal",
+      "flag": "🌐",
+      "description": "Universal English Grammar, Tenses, Parts of Speech, Active/Passive & Direct/Indirect Voice",
       "classes": [
         {
           "id": "Secondary_English",
-          "name": "Secondary English (Classes 9 & 10)",
-          "country": "Pakistan",
-          "flag": "🇵🇰",
+          "name": "Secondary English (Grammar & Syntax)",
+          "country": "Universal",
+          "flag": "🌐",
           "subjects": [
             {
               "id": "Tenses",
               "name": "Tenses",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_English__Secondary_English__Tenses",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_English__Secondary_English__Tenses",
               "chapterCount": 16,
               "questionCount": 2037,
               "chapters": [
@@ -6121,9 +6121,9 @@
             {
               "id": "Parts_of_Speech",
               "name": "Parts of Speech",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_English__Secondary_English__Parts_of_Speech",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_English__Secondary_English__Parts_of_Speech",
               "chapterCount": 16,
               "questionCount": 1121,
               "chapters": [
@@ -6212,9 +6212,9 @@
             {
               "id": "Active_Passive_Voice",
               "name": "Active & Passive Voice",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_English__Secondary_English__Active_Passive_Voice",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_English__Secondary_English__Active_Passive_Voice",
               "chapterCount": 12,
               "questionCount": 920,
               "chapters": [
@@ -6283,9 +6283,9 @@
             {
               "id": "Direct_Indirect_Speech",
               "name": "Direct & Indirect Speech",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_English__Secondary_English__Direct_Indirect_Speech",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_English__Secondary_English__Direct_Indirect_Speech",
               "chapterCount": 5,
               "questionCount": 798,
               "chapters": [
@@ -6321,24 +6321,24 @@
       ]
     },
     {
-      "id": "FBISE_Math",
-      "name": "FBISE Pakistan - Math",
-      "country": "Pakistan",
-      "flag": "🇵🇰",
-      "description": "Federal Board of Intermediate & Secondary Education (FBISE) - Secondary Mathematics Complete Syllabi",
+      "id": "Universal_Math",
+      "name": "Universal Mathematics",
+      "country": "Universal",
+      "flag": "🌐",
+      "description": "Universal Secondary Mathematics: Algebra, Geometry, Arithmetic, Statistics & Probability",
       "classes": [
         {
           "id": "Secondary_Math",
-          "name": "Secondary Mathematics (Classes 9 & 10)",
-          "country": "Pakistan",
-          "flag": "🇵🇰",
+          "name": "Secondary Mathematics (Core Topics)",
+          "country": "Universal",
+          "flag": "🌐",
           "subjects": [
             {
               "id": "Number_System",
               "name": "Number System",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Number_System",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Number_System",
               "chapterCount": 7,
               "questionCount": 563,
               "chapters": [
@@ -6382,9 +6382,9 @@
             {
               "id": "Arithmetic",
               "name": "Arithmetic",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Arithmetic",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Arithmetic",
               "chapterCount": 10,
               "questionCount": 1422,
               "chapters": [
@@ -6443,9 +6443,9 @@
             {
               "id": "Fractions_Decimals",
               "name": "Fractions & Decimals",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Fractions_Decimals",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Fractions_Decimals",
               "chapterCount": 7,
               "questionCount": 1105,
               "chapters": [
@@ -6489,9 +6489,9 @@
             {
               "id": "Percentages_Ratio_Proportion",
               "name": "Percentages, Ratio & Proportion",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Percentages_Ratio_Proportion",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Percentages_Ratio_Proportion",
               "chapterCount": 5,
               "questionCount": 1054,
               "chapters": [
@@ -6525,9 +6525,9 @@
             {
               "id": "Algebra",
               "name": "Algebra",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Algebra",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Algebra",
               "chapterCount": 11,
               "questionCount": 1462,
               "chapters": [
@@ -6591,9 +6591,9 @@
             {
               "id": "Powers_Roots",
               "name": "Powers & Roots",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Powers_Roots",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Powers_Roots",
               "chapterCount": 5,
               "questionCount": 518,
               "chapters": [
@@ -6627,9 +6627,9 @@
             {
               "id": "Geometry",
               "name": "Geometry",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Geometry",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Geometry",
               "chapterCount": 8,
               "questionCount": 832,
               "chapters": [
@@ -6678,9 +6678,9 @@
             {
               "id": "Mensuration",
               "name": "Mensuration",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Mensuration",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Mensuration",
               "chapterCount": 5,
               "questionCount": 668,
               "chapters": [
@@ -6714,9 +6714,9 @@
             {
               "id": "Coordinate_Geometry",
               "name": "Coordinate Geometry",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Coordinate_Geometry",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Coordinate_Geometry",
               "chapterCount": 4,
               "questionCount": 469,
               "chapters": [
@@ -6745,9 +6745,9 @@
             {
               "id": "Data_Handling_Statistics",
               "name": "Data Handling & Statistics",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Data_Handling_Statistics",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Data_Handling_Statistics",
               "chapterCount": 7,
               "questionCount": 871,
               "chapters": [
@@ -6791,9 +6791,9 @@
             {
               "id": "Probability",
               "name": "Probability",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Probability",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Probability",
               "chapterCount": 4,
               "questionCount": 379,
               "chapters": [
@@ -6822,9 +6822,9 @@
             {
               "id": "Logical_Reasoning",
               "name": "Logical Reasoning",
-              "country": "Pakistan",
-              "flag": "🇵🇰",
-              "fileKey": "FBISE_Math__Secondary_Math__Logical_Reasoning",
+              "country": "Universal",
+              "flag": "🌐",
+              "fileKey": "Universal_Math__Secondary_Math__Logical_Reasoning",
               "chapterCount": 7,
               "questionCount": 968,
               "chapters": [

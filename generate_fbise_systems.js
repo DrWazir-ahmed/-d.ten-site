@@ -215,7 +215,7 @@ for (const clsId of Object.keys(matricData).sort()) {
 console.log(`Saved FBISE Matric: ${matricQuestionsCount} questions.`);
 
 // ==========================================
-// 2. PROCESS ENGLISH SHEET (FBISE Pakistan - English)
+// 2. PROCESS ENGLISH SHEET (Universal - English)
 // ==========================================
 console.log('Processing Sheet 2: English...');
 const englishRows = XLSX.utils.sheet_to_json(wb.Sheets['English']);
@@ -273,18 +273,18 @@ englishRows.forEach((r, idx) => {
   });
 });
 
-const fbiseEnglishSystem = {
-  id: 'FBISE_English',
-  name: 'FBISE Pakistan - English',
-  country: 'Pakistan',
-  flag: '🇵🇰',
-  description: 'Federal Board of Intermediate & Secondary Education (FBISE) - Secondary English Grammar, Tenses, Parts of Speech & Syntax',
+const universalEnglishSystem = {
+  id: 'Universal_English',
+  name: 'Universal English',
+  country: 'Universal',
+  flag: '🌐',
+  description: 'Universal English Grammar, Tenses, Parts of Speech, Active/Passive & Direct/Indirect Voice',
   classes: [
     {
       id: 'Secondary_English',
-      name: 'Secondary English (Classes 9 & 10)',
-      country: 'Pakistan',
-      flag: '🇵🇰',
+      name: 'Secondary English (Grammar & Syntax)',
+      country: 'Universal',
+      flag: '🌐',
       subjects: []
     }
   ]
@@ -293,7 +293,7 @@ const fbiseEnglishSystem = {
 let englishQuestionsCount = 0;
 for (const subId of Object.keys(englishSubjects)) {
   const subObj = englishSubjects[subId];
-  const fileKey = `FBISE_English__Secondary_English__${subId}`;
+  const fileKey = `Universal_English__Secondary_English__${subId}`;
   const questionFileMap = {};
   const chaptersList = [];
   let subQCount = 0;
@@ -310,27 +310,30 @@ for (const subId of Object.keys(englishSubjects)) {
     });
   });
 
-  fs.writeFileSync(
-    path.join(QUESTIONS_DIR, `${fileKey}.json`),
-    JSON.stringify(questionFileMap)
-  );
+  const targetPath = path.join(QUESTIONS_DIR, `${fileKey}.json`);
+  fs.writeFileSync(targetPath, JSON.stringify(questionFileMap));
+  
+  const distQuestionsDir = path.resolve('dist/data/curriculum/questions');
+  if (fs.existsSync(distQuestionsDir)) {
+    fs.writeFileSync(path.join(distQuestionsDir, `${fileKey}.json`), JSON.stringify(questionFileMap));
+  }
 
   englishQuestionsCount += subQCount;
-  fbiseEnglishSystem.classes[0].subjects.push({
+  universalEnglishSystem.classes[0].subjects.push({
     id: subObj.id,
     name: subObj.name,
-    country: 'Pakistan',
-    flag: '🇵🇰',
+    country: 'Universal',
+    flag: '🌐',
     fileKey,
     chapterCount: chaptersList.length,
     questionCount: subQCount,
     chapters: chaptersList
   });
 }
-console.log(`Saved FBISE English: ${englishQuestionsCount} questions.`);
+console.log(`Saved Universal English: ${englishQuestionsCount} questions.`);
 
 // ==========================================
-// 3. PROCESS MATH SHEET (FBISE Pakistan - Math)
+// 3. PROCESS MATH SHEET (Universal - Math)
 // ==========================================
 console.log('Processing Sheet 3: Math...');
 const mathRows = XLSX.utils.sheet_to_json(wb.Sheets['Math']);
@@ -384,18 +387,18 @@ mathRows.forEach((r, idx) => {
   });
 });
 
-const fbiseMathSystem = {
-  id: 'FBISE_Math',
-  name: 'FBISE Pakistan - Math',
-  country: 'Pakistan',
-  flag: '🇵🇰',
-  description: 'Federal Board of Intermediate & Secondary Education (FBISE) - Secondary Mathematics Complete Syllabi',
+const universalMathSystem = {
+  id: 'Universal_Math',
+  name: 'Universal Mathematics',
+  country: 'Universal',
+  flag: '🌐',
+  description: 'Universal Secondary Mathematics: Algebra, Geometry, Arithmetic, Statistics & Probability',
   classes: [
     {
       id: 'Secondary_Math',
-      name: 'Secondary Mathematics (Classes 9 & 10)',
-      country: 'Pakistan',
-      flag: '🇵🇰',
+      name: 'Secondary Mathematics (Core Topics)',
+      country: 'Universal',
+      flag: '🌐',
       subjects: []
     }
   ]
@@ -404,7 +407,7 @@ const fbiseMathSystem = {
 let mathQuestionsCount = 0;
 for (const subId of Object.keys(mathSubjects)) {
   const subObj = mathSubjects[subId];
-  const fileKey = `FBISE_Math__Secondary_Math__${subId}`;
+  const fileKey = `Universal_Math__Secondary_Math__${subId}`;
   const questionFileMap = {};
   const chaptersList = [];
   let subQCount = 0;
@@ -421,31 +424,34 @@ for (const subId of Object.keys(mathSubjects)) {
     });
   });
 
-  fs.writeFileSync(
-    path.join(QUESTIONS_DIR, `${fileKey}.json`),
-    JSON.stringify(questionFileMap)
-  );
+  const targetPath = path.join(QUESTIONS_DIR, `${fileKey}.json`);
+  fs.writeFileSync(targetPath, JSON.stringify(questionFileMap));
+
+  const distQuestionsDir = path.resolve('dist/data/curriculum/questions');
+  if (fs.existsSync(distQuestionsDir)) {
+    fs.writeFileSync(path.join(distQuestionsDir, `${fileKey}.json`), JSON.stringify(questionFileMap));
+  }
 
   mathQuestionsCount += subQCount;
-  fbiseMathSystem.classes[0].subjects.push({
+  universalMathSystem.classes[0].subjects.push({
     id: subObj.id,
     name: subObj.name,
-    country: 'Pakistan',
-    flag: '🇵🇰',
+    country: 'Universal',
+    flag: '🌐',
     fileKey,
     chapterCount: chaptersList.length,
     questionCount: subQCount,
     chapters: chaptersList
   });
 }
-console.log(`Saved FBISE Math: ${mathQuestionsCount} questions.`);
+console.log(`Saved Universal Math: ${mathQuestionsCount} questions.`);
 
 // Assemble all systems
 const finalSystems = [
   ...baseSystems,
   fbiseMatricSystem,
-  fbiseEnglishSystem,
-  fbiseMathSystem
+  universalEnglishSystem,
+  universalMathSystem
 ];
 
 const totalQuestionsOverall = finalSystems.reduce((acc, sys) => {
