@@ -21,6 +21,99 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt', flag: '🇻🇳', dir: 'ltr', speechCode: 'vi-VN', script: 'Latin' }
 ];
 
+export const COURSE_MODULES = [
+  {
+    id: 1,
+    title: "Module 1: Foundations & Daily Essentials",
+    shortTitle: "Foundations",
+    description: "Greetings, courtesy, essential numbers, basic question starters & daily etiquette",
+    vocabRange: [1, 50],
+    sentenceRange: [1, 30],
+    badge: "Level 1 • Beginner"
+  },
+  {
+    id: 2,
+    title: "Module 2: Family, People & Time",
+    shortTitle: "Family & Time",
+    description: "Family members, relationships, days of the week, months, calendar & telling time",
+    vocabRange: [51, 100],
+    sentenceRange: [31, 60],
+    badge: "Level 2 • Beginner"
+  },
+  {
+    id: 3,
+    title: "Module 3: Food, Dining & Market",
+    shortTitle: "Food & Dining",
+    description: "Fruits, vegetables, meals, ordering food at restaurants, flavors & drinks",
+    vocabRange: [101, 150],
+    sentenceRange: [61, 90],
+    badge: "Level 3 • Elementary"
+  },
+  {
+    id: 4,
+    title: "Module 4: House, Living & Daily Objects",
+    shortTitle: "Home & Routine",
+    description: "Rooms, furniture, household objects, daily schedule, chores & home maintenance",
+    vocabRange: [151, 200],
+    sentenceRange: [91, 120],
+    badge: "Level 4 • Elementary"
+  },
+  {
+    id: 5,
+    title: "Module 5: Travel, Navigation & Transit",
+    shortTitle: "Travel & Transit",
+    description: "Airport check-in, customs, train stations, metro cards, bus rides & city navigation",
+    vocabRange: [201, 250],
+    sentenceRange: [121, 150],
+    badge: "Level 5 • Intermediate"
+  },
+  {
+    id: 6,
+    title: "Module 6: Body, Health & Wellness",
+    shortTitle: "Body & Health",
+    description: "Human anatomy, feeling unwell, pharmacy, doctor consultations & medical advice",
+    vocabRange: [251, 300],
+    sentenceRange: [151, 180],
+    badge: "Level 6 • Intermediate"
+  },
+  {
+    id: 7,
+    title: "Module 7: Education, Work & Career",
+    shortTitle: "School & Work",
+    description: "Classrooms, university exams, job interviews, office meetings & emails",
+    vocabRange: [301, 350],
+    sentenceRange: [181, 210],
+    badge: "Level 7 • Intermediate"
+  },
+  {
+    id: 8,
+    title: "Module 8: Technology, Media & Society",
+    shortTitle: "Tech & Media",
+    description: "Smartphones, internet, cloud services, software apps & digital devices",
+    vocabRange: [351, 400],
+    sentenceRange: [211, 240],
+    badge: "Level 8 • Advanced"
+  },
+  {
+    id: 9,
+    title: "Module 9: Living World, Animals & Nature",
+    shortTitle: "Nature & Animals",
+    description: "Animals, birds, sea life, weather forecasts, seasons & the natural environment",
+    vocabRange: [401, 450],
+    sentenceRange: [241, 270],
+    badge: "Level 9 • Advanced"
+  },
+  {
+    id: 10,
+    title: "Module 10: Feelings, Discussions & Fluency",
+    shortTitle: "Fluency & Mastery",
+    description: "Complex feelings, sentence connectors, opinions, cultural dialogues & graduation",
+    vocabRange: [451, 500],
+    sentenceRange: [271, 300],
+    badge: "Level 10 • Master Polyglot"
+  }
+];
+
 export const VOCABULARY_CATEGORIES = [
   "All Categories",
   "Greetings & Civility",
@@ -32,7 +125,14 @@ export const VOCABULARY_CATEGORIES = [
   "Places, Travel & Directions",
   "Core Verbs",
   "Adjectives & Descriptors",
-  "Nature, Colors & Weather"
+  "Nature, Colors & Weather",
+  "Body & Health",
+  "Clothing & Fashion",
+  "Education & School",
+  "Work & Careers",
+  "Technology & Devices",
+  "Animals & Nature",
+  "Emotions & Feelings"
 ];
 
 export const SENTENCE_CATEGORIES = [
@@ -46,5 +146,12 @@ export const SENTENCE_CATEGORIES = [
   "Transportation",
   "Health & Medical",
   "Emergencies & Safety",
-  "Social & Future Plans"
+  "Social & Future Plans",
+  "Airport & Flights",
+  "Housing & Renting",
+  "Education & School",
+  "Work & Career",
+  "Technology & Devices",
+  "Weather & Seasons",
+  "Conversations & Thoughts"
 ];

@@ -1,24 +1,25 @@
 export const POLYGLOT_COURSE_DATA = {
   id: "course-polyglot-20-languages",
   title: "Global Polyglot: Master 20 World Languages",
-  description: "Comprehensive multilingual learning course covering 20 world languages: English, Mandarin Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian, Urdu, Indonesian, German, Japanese, Punjabi, Swahili, Marathi, Telugu, Turkish, Tamil, and Vietnamese. Learn 250 common vocabulary words and 100 conversational sentences with bilingual text, phonetic pronunciations, and native audio synthesis.",
+  description: "Comprehensive multilingual learning course covering 20 world languages: English, Mandarin Chinese, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian, Urdu, Indonesian, German, Japanese, Punjabi, Swahili, Marathi, Telugu, Turkish, Tamil, and Vietnamese. Learn 500 common vocabulary words and 300 conversational sentences structured into 10 sequential modules with one-by-one card presentation, progress bar tracking, phonetic romanizations, native audio synthesis, and an interactive language mastery exam.",
   category: "Language Learning",
   level: "All Levels",
   membership: "free",
   thumbnail: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=800&q=80",
   instructor: "D.TEN Global Language Faculty",
-  duration: "10 hours",
-  lessonCount: 6,
+  duration: "15 hours",
+  lessonCount: 10,
   rating: 5.0,
-  reviewsCount: 528,
+  reviewsCount: 642,
   status: "published",
   createdDate: "2026-10-23",
   excelDownloadUrl: "/data/languages/Global_Language_Learning_20_Languages.xlsx",
   objectives: [
-    "Select your native language and learn any of the 20 most spoken world languages",
-    "Master 250 core daily vocabulary words across 10 vital categories",
-    "Speak 100 real-life conversational sentences for travel, dining, shopping, hotel, emergency, and social interaction",
-    "Read phonetic romanizations and listen to crystal-clear native speech synthesis",
+    "Select your native language and learn any of the 20 most spoken world languages in a distraction-free focused studio",
+    "Master 500 core daily vocabulary words across 10 structured course modules",
+    "Speak 300 real-life conversational sentences for travel, airport, transit, dining, shopping, hotel, office, and health",
+    "Learn step-by-step in sequential order with active progress bar tracking",
+    "Take comprehensive Language Mastery Assessment tests and receive completion certification",
     "Download the complete course dataset as a structured Excel workbook (.xlsx)"
   ],
   requirements: [
@@ -31,7 +32,7 @@ export const POLYGLOT_COURSE_DATA = {
       title: "Interactive Polyglot Studio (20 Languages)",
       duration: "Flexible",
       type: "language_studio",
-      content: `Welcome to the Global Polyglot Studio. In this interactive environment, you can select any of the 20 supported languages as your native tongue and choose any target language to learn.\n\nKey Capabilities:\n- 250 Common Vocabulary Words categorized into Numbers, Family, Time, Food, Travel, Verbs, etc.\n- 100 Real-life Conversational Sentences covering Airport, Hotel, Directions, Dining, Shopping, Health, and Emergency.\n- Instant Dual-Language Text display with script-sensitive font sizing and RTL direction support for Urdu and Arabic.\n- Phonetic Romanization pronunciation guides for every single phrase.\n- Text-to-Speech audio listening powered by the Web Speech API.\n- Interactive Flashcards Mode with reveal answer testing.\n- Complete Course Excel Workbook (.xlsx) export button for offline study.`
+      content: `Welcome to the Global Polyglot Studio. In this interactive environment, you can select any of the 20 supported languages as your native tongue and choose any target language to learn.\n\nKey Capabilities:\n- 500 Common Vocabulary Words organized into 10 structured thematic modules.\n- 300 Real-life Conversational Sentences covering Airport, Hotel, Directions, Dining, Shopping, Health, Career, and Digital Life.\n- Sequential Step-by-Step Learning: Study cards one-by-one with persistent course progress bar tracking.\n- Focused Learning Mode: Distracting options disappear once a language pair is chosen.\n- Language Mastery Assessment: Interactive multi-question test with performance feedback and completion badge.\n- Instant Dual-Language Text display with script-sensitive font sizing and RTL direction support for Urdu and Arabic.\n- Phonetic Romanization pronunciation guides for every single phrase.\n- Text-to-Speech audio listening powered by the Web Speech API.\n- Complete Course Excel Workbook (.xlsx) export button for offline study.`
     },
     {
       id: "les-polyglot-greetings",
