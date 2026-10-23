@@ -232,6 +232,16 @@ export const Courses = () => {
                       <Clock className="w-3 h-3" />
                       {course.duration}
                     </div>
+
+                    {course.id === 'course-polyglot-20-languages' && (
+                      <div className="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md text-[11px] font-bold text-white flex items-center justify-between border border-white/10 shadow-sm">
+                        <span className="flex items-center gap-1 text-brand-300">
+                          <span>🌐</span>
+                          <span>20 Languages</span>
+                        </span>
+                        <span className="text-emerald-300 font-mono text-[10px]">250 Words • 100 Sentences</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Body Content */}

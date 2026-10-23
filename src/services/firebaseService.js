@@ -462,6 +462,16 @@ export const getCourseById = async (id) => {
       }
     }
 
+    if (course.id === 'course-polyglot-20-languages' || course.title?.includes('Global Polyglot')) {
+      const seedPoly = INITIAL_COURSES.find(c => c.id === 'course-polyglot-20-languages');
+      if (seedPoly) {
+        course = {
+          ...course,
+          ...seedPoly
+        };
+      }
+    }
+
     if (course.id === 'course-14' || course.title === 'Active and Passive Voice Mastery') {
       const seedAp = INITIAL_COURSES.find(c => c.id === 'course-14');
       if (seedAp) {

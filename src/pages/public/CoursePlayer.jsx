@@ -33,6 +33,7 @@ import { Badge } from '../../components/common/Badge';
 import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
+import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
 
 export const CoursePlayer = () => {
   const { id } = useParams();
@@ -398,7 +399,19 @@ export const CoursePlayer = () => {
             )}
 
             {/* Dynamic Lesson Type Display */}
-            {currentLesson.type === 'video' ? (
+            {currentLesson.type === 'language_studio' || (course.id === 'course-polyglot-20-languages' && currentLesson.type !== 'quiz') ? (
+              <div className="space-y-6">
+                {currentLesson.content && (
+                  <div className="p-5 rounded-2xl bg-gradient-to-r from-brand-50 to-indigo-50/60 dark:from-slate-800/60 dark:to-brand-950/30 border border-brand-200/80 dark:border-brand-800/60">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-2">
+                      Lesson Instructions & Guide
+                    </h4>
+                    <FormattedText content={currentLesson.content} />
+                  </div>
+                )}
+                <LanguageLearningStudio />
+              </div>
+            ) : currentLesson.type === 'video' ? (
               <div className="space-y-6">
                 <div className="aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 shadow-inner flex items-center justify-center relative">
                   <div className="text-center p-6 space-y-3">

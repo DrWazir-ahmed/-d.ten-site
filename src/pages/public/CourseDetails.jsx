@@ -23,6 +23,7 @@ import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
 import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
+import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
 
 export const CourseDetails = () => {
   const { id } = useParams();
@@ -459,6 +460,25 @@ export const CourseDetails = () => {
               </ul>
             </div>
           )}
+
+          {/* Interactive Language Studio Live Preview */}
+          {course.id === 'course-polyglot-20-languages' && (
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-extrabold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-brand-500" />
+                  Interactive Polyglot Studio
+                </h3>
+                <button
+                  onClick={handleEnrollOrContinue}
+                  className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline"
+                >
+                  Start Course & Learn →
+                </button>
+              </div>
+              <LanguageLearningStudio />
+            </div>
+          )}
         </div>
 
         {/* Right Column: Sticky Enrollment Card */}
@@ -521,6 +541,17 @@ export const CourseDetails = () => {
                 <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-brand-600 text-brand-600' : ''}`} />
                 <span>{isBookmarked ? 'Saved to Bookmarks' : 'Save / Bookmark Course'}</span>
               </button>
+
+              {course.excelDownloadUrl && (
+                <a
+                  href={course.excelDownloadUrl}
+                  download="Global_Language_Learning_20_Languages.xlsx"
+                  className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-900 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 transition flex items-center justify-center gap-2 shadow-xs"
+                >
+                  <FileText className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span>Download Course Excel (.xlsx)</span>
+                </a>
+              )}
             </div>
 
             {/* Inclusions */}
