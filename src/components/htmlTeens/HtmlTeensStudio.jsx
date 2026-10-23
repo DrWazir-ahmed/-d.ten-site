@@ -27,7 +27,12 @@ import {
   Smartphone,
   Eye,
   CheckCircle,
-  ExternalLink
+  ExternalLink,
+  Layers,
+  Terminal,
+  Languages,
+  ArrowLeft,
+  Maximize2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { HTML_TEENS_COURSE } from '../../data/htmlTeensCourseData';
@@ -43,12 +48,21 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
   // Active View: 'lesson' | 'quiz' | 'exam'
   const [activeView, setActiveView] = useState('lesson');
 
+  // Lesson Step Mode: 'slides' | 'editor'
+  // Starts with Slides first, then transitions to editor and live screen
+  const [lessonMode, setLessonMode] = useState('slides');
+  const [activeSlide, setActiveSlide] = useState(0); // 0: Concept, 1: Glossary, 2: Example 1, 3: Example 2, 4: Challenge
+
+  // Language Preference: Urdu Optional Toggle
+  const [showUrdu, setShowUrdu] = useState(true);
+
   // Preview Mode: 'desktop' | 'mobile'
   const [previewDevice, setPreviewDevice] = useState('desktop');
 
   // Code Playground State
   const [userCode, setUserCode] = useState('');
   const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedExIndex, setCopiedExIndex] = useState(null);
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
 
@@ -91,6 +105,8 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
       setUserCode(currentLesson.starterCode);
       setShowHint(false);
       setShowSolution(false);
+      setActiveSlide(0);
+      setLessonMode('slides'); // Start with slides when switching lessons
       stopSpeaking();
     }
   }, [currentLesson?.id]);
@@ -135,13 +151,12 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
     }
   };
 
-  // Text to Speech for English and Urdu voices
+  // Text to Speech for English and Urdu voices (Always available)
   const speakText = (text, langCode) => {
     stopSpeaking();
 
     if (langCode === 'ur') {
       setSpeakingLanguage('ur');
-      // Look for pre-recorded audio in /audio/htmlTeens/{lessonId}_urdu.mp3
       speakUrduFahad({
         text,
         lessonId: currentLesson?.id,
@@ -187,6 +202,15 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
       navigator.clipboard.writeText(userCode);
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2000);
+    }
+  };
+
+  // Copy Example Code helper
+  const handleCopyExample = (code, index) => {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(code);
+      setCopiedExIndex(index);
+      setTimeout(() => setCopiedExIndex(null), 2000);
     }
   };
 
@@ -260,52 +284,98 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
     setExamScore(0);
   };
 
-  // Overall Progress
+  // Total Progress
   const totalLessonsCount = 21;
   const progressPercent = Math.min(100, Math.round((completedLessons.length / totalLessonsCount) * 100));
+
+  // Slide Deck Definitions for Current Lesson
+  const SLIDE_STEPS = [
+    { id: 0, title: 'Concept Blueprint', urduTitle: 'تصور اور مثال' },
+    { id: 1, title: 'Technical Terms', urduTitle: 'نئے الفاظ' },
+    { id: 2, title: 'Example 1', urduTitle: 'مثال 1' },
+    { id: 3, title: 'Example 2', urduTitle: 'مثال 2' },
+    { id: 4, title: 'Coding Challenge', urduTitle: 'کوڈنگ چیلنج' }
+  ];
 
   return (
     <div className="w-full min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       
       {/* ─────────────────────────────────────────────────────────────
-          TOP APP HEADER & TEEN PROGRESS BAR
+          STICKY TOP BAR: BRAND, BOTH VOICE BUTTONS & URDU TOGGLE
       ───────────────────────────────────────────────────────────── */}
-      <header className="bg-slate-950/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md px-4 sm:px-6 py-3">
+      <header className="bg-slate-950/95 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md px-4 sm:px-6 py-2.5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
           
           {/* Logo & Course Title */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white font-extrabold shadow-lg shadow-blue-500/20 text-lg">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white font-extrabold shadow-lg shadow-blue-500/20 text-base">
               &lt;/&gt;
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-lg font-extrabold text-white tracking-tight">
+                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">
                   HTML5 Web Developer
                 </h1>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider">
-                  Teen Coder (13–16 Yrs)
+                <span className="px-2 py-0.2 rounded-full text-[10px] font-extrabold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase">
+                  Teens 13–16
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-urdu font-medium" dir="rtl">
-                ایچ ٹی ایم ایل 5 ویب ڈویلپمنٹ برائے پاکستانی نوجوان طلبہ 🇵🇰
-              </p>
+              {showUrdu && (
+                <p className="text-[11px] text-amber-300 font-urdu font-medium" dir="rtl">
+                  ایچ ٹی ایم ایل 5 ویب ڈویلپمنٹ برائے پاکستانی نوجوان 🇵🇰
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Progress Bar & Actions */}
-          <div className="flex items-center gap-4 w-full md:w-auto justify-end">
-            <div className="flex-1 md:w-48 bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
-              <div 
-                className="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-full transition-all duration-500"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-            <div className="text-xs font-bold text-cyan-400 whitespace-nowrap">
-              {completedLessons.length} / {totalLessonsCount} Completed ({progressPercent}%)
-            </div>
+          {/* DUAL VOICE BUTTONS & OPTIONAL URDU TOGGLE (ALWAYS VISIBLE) */}
+          <div className="flex flex-wrap items-center gap-2">
+            
+            {/* Urdu Optional Button */}
+            <button
+              onClick={() => setShowUrdu(!showUrdu)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                showUrdu
+                  ? 'bg-amber-500/10 text-amber-300 border-amber-500/40 hover:bg-amber-500/20'
+                  : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+              }`}
+              title="اردو تحریر آن یا آف کریں (Toggle Urdu Language On/Off)"
+            >
+              <Languages className="w-3.5 h-3.5" />
+              <span>{showUrdu ? 'اردو: آن (ON)' : 'اردو: آف (OFF)'}</span>
+            </button>
 
-            {/* Quick Final Exam Button */}
+            {/* Voice 1: Urdu Voice (Always Visible) */}
+            <button
+              onClick={() => speakingLanguage === 'ur' ? stopSpeaking() : speakText(currentLesson.urduVoice, 'ur')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                speakingLanguage === 'ur'
+                  ? 'bg-emerald-600 text-white border-emerald-700 shadow-md ring-2 ring-emerald-400 animate-pulse'
+                  : 'bg-emerald-950/40 hover:bg-emerald-950/60 text-emerald-300 border-emerald-800'
+              }`}
+              title="سبق سنیں (اُردو آواز)"
+            >
+              <Volume2 className={`w-3.5 h-3.5 ${speakingLanguage === 'ur' ? 'animate-bounce text-yellow-300' : 'text-emerald-400'}`} />
+              <span className="font-urdu text-xs">
+                {speakingLanguage === 'ur' ? 'روکیں (Stop)' : '🎙️ اُردو آواز'}
+              </span>
+            </button>
+
+            {/* Voice 2: English Voice (Always Visible) */}
+            <button
+              onClick={() => speakingLanguage === 'en' ? stopSpeaking() : speakText(currentLesson.englishVoice, 'en')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                speakingLanguage === 'en'
+                  ? 'bg-blue-600 text-white border-blue-700 shadow-md ring-2 ring-blue-400 animate-pulse'
+                  : 'bg-blue-950/40 hover:bg-blue-950/60 text-blue-300 border-blue-800'
+              }`}
+              title="Listen in English"
+            >
+              <Volume2 className={`w-3.5 h-3.5 ${speakingLanguage === 'en' ? 'animate-bounce' : ''}`} />
+              <span>{speakingLanguage === 'en' ? 'Stop' : '🔊 English Voice'}</span>
+            </button>
+
+            {/* Final Exam Quick Trigger */}
             <button
               onClick={() => setActiveView('exam')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm ${
@@ -317,12 +387,13 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
               <Trophy className="w-3.5 h-3.5" />
               Final Exam
             </button>
+
           </div>
         </div>
       </header>
 
       {/* ─────────────────────────────────────────────────────────────
-          7 MODULES HORIZONTAL TABS CAROUSEL
+          7 MODULES CAROUSEL
       ───────────────────────────────────────────────────────────── */}
       <nav className="bg-slate-900/90 border-b border-slate-800 px-4 sm:px-6 py-2 overflow-x-auto scrollbar-thin">
         <div className="max-w-7xl mx-auto flex items-center gap-2 min-w-max">
@@ -338,8 +409,10 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                   setActiveModuleId(m.id);
                   setActiveLessonIndex(0);
                   setActiveView('lesson');
+                  setLessonMode('slides');
+                  setActiveSlide(0);
                 }}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border ${
                   isCurrentModule
                     ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/30'
                     : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:border-slate-600'
@@ -360,9 +433,9 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
       </nav>
 
       {/* ─────────────────────────────────────────────────────────────
-          MAIN CONTENT AREA
+          MAIN CONTENT WORKSPACE
       ───────────────────────────────────────────────────────────── */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-5">
 
         {/* ─── VIEW 1: FINAL CERTIFICATION EXAM ─── */}
         {activeView === 'exam' && (
@@ -376,9 +449,11 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 <h2 className="text-xl sm:text-2xl font-black text-white mt-2">
                   {HTML_TEENS_COURSE.finalExam.title}
                 </h2>
-                <h3 className="text-sm sm:text-base font-urdu font-bold text-amber-400 mt-1" dir="rtl">
-                  {HTML_TEENS_COURSE.finalExam.urduTitle}
-                </h3>
+                {showUrdu && (
+                  <h3 className="text-sm sm:text-base font-urdu font-bold text-amber-400 mt-1" dir="rtl">
+                    {HTML_TEENS_COURSE.finalExam.urduTitle}
+                  </h3>
+                )}
               </div>
               <button
                 onClick={() => setActiveView('lesson')}
@@ -392,7 +467,6 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
             <div className="space-y-6 my-6">
               {HTML_TEENS_COURSE.finalExam.questions.map((q, qIdx) => {
                 const selectedOpt = examAnswers[qIdx];
-                const isAnswered = selectedOpt !== undefined;
 
                 return (
                   <div key={qIdx} className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
@@ -401,9 +475,11 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                         <h4 className="text-sm sm:text-base font-bold text-slate-100">
                           {q.question}
                         </h4>
-                        <p className="text-xs sm:text-sm font-urdu font-semibold text-amber-300 mt-1" dir="rtl">
-                          {q.urduQuestion}
-                        </p>
+                        {showUrdu && (
+                          <p className="text-xs sm:text-sm font-urdu font-semibold text-amber-300 mt-1" dir="rtl">
+                            {q.urduQuestion}
+                          </p>
+                        )}
                       </div>
                       <span className="px-2 py-1 rounded-lg bg-slate-800 text-slate-400 text-xs font-mono">
                         Q{qIdx + 1}
@@ -528,15 +604,17 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 <h2 className="text-xl font-black text-white mt-1.5">
                   {currentModule.quiz.title}
                 </h2>
-                <h3 className="text-sm font-urdu font-bold text-amber-400 mt-0.5" dir="rtl">
-                  {currentModule.quiz.urduTitle}
-                </h3>
+                {showUrdu && (
+                  <h3 className="text-sm font-urdu font-bold text-amber-400 mt-0.5" dir="rtl">
+                    {currentModule.quiz.urduTitle}
+                  </h3>
+                )}
               </div>
               <button
                 onClick={() => setActiveView('lesson')}
                 className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
               >
-                ← Return to Editor
+                ← Return to Lesson
               </button>
             </div>
 
@@ -549,9 +627,11 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     <h4 className="text-sm font-bold text-slate-100">
                       {qIdx + 1}. {q.question}
                     </h4>
-                    <p className="text-xs font-urdu font-semibold text-amber-300" dir="rtl">
-                      {q.urduQuestion}
-                    </p>
+                    {showUrdu && (
+                      <p className="text-xs font-urdu font-semibold text-amber-300" dir="rtl">
+                        {q.urduQuestion}
+                      </p>
+                    )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {q.options.map((opt, optIdx) => {
@@ -625,6 +705,8 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                           setActiveModuleId(prev => prev + 1);
                           setActiveLessonIndex(0);
                           setActiveView('lesson');
+                          setLessonMode('slides');
+                          setActiveSlide(0);
                           resetModuleQuiz();
                         }}
                         className="px-4 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white"
@@ -646,15 +728,15 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
           </div>
         )}
 
-        {/* ─── VIEW 3: INTERACTIVE LESSON STUDIO (EDITOR + LIVE PREVIEW) ─── */}
+        {/* ─── VIEW 3: LESSON EXPERIENCE (SLIDES FIRST, THEN LIVE EDITOR) ─── */}
         {activeView === 'lesson' && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             
-            {/* 3 Lessons Bar of Current Module */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/70 border border-slate-800">
+            {/* Sub-navigation: 3 Lessons Selector & Mode Switcher */}
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/80 border border-slate-800">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-slate-400">
-                  Module {activeModuleId} Lessons:
+                  Lessons:
                 </span>
                 <div className="flex items-center gap-1.5">
                   {currentModule.lessons.map((les, idx) => {
@@ -664,8 +746,12 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                     return (
                       <button
                         key={les.id}
-                        onClick={() => setActiveLessonIndex(idx)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 ${
+                        onClick={() => {
+                          setActiveLessonIndex(idx);
+                          setLessonMode('slides');
+                          setActiveSlide(0);
+                        }}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 ${
                           isSelected
                             ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/30'
                             : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700'
@@ -679,407 +765,763 @@ export const HtmlTeensStudio = ({ standalone = false }) => {
                 </div>
               </div>
 
-              {/* Module Quiz Trigger */}
-              <button
-                onClick={() => {
-                  setActiveView('quiz');
-                  resetModuleQuiz();
-                }}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 transition-all flex items-center gap-1.5"
-              >
-                <HelpCircle className="w-3.5 h-3.5" />
-                Take Module {activeModuleId} Quiz
-              </button>
+              {/* Toggle Mode: Slides vs Code Studio */}
+              <div className="flex items-center gap-2">
+                <div className="bg-slate-900 p-1 rounded-xl border border-slate-800 flex items-center gap-1">
+                  <button
+                    onClick={() => setLessonMode('slides')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      lessonMode === 'slides'
+                        ? 'bg-blue-600 text-white shadow'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    Presentation Slides
+                  </button>
+                  <button
+                    onClick={() => setLessonMode('editor')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      lessonMode === 'editor'
+                        ? 'bg-emerald-600 text-white shadow'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Editor & Live Preview
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setActiveView('quiz');
+                    resetModuleQuiz();
+                  }}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 transition-all flex items-center gap-1"
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  Quiz {activeModuleId}
+                </button>
+              </div>
             </div>
 
-            {/* Lesson Banner Card with Bilingual Audio Narration */}
-            <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border border-slate-800 shadow-xl space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
+            {/* ══════════════════════════════════════════════════════════════
+                MODE A: MODERN SLIDE DECK (5 INTERACTIVE SLIDES)
+            ══════════════════════════════════════════════════════════════ */}
+            {lessonMode === 'slides' && (
+              <div className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col min-h-[560px]">
+                
+                {/* Slide Stepper Header */}
+                <div className="p-4 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider">
-                      {currentModule.badge}
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase">
+                      Slide {activeSlide + 1} of {SLIDE_STEPS.length}
                     </span>
-                    <span className="text-xs text-slate-400 font-mono">
-                      Lesson {activeLessonIndex + 1} of 3
+                    <span className="text-xs font-bold text-white">
+                      {SLIDE_STEPS[activeSlide].title}
                     </span>
-                  </div>
-                  <h2 className="text-lg sm:text-xl font-black text-white mt-1">
-                    {currentLesson.title}
-                  </h2>
-                  <h3 className="text-base sm:text-lg font-urdu font-bold text-amber-400" dir="rtl">
-                    {currentLesson.urduTitle}
-                  </h3>
-                </div>
-
-                {/* Audio Narration Buttons */}
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* Urdu Voice Narration */}
-                  <button
-                    onClick={() => speakingLanguage === 'ur' ? stopSpeaking() : speakText(currentLesson.urduVoice, 'ur')}
-                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
-                      speakingLanguage === 'ur'
-                        ? 'bg-emerald-600 text-white border-emerald-700 shadow-md ring-2 ring-emerald-400 animate-pulse'
-                        : 'bg-emerald-950/40 hover:bg-emerald-950/60 text-emerald-300 border-emerald-800'
-                    }`}
-                    title="سبق سنیں (اُردو آواز)"
-                  >
-                    <Volume2 className={`w-4 h-4 ${speakingLanguage === 'ur' ? 'animate-bounce text-yellow-300' : 'text-emerald-400'}`} />
-                    <span className="font-urdu text-xs">
-                      {speakingLanguage === 'ur' ? 'روکیں (Stop)' : '🎙️ اُردو آواز'}
-                    </span>
-                  </button>
-
-                  {/* English Voice Narration */}
-                  <button
-                    onClick={() => speakingLanguage === 'en' ? stopSpeaking() : speakText(currentLesson.englishVoice, 'en')}
-                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
-                      speakingLanguage === 'en'
-                        ? 'bg-blue-600 text-white border-blue-700 shadow-md ring-2 ring-blue-400 animate-pulse'
-                        : 'bg-blue-950/40 hover:bg-blue-950/60 text-blue-300 border-blue-800'
-                    }`}
-                    title="Listen in English"
-                  >
-                    <Volume2 className={`w-4 h-4 ${speakingLanguage === 'en' ? 'animate-bounce' : ''}`} />
-                    <span>{speakingLanguage === 'en' ? 'Stop Audio' : '🔊 English Voice'}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* New Terms Introduction Grid (Beginner Friendly Ground Zero) */}
-              {currentLesson.newTerms && currentLesson.newTerms.length > 0 && (
-                <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-900/50 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
-                      <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
-                      New Terms Introduced (نئے بنیادی الفاظ):
-                    </span>
-                    <span className="text-[11px] font-urdu text-indigo-300">
-                      پہلی بار سیکھنے والوں کے لیے
-                    </span>
+                    {showUrdu && (
+                      <span className="text-xs font-urdu font-bold text-amber-400">
+                        ({SLIDE_STEPS[activeSlide].urduTitle})
+                      </span>
+                    )}
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {currentLesson.newTerms.map((item, idx) => (
-                      <div key={idx} className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-cyan-300 font-mono">
-                            {item.term}
-                          </span>
-                          <span className="text-xs font-urdu font-bold text-amber-300" dir="rtl">
-                            {item.urduTerm}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-slate-300 leading-relaxed">
-                          {item.definition}
-                        </p>
-                        <p className="text-[11px] font-urdu text-amber-200/90 leading-relaxed" dir="rtl">
-                          {item.urduDefinition}
-                        </p>
-                      </div>
+                  {/* Stepper Dots */}
+                  <div className="flex items-center gap-1.5">
+                    {SLIDE_STEPS.map((s, idx) => (
+                      <button
+                        key={s.id}
+                        onClick={() => setActiveSlide(idx)}
+                        className={`transition-all rounded-full ${
+                          activeSlide === idx
+                            ? 'w-8 h-2.5 bg-blue-500 shadow-sm'
+                            : 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-600'
+                        }`}
+                        title={s.title}
+                      />
                     ))}
                   </div>
-                </div>
-              )}
 
-              {/* Beginner Analogy Card (How to easily understand) */}
-              {currentLesson.analogy && (
-                <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-900/40 grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
-                  <div className="flex items-start gap-2.5 text-xs text-emerald-200">
-                    <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="text-emerald-300">💡 Easy Real-World Analogy: </strong>
-                      {currentLesson.analogy}
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2.5 text-xs text-emerald-200 font-urdu text-right" dir="rtl">
-                    <div>
-                      <strong className="text-emerald-300">آسان مثال سے سمجھیں: </strong>
-                      {currentLesson.urduAnalogy}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Bilingual Concept Explanation */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs sm:text-sm text-slate-300 leading-relaxed space-y-1">
-                  <div className="font-bold text-blue-400 text-xs uppercase tracking-wider">
-                    Core Technical Concept:
-                  </div>
-                  <p>{currentLesson.concept}</p>
+                  {/* Quick Jump to Code Editor */}
+                  <button
+                    onClick={() => setLessonMode('editor')}
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md flex items-center gap-1.5"
+                  >
+                    <span>Open Editor & Live Screen</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-900/40 text-xs sm:text-sm text-amber-200 leading-relaxed font-urdu text-right space-y-1" dir="rtl">
-                  <div className="font-bold text-amber-400 text-xs tracking-wider">
-                    تکنیکی تصور (اردو وضاحت):
-                  </div>
-                  <p>{currentLesson.urduConcept}</p>
-                </div>
-              </div>
+                {/* SLIDE CANVAS BODY */}
+                <div className="flex-1 p-6 sm:p-8 flex flex-col justify-center">
+                  
+                  {/* SLIDE 0: CONCEPT BLUEPRINT & INTUITION */}
+                  {activeSlide === 0 && (
+                    <div className="max-w-4xl mx-auto w-full space-y-6">
+                      <div className="space-y-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                          {currentModule.badge} • Module {activeModuleId}
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-black text-white">
+                          {currentLesson.title}
+                        </h2>
+                        {showUrdu && (
+                          <h3 className="text-lg sm:text-xl font-urdu font-bold text-amber-400" dir="rtl">
+                            {currentLesson.urduTitle}
+                          </h3>
+                        )}
+                      </div>
 
-              {/* Pakistani Teen Context Box */}
-              <div className="p-3 rounded-xl bg-blue-950/30 border border-blue-900/40 flex items-center gap-2.5 text-xs text-blue-200">
-                <Globe className="w-4 h-4 text-cyan-400 shrink-0" />
-                <div>
-                  <strong>🇵🇰 Pakistani Teen Context: </strong> {currentLesson.pakistaniContext}
-                </div>
-              </div>
-            </div>
+                      {/* Analogy Card */}
+                      {currentLesson.analogy && (
+                        <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 to-slate-900 border border-emerald-800/50 space-y-2">
+                          <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+                            <Sparkles className="w-4 h-4 text-emerald-400" />
+                            Beginner Real-World Analogy (آسان مثال):
+                          </div>
+                          <p className="text-sm text-emerald-100 leading-relaxed">
+                            {currentLesson.analogy}
+                          </p>
+                          {showUrdu && currentLesson.urduAnalogy && (
+                            <p className="text-sm font-urdu text-amber-300 leading-relaxed pt-1" dir="rtl">
+                              {currentLesson.urduAnalogy}
+                            </p>
+                          )}
+                        </div>
+                      )}
 
-            {/* ─── SPLIT WORKSPACE: LEFT EDITOR | RIGHT LIVE SANDBOX PREVIEW ─── */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              
-              {/* LEFT PANE: HTML CODE EDITOR */}
-              <div className="flex flex-col bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl min-h-[480px]">
-                
-                {/* Editor Header */}
-                <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-                    <span className="ml-2 font-mono text-xs font-bold text-slate-400 flex items-center gap-1">
-                      <Code className="w-3.5 h-3.5 text-blue-400" />
-                      index.html
-                    </span>
-                  </div>
+                      {/* Technical Concept */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-blue-400">
+                            Core Web Concept:
+                          </h4>
+                          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            {currentLesson.concept}
+                          </p>
+                        </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleCopyCode}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
-                      title="Copy HTML to clipboard"
-                    >
-                      {copiedCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                      {copiedCode ? 'Copied' : 'Copy'}
-                    </button>
+                        {showUrdu ? (
+                          <div className="p-5 rounded-2xl bg-amber-950/20 border border-amber-900/40 space-y-2 font-urdu text-right" dir="rtl">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                              تکنیکی تصور (اردو وضاحت):
+                            </h4>
+                            <p className="text-xs sm:text-sm text-amber-200 leading-relaxed">
+                              {currentLesson.urduConcept}
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                              Pakistani Teen Context:
+                            </h4>
+                            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                              {currentLesson.pakistaniContext}
+                            </p>
+                          </div>
+                        )}
+                      </div>
 
-                    <button
-                      onClick={handleResetCode}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
-                      title="Reset code to lesson starter"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      Reset
-                    </button>
-                  </div>
-                </div>
-
-                {/* Textarea Code Editor */}
-                <div className="relative flex-1 bg-slate-950 font-mono text-xs sm:text-sm">
-                  <textarea
-                    value={userCode}
-                    onChange={(e) => setUserCode(e.target.value)}
-                    spellCheck={false}
-                    className="w-full h-full min-h-[380px] p-4 bg-transparent text-cyan-200 leading-relaxed font-mono resize-none focus:outline-none border-none selection:bg-blue-600"
-                    placeholder="Enter your HTML5 code here..."
-                  />
-                </div>
-
-                {/* Coding Challenge & Solution Footer */}
-                <div className="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="text-xs text-slate-300">
-                      <strong className="text-amber-400">⚡ Code Challenge: </strong>
-                      {currentLesson.challenge}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-800/80">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setShowHint(!showHint)}
-                        className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
-                      >
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-                        {showHint ? 'Hide Hint' : 'Show Hint'}
-                      </button>
-
-                      <button
-                        onClick={() => setShowSolution(!showSolution)}
-                        className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                        {showSolution ? 'Hide Solution' : 'View Solution'}
-                      </button>
-                    </div>
-
-                    <button
-                      onClick={() => markLessonComplete(currentLesson.id)}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                        completedLessons.includes(currentLesson.id)
-                          ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/40'
-                          : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md'
-                      }`}
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      {completedLessons.includes(currentLesson.id) ? 'Completed ✓' : 'Mark Completed'}
-                    </button>
-                  </div>
-
-                  {/* Hint Reveal Box */}
-                  {showHint && (
-                    <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-900/50 text-xs text-amber-200">
-                      <strong>💡 Helpful Hint: </strong> {currentLesson.hint}
+                      {showUrdu && (
+                        <div className="p-3.5 rounded-xl bg-blue-950/30 border border-blue-900/40 flex items-center gap-2.5 text-xs text-blue-200">
+                          <Globe className="w-4 h-4 text-cyan-400 shrink-0" />
+                          <div>
+                            <strong>🇵🇰 Pakistani Teen Context: </strong> {currentLesson.pakistaniContext}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  {/* Solution Box with Insert Button */}
-                  {showSolution && (
-                    <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-900/50 space-y-2">
-                      <div className="flex items-center justify-between text-xs text-blue-300 font-bold">
-                        <span>Solution Preview:</span>
+                  {/* SLIDE 1: TECHNICAL TERMS GLOSSARY */}
+                  {activeSlide === 1 && (
+                    <div className="max-w-4xl mx-auto w-full space-y-5">
+                      <div className="text-center space-y-1">
+                        <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center justify-center gap-1.5">
+                          <BookOpen className="w-4 h-4 text-indigo-400" />
+                          Vocabulary & Technical Terms
+                        </span>
+                        <h3 className="text-xl sm:text-2xl font-black text-white">
+                          New Terms Introduced in this Lesson
+                        </h3>
+                        {showUrdu && (
+                          <p className="text-sm font-urdu font-bold text-amber-400" dir="rtl">
+                            اس سبق میں سکھائے جانے والے نئے الفاظ اور اصطلاحات
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {currentLesson.newTerms?.map((item, idx) => (
+                          <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 hover:border-slate-700 transition-all">
+                            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                              <span className="px-2.5 py-1 rounded-lg bg-blue-600/20 text-cyan-300 font-mono text-xs font-bold border border-blue-500/30">
+                                {item.term}
+                              </span>
+                              {showUrdu && (
+                                <span className="text-xs font-urdu font-bold text-amber-300" dir="rtl">
+                                  {item.urduTerm}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              {item.definition}
+                            </p>
+                            {showUrdu && (
+                              <p className="text-xs font-urdu text-amber-200/90 leading-relaxed pt-1" dir="rtl">
+                                {item.urduDefinition}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SLIDE 2: CODE EXAMPLE 1 WITH LINE-BY-LINE EXPLANATION & MINI PREVIEW */}
+                  {activeSlide === 2 && (
+                    <div className="max-w-5xl mx-auto w-full space-y-4">
+                      {currentLesson.examples && currentLesson.examples[0] ? (
+                        <>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase">
+                                Example 1 of 2
+                              </span>
+                              <h3 className="text-lg sm:text-xl font-bold text-white mt-1">
+                                {currentLesson.examples[0].title}
+                              </h3>
+                              {showUrdu && (
+                                <h4 className="text-sm font-urdu font-bold text-amber-400" dir="rtl">
+                                  {currentLesson.examples[0].urduTitle}
+                                </h4>
+                              )}
+                            </div>
+
+                            <button
+                              onClick={() => handleCopyExample(currentLesson.examples[0].code, 0)}
+                              className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-1.5"
+                            >
+                              {copiedExIndex === 0 ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                              {copiedExIndex === 0 ? 'Copied' : 'Copy Example'}
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
+                            {/* Code Box */}
+                            <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col">
+                              <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                                <span>HTML Code Snippet</span>
+                                <span className="text-blue-400">Example 1</span>
+                              </div>
+                              <pre className="p-4 font-mono text-xs sm:text-sm text-cyan-200 overflow-x-auto flex-1 leading-relaxed">
+                                {currentLesson.examples[0].code}
+                              </pre>
+                            </div>
+
+                            {/* Live Output Mini Render */}
+                            <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col">
+                              <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                                <span>Live Visual Output (براؤزر اسکرین)</span>
+                                <span className="text-emerald-400">● Live Preview</span>
+                              </div>
+                              <div className="p-4 bg-white text-slate-900 flex-1 overflow-auto rounded-b-2xl min-h-[140px]">
+                                <iframe
+                                  title="Mini Preview 1"
+                                  srcDoc={buildSandboxHtml(currentLesson.examples[0].code)}
+                                  className="w-full h-full min-h-[120px] border-none"
+                                  sandbox="allow-scripts"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Explanation Box */}
+                          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+                            <h5 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                              Why this code works (وضاحت):
+                            </h5>
+                            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                              {currentLesson.examples[0].explanation}
+                            </p>
+                            {showUrdu && (
+                              <p className="text-xs sm:text-sm font-urdu text-amber-200 leading-relaxed pt-1" dir="rtl">
+                                {currentLesson.examples[0].urduExplanation}
+                              </p>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-slate-400">Example loading...</p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* SLIDE 3: CODE EXAMPLE 2 WITH LINE-BY-LINE EXPLANATION & MINI PREVIEW */}
+                  {activeSlide === 3 && (
+                    <div className="max-w-5xl mx-auto w-full space-y-4">
+                      {currentLesson.examples && currentLesson.examples[1] ? (
+                        <>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 uppercase">
+                                Example 2 of 2 (Pakistani Teen Project)
+                              </span>
+                              <h3 className="text-lg sm:text-xl font-bold text-white mt-1">
+                                {currentLesson.examples[1].title}
+                              </h3>
+                              {showUrdu && (
+                                <h4 className="text-sm font-urdu font-bold text-amber-400" dir="rtl">
+                                  {currentLesson.examples[1].urduTitle}
+                                </h4>
+                              )}
+                            </div>
+
+                            <button
+                              onClick={() => handleCopyExample(currentLesson.examples[1].code, 1)}
+                              className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-1.5"
+                            >
+                              {copiedExIndex === 1 ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                              {copiedExIndex === 1 ? 'Copied' : 'Copy Example'}
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
+                            {/* Code Box */}
+                            <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col">
+                              <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                                <span>HTML Code Snippet</span>
+                                <span className="text-cyan-400">Example 2</span>
+                              </div>
+                              <pre className="p-4 font-mono text-xs sm:text-sm text-cyan-200 overflow-x-auto flex-1 leading-relaxed">
+                                {currentLesson.examples[1].code}
+                              </pre>
+                            </div>
+
+                            {/* Live Output Mini Render */}
+                            <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col">
+                              <div className="px-4 py-2 bg-slate-950 border-b border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                                <span>Live Visual Output (براؤزر اسکرین)</span>
+                                <span className="text-emerald-400">● Live Preview</span>
+                              </div>
+                              <div className="p-4 bg-white text-slate-900 flex-1 overflow-auto rounded-b-2xl min-h-[140px]">
+                                <iframe
+                                  title="Mini Preview 2"
+                                  srcDoc={buildSandboxHtml(currentLesson.examples[1].code)}
+                                  className="w-full h-full min-h-[120px] border-none"
+                                  sandbox="allow-scripts"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Explanation Box */}
+                          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+                            <h5 className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                              Why this code works (وضاحت):
+                            </h5>
+                            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                              {currentLesson.examples[1].explanation}
+                            </p>
+                            {showUrdu && (
+                              <p className="text-xs sm:text-sm font-urdu text-amber-200 leading-relaxed pt-1" dir="rtl">
+                                {currentLesson.examples[1].urduExplanation}
+                              </p>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-slate-400">Example loading...</p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* SLIDE 4: CODING CHALLENGE BRIEFING & LAUNCH ACTION */}
+                  {activeSlide === 4 && (
+                    <div className="max-w-4xl mx-auto w-full space-y-6 text-center">
+                      <div className="space-y-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-widest inline-flex items-center gap-1.5">
+                          <Terminal className="w-3.5 h-3.5" />
+                          Ready for Hands-On Practice!
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-black text-white">
+                          Time to Code in the Interactive Studio
+                        </h2>
+                        {showUrdu && (
+                          <h3 className="text-base sm:text-lg font-urdu font-bold text-amber-400" dir="rtl">
+                            اب آپ خود کوڈنگ کریں اور لائیو رزلٹ دیکھیں!
+                          </h3>
+                        )}
+                      </div>
+
+                      {/* Challenge Details Card */}
+                      <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 text-left space-y-3">
+                        <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                          <Lightbulb className="w-4 h-4 text-amber-400" />
+                          Your Mission & Challenge:
+                        </div>
+                        <p className="text-sm sm:text-base text-slate-200 font-medium">
+                          {currentLesson.challenge}
+                        </p>
+                        <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-400">
+                          <strong>💡 Helpful Hint: </strong> {currentLesson.hint}
+                        </div>
+                      </div>
+
+                      {/* BIG LAUNCH BUTTON INTO EDITOR */}
+                      <div className="pt-2">
                         <button
-                          onClick={handleInsertSolution}
-                          className="px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px]"
+                          onClick={() => setLessonMode('editor')}
+                          className="px-8 py-4 rounded-2xl text-base font-black bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 shadow-xl shadow-emerald-500/25 hover:scale-105 transition-all inline-flex items-center gap-3"
                         >
-                          Insert into Editor ➔
+                          <Code className="w-5 h-5 text-slate-950" />
+                          <span>Open Live Code Editor & Sandbox Screen 🚀</span>
+                        </button>
+                        {showUrdu && (
+                          <p className="text-xs font-urdu text-amber-300 font-semibold mt-2" dir="rtl">
+                            کلک کریں اور لائیو ویب براؤزر اسکرین پر کوڈنگ شروع کریں!
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* Slide Footer Controls Bar */}
+                <div className="p-4 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between">
+                  <button
+                    disabled={activeSlide === 0}
+                    onClick={() => setActiveSlide(prev => Math.max(0, prev - 1))}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      activeSlide === 0
+                        ? 'bg-slate-900 text-slate-600 border border-slate-800 cursor-not-allowed'
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                    }`}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous Slide
+                  </button>
+
+                  <div className="text-xs text-slate-400 font-mono">
+                    Slide {activeSlide + 1} / {SLIDE_STEPS.length}
+                  </div>
+
+                  {activeSlide < SLIDE_STEPS.length - 1 ? (
+                    <button
+                      onClick={() => setActiveSlide(prev => Math.min(SLIDE_STEPS.length - 1, prev + 1))}
+                      className="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5"
+                    >
+                      Next Slide
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setLessonMode('editor')}
+                      className="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/30 transition-all flex items-center gap-1.5"
+                    >
+                      Launch Code Studio ➔
+                    </button>
+                  )}
+                </div>
+
+              </div>
+            )}
+
+            {/* ══════════════════════════════════════════════════════════════
+                MODE B: THE CODE EDITOR & LIVE WEB SANDBOX SCREEN
+            ══════════════════════════════════════════════════════════════ */}
+            {lessonMode === 'editor' && (
+              <div className="space-y-4">
+                
+                {/* Editor Header Bar with Return to Slides button */}
+                <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setLessonMode('slides')}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 flex items-center gap-1.5"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Review Presentation Slides</span>
+                    </button>
+                    <span className="text-xs font-mono text-slate-400">
+                      Module {activeModuleId} • Lesson {activeLessonIndex + 1}: {currentLesson.title.split(':')[0]}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-emerald-400 font-bold flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
+                      Live Sync Active
+                    </span>
+                  </div>
+                </div>
+
+                {/* ─── SPLIT WORKSPACE: LEFT EDITOR | RIGHT LIVE SANDBOX PREVIEW ─── */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  
+                  {/* LEFT PANE: HTML CODE EDITOR */}
+                  <div className="flex flex-col bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl min-h-[500px]">
+                    
+                    {/* Editor Header */}
+                    <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
+                        <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
+                        <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
+                        <span className="ml-2 font-mono text-xs font-bold text-slate-400 flex items-center gap-1">
+                          <Code className="w-3.5 h-3.5 text-blue-400" />
+                          index.html
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleCopyCode}
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                          title="Copy HTML to clipboard"
+                        >
+                          {copiedCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                          {copiedCode ? 'Copied' : 'Copy'}
+                        </button>
+
+                        <button
+                          onClick={handleResetCode}
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                          title="Reset code to lesson starter"
+                        >
+                          <RotateCcw className="w-3 h-3" />
+                          Reset
                         </button>
                       </div>
-                      <pre className="p-2 rounded bg-slate-950 text-cyan-300 text-[11px] font-mono overflow-x-auto max-h-36">
-                        {currentLesson.solution}
-                      </pre>
                     </div>
-                  )}
-                </div>
 
-              </div>
+                    {/* Textarea Code Editor */}
+                    <div className="relative flex-1 bg-slate-950 font-mono text-xs sm:text-sm">
+                      <textarea
+                        value={userCode}
+                        onChange={(e) => setUserCode(e.target.value)}
+                        spellCheck={false}
+                        className="w-full h-full min-h-[380px] p-4 bg-transparent text-cyan-200 leading-relaxed font-mono resize-none focus:outline-none border-none selection:bg-blue-600"
+                        placeholder="Enter your HTML5 code here..."
+                      />
+                    </div>
 
-              {/* RIGHT PANE: LIVE SANDBOX WEB PREVIEW */}
-              <div className="flex flex-col bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl min-h-[480px]">
-                
-                {/* Browser Simulator Top Bar */}
-                <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
-                  <div className="flex items-center gap-2">
-                    <span className="p-1 rounded bg-slate-800 text-slate-400">
-                      <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                    </span>
-                    <span className="text-xs font-mono text-slate-400 truncate max-w-[200px] sm:max-w-xs">
-                      https://teen-dev.dten.pk/preview
-                    </span>
+                    {/* Coding Challenge & Solution Footer */}
+                    <div className="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3">
+                      <div className="text-xs text-slate-300">
+                        <strong className="text-amber-400">⚡ Code Challenge: </strong>
+                        {currentLesson.challenge}
+                      </div>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-800/80">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setShowHint(!showHint)}
+                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                          >
+                            <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+                            {showHint ? 'Hide Hint' : 'Show Hint'}
+                          </button>
+
+                          <button
+                            onClick={() => setShowSolution(!showSolution)}
+                            className="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all flex items-center gap-1"
+                          >
+                            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                            {showSolution ? 'Hide Solution' : 'View Solution'}
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => markLessonComplete(currentLesson.id)}
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                            completedLessons.includes(currentLesson.id)
+                              ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/40'
+                              : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md'
+                          }`}
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {completedLessons.includes(currentLesson.id) ? 'Completed ✓' : 'Mark Completed'}
+                        </button>
+                      </div>
+
+                      {/* Hint Reveal Box */}
+                      {showHint && (
+                        <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-900/50 text-xs text-amber-200">
+                          <strong>💡 Helpful Hint: </strong> {currentLesson.hint}
+                        </div>
+                      )}
+
+                      {/* Solution Box with Insert Button */}
+                      {showSolution && (
+                        <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-900/50 space-y-2">
+                          <div className="flex items-center justify-between text-xs text-blue-300 font-bold">
+                            <span>Solution Preview:</span>
+                            <button
+                              onClick={handleInsertSolution}
+                              className="px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px]"
+                            >
+                              Insert into Editor ➔
+                            </button>
+                          </div>
+                          <pre className="p-2 rounded bg-slate-950 text-cyan-300 text-[11px] font-mono overflow-x-auto max-h-36">
+                            {currentLesson.solution}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
+
                   </div>
 
-                  {/* Desktop / Mobile Switcher */}
-                  <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
-                    <button
-                      onClick={() => setPreviewDevice('desktop')}
-                      className={`p-1.5 rounded-lg transition-all ${
-                        previewDevice === 'desktop'
-                          ? 'bg-blue-600 text-white shadow-sm'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                      title="Desktop Monitor View"
-                    >
-                      <Monitor className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => setPreviewDevice('mobile')}
-                      className={`p-1.5 rounded-lg transition-all ${
+                  {/* RIGHT PANE: LIVE SANDBOX WEB PREVIEW */}
+                  <div className="flex flex-col bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl min-h-[500px]">
+                    
+                    {/* Browser Simulator Top Bar */}
+                    <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <span className="p-1 rounded bg-slate-800 text-slate-400">
+                          <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                        </span>
+                        <span className="text-xs font-mono text-slate-400 truncate max-w-[200px] sm:max-w-xs">
+                          https://teen-dev.dten.pk/preview
+                        </span>
+                      </div>
+
+                      {/* Desktop / Mobile Switcher */}
+                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button
+                          onClick={() => setPreviewDevice('desktop')}
+                          className={`p-1.5 rounded-lg transition-all ${
+                            previewDevice === 'desktop'
+                              ? 'bg-blue-600 text-white shadow-sm'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                          title="Desktop Monitor View"
+                        >
+                          <Monitor className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setPreviewDevice('mobile')}
+                          className={`p-1.5 rounded-lg transition-all ${
+                            previewDevice === 'mobile'
+                              ? 'bg-blue-600 text-white shadow-sm'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                          title="Mobile Smartphone View"
+                        >
+                          <Smartphone className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Real-time Validation Bar */}
+                    {validation.errors.length > 0 && (
+                      <div className="px-4 py-2 bg-rose-950/60 border-b border-rose-900/60 text-xs text-rose-300 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                          <span>{validation.errors[0].english}</span>
+                        </div>
+                        {showUrdu && (
+                          <span className="font-urdu text-[11px] text-rose-200 hidden sm:inline" dir="rtl">
+                            {validation.errors[0].urdu}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {validation.warnings.length > 0 && validation.errors.length === 0 && (
+                      <div className="px-4 py-1.5 bg-amber-950/50 border-b border-amber-900/50 text-xs text-amber-300 flex items-center gap-2">
+                        <Lightbulb className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>{validation.warnings[0].english}</span>
+                      </div>
+                    )}
+
+                    {/* The Isolated Sandbox Web Iframe */}
+                    <div className="flex-1 bg-slate-900/50 p-4 flex items-center justify-center overflow-auto">
+                      <div className={`transition-all duration-300 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-700/80 ${
                         previewDevice === 'mobile'
-                          ? 'bg-blue-600 text-white shadow-sm'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                      title="Mobile Smartphone View"
-                    >
-                      <Smartphone className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Real-time Validation Bar */}
-                {validation.errors.length > 0 && (
-                  <div className="px-4 py-2 bg-rose-950/60 border-b border-rose-900/60 text-xs text-rose-300 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                      <span>{validation.errors[0].english}</span>
+                          ? 'w-[320px] h-[520px] ring-8 ring-slate-800'
+                          : 'w-full h-full min-h-[400px]'
+                      }`}>
+                        <iframe
+                          title="Live HTML Sandbox Preview"
+                          srcDoc={sandboxHtml}
+                          sandbox="allow-scripts allow-modals"
+                          className="w-full h-full border-none bg-white"
+                        />
+                      </div>
                     </div>
-                    <span className="font-urdu text-[11px] text-rose-200 hidden sm:inline" dir="rtl">
-                      {validation.errors[0].urdu}
-                    </span>
-                  </div>
-                )}
 
-                {validation.warnings.length > 0 && validation.errors.length === 0 && (
-                  <div className="px-4 py-1.5 bg-amber-950/50 border-b border-amber-900/50 text-xs text-amber-300 flex items-center gap-2">
-                    <Lightbulb className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span>{validation.warnings[0].english}</span>
-                  </div>
-                )}
+                    {/* Live Inspector Stats Footer */}
+                    <div className="px-4 py-2 bg-slate-900 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+                      <div className="flex items-center gap-3 font-mono text-[11px]">
+                        <span className="text-emerald-400 font-bold">● Live Preview Active</span>
+                        <span>Elements: {validation.stats.tagsCount}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        D.TEN Sandbox v5.0
+                      </div>
+                    </div>
 
-                {/* The Isolated Sandbox Web Iframe */}
-                <div className="flex-1 bg-slate-900/50 p-4 flex items-center justify-center overflow-auto">
-                  <div className={`transition-all duration-300 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-700/80 ${
-                    previewDevice === 'mobile'
-                      ? 'w-[320px] h-[520px] ring-8 ring-slate-800'
-                      : 'w-full h-full min-h-[400px]'
-                  }`}>
-                    <iframe
-                      title="Live HTML Sandbox Preview"
-                      srcDoc={sandboxHtml}
-                      sandbox="allow-scripts allow-modals"
-                      className="w-full h-full border-none bg-white"
-                    />
                   </div>
+
                 </div>
 
-                {/* Live Inspector Stats Footer */}
-                <div className="px-4 py-2 bg-slate-900 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
-                  <div className="flex items-center gap-3 font-mono text-[11px]">
-                    <span className="text-emerald-400 font-bold">● Live Sync</span>
-                    <span>Elements: {validation.stats.tagsCount}</span>
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    D.TEN Sandbox v5.0
-                  </div>
+                {/* Bottom Navigation */}
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                  <button
+                    disabled={activeLessonIndex === 0 && activeModuleId === 1}
+                    onClick={() => {
+                      if (activeLessonIndex > 0) {
+                        setActiveLessonIndex(prev => prev - 1);
+                      } else if (activeModuleId > 1) {
+                        setActiveModuleId(prev => prev - 1);
+                        setActiveLessonIndex(2);
+                      }
+                      setLessonMode('slides');
+                      setActiveSlide(0);
+                    }}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      activeLessonIndex === 0 && activeModuleId === 1
+                        ? 'bg-slate-900 text-slate-600 border border-slate-800 cursor-not-allowed'
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                    }`}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous Lesson
+                  </button>
+
+                  <button
+                    onClick={() => setLessonMode('slides')}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    Review Slides
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (activeLessonIndex < 2) {
+                        setActiveLessonIndex(prev => prev + 1);
+                        setLessonMode('slides');
+                        setActiveSlide(0);
+                      } else if (activeModuleId < 7) {
+                        setActiveView('quiz');
+                      } else {
+                        setActiveView('exam');
+                      }
+                    }}
+                    className="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5"
+                  >
+                    {activeLessonIndex < 2 ? 'Next Lesson' : (activeModuleId < 7 ? 'Take Module Quiz' : 'Final Exam')}
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
 
               </div>
-
-            </div>
-
-            {/* Bottom Lesson Navigation */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <button
-                disabled={activeLessonIndex === 0 && activeModuleId === 1}
-                onClick={() => {
-                  if (activeLessonIndex > 0) {
-                    setActiveLessonIndex(prev => prev - 1);
-                  } else if (activeModuleId > 1) {
-                    setActiveModuleId(prev => prev - 1);
-                    setActiveLessonIndex(2);
-                  }
-                }}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  activeLessonIndex === 0 && activeModuleId === 1
-                    ? 'bg-slate-900 text-slate-600 border border-slate-800 cursor-not-allowed'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
-                }`}
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Previous Lesson
-              </button>
-
-              <div className="text-xs font-mono text-slate-400">
-                Module {activeModuleId} • Lesson {activeLessonIndex + 1} of 3
-              </div>
-
-              <button
-                onClick={() => {
-                  if (activeLessonIndex < 2) {
-                    setActiveLessonIndex(prev => prev + 1);
-                  } else if (activeModuleId < 7) {
-                    setActiveView('quiz');
-                  } else {
-                    setActiveView('exam');
-                  }
-                }}
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/30 transition-all flex items-center gap-1.5"
-              >
-                {activeLessonIndex < 2 ? 'Next Lesson' : (activeModuleId < 7 ? 'Take Module Quiz' : 'Final Exam')}
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+            )}
 
           </div>
         )}

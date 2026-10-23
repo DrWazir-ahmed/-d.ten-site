@@ -81,7 +81,25 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Welcome young web architect! We are starting from absolute zero, like a complete newbie. You do not need any prior coding knowledge. Have you ever wondered how websites are made? When you open Chrome or Edge, the browser reads an HTML file. In HTML, we use tags inside angle brackets. For example, the letter p stands for paragraph. You open with <p>, type your words, and close with </p>. Look at the editor right now, change the name to your own, and watch the Live Preview change instantly!",
           urduVoice: "خوش آمدید نوجوان ڈویلپر! ہم بالکل صفر سے، ایک نوآموز کی طرح آغاز کر رہے ہیں۔ آپ کو پہلے سے کسی کوڈنگ کی ضرورت نہیں۔ کیا آپ نے کبھی سوچا کہ ویب سائٹس کیسے بنتی ہیں؟ جب آپ گوگل کروم کھولتے ہیں تو وہ ایچ ٹی ایم ایل فائل کو پڑھتا ہے۔ ایچ ٹی ایم ایل میں ہم اینگل بریکٹس یعنی ٹیگز کا استعمال کرتے ہیں۔ انگریزی حرف پی کا مطلب ہے پیراگراف۔ پہلے بریکٹ میں پی لکھتے ہیں، پھر اپنی بات، اور آخر میں سلیش پی کے ساتھ اسے بند کرتے ہیں۔ ایڈیٹر میں اپنا نام لکھیں اور لائیو اسکرین پر جادو دیکھیں!",
           pakistaniContext: "Every Pakistani teen coder in Karachi, Lahore, and Islamabad starts their web development journey right here with their first paragraph tag!",
-          starterCode: `<!-- This is your very first HTML code! -->
+          examples: [
+          {
+            title: 'Example 1: Basic Paragraph & Tag Anatomy',
+            urduTitle: 'مثال 1: بنیادی پیراگراف اور ٹیگ کی ساخت',
+            code: `<p>Salam Pakistan! 🇵🇰</p>`,
+            explanation: "Here, <p> is the opening tag that signals a paragraph, 'Salam Pakistan! 🇵🇰' is the human-readable text content, and </p> is the closing tag that tells the browser the paragraph has ended.",
+            urduExplanation: "یہاں <p> اوپننگ ٹیگ ہے جو پیراگراف شروع کرتا ہے، 'Salam Pakistan!' اس کا مواد ہے، اور </p> کلوزنگ ٹیگ ہے جو بتاتا ہے کہ پیراگراف یہاں ختم ہو گیا ہے۔"
+          },
+          {
+            title: 'Example 2: Teen Gamer Info Card with Multiple Paragraphs',
+            urduTitle: 'مثال 2: نوجوان گیمر کی معلومات کے پیراگراف',
+            code: `<p>Gamer Tag: <strong>CyberWolf_PK</strong></p>
+<p>City: Islamabad, Pakistan</p>
+<p>Favorite Game: Valorant & CS2</p>`,
+            explanation: 'Stacking multiple <p> tags creates clean, separated lines of text. Browsers automatically add vertical spacing between each paragraph block.',
+            urduExplanation: 'ایک کے بعد ایک <p> ٹیگز لکھنے سے الگ الگ لائنیں بن جاتی ہیں۔ براؤزر ہر پیراگراف کے درمیان خودکار مناسب فاصلہ پیدا کرتا ہے۔'
+          },
+        ],
+starterCode: `<!-- This is your very first HTML code! -->
 <p>Salam Pakistan! 🇵🇰</p>
 <p>My name is Hamza and I am 14 years old.</p>
 <p>I am learning HTML5 from scratch with D.TEN!</p>`,
@@ -125,7 +143,41 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Now we step up from simple text to the complete official structure of the internet! Just like a human has a head and a body, every single webpage has a <head> and a <body>. Notice the <title> tag inside head: whatever you write inside title appears at the very top of your browser tab. Everything inside body is what users see on the page. Let's build the full skeleton together!",
           urduVoice: "اب ہم سادہ تحریر سے آگے بڑھ کر انٹرنیٹ کا مکمل آفیشل ڈھانچہ سیکھ رہے ہیں۔ جس طرح انسان کے پاس سر اور جسم ہوتا ہے، اسی طرح ہر ویب پیج کے دو حصے ہوتے ہیں: ہیڈ اور باڈی۔ ہیڈ کے اندر ٹائٹل لکھا جاتا ہے جو براؤزر کی ونڈو یا ٹیب کے اوپر نظر آتا ہے۔ اور باڈی کے اندر لکھی گئی ہر چیز اسکرین پر نظر آتی ہے۔ آئیے یہ ڈھانچہ خود بناتے ہیں!",
           pakistaniContext: "Set up the official webpage structure for an aspiring Pakistani Young Tech Founder in Lahore.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Minimal Valid HTML5 Skeleton',
+            urduTitle: 'مثال 1: ایچ ٹی ایم ایل 5 کا بنیادی اور سادہ ڈھانچہ',
+            code: `<!DOCTYPE html>
+<html>
+<head>
+  <title>My First Site</title>
+</head>
+<body>
+  <p>Hello from Pakistan!</p>
+</body>
+</html>`,
+            explanation: 'Every valid webpage has <!DOCTYPE html>, an opening <html>, a <head> holding the tab title, and a <body> holding the visible text.',
+            urduExplanation: 'ہر درست ویب پیج میں سب سے اوپر ڈاک ٹائپ، پھر html، ٹیب ٹائٹل کے لیے head، اور دکھائی دینے والے مواد کے لیے body ہوتا ہے۔'
+          },
+          {
+            title: 'Example 2: Complete Webpage with Meta UTF-8 Charset',
+            urduTitle: 'مثال 2: مکمل ویب پیج بمعہ اردو اور ایموجی سپورٹ',
+            code: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Babar Azam Fan Page</title>
+</head>
+<body>
+  <h1>King Babar Azam 🏏</h1>
+  <p>Pakistan National Cricket Captain</p>
+</body>
+</html>`,
+            explanation: "The <meta charset='UTF-8'> tag guarantees that international characters, Urdu script, and emojis like 🏏 and 🇵🇰 display perfectly on all smartphones and computers.",
+            urduExplanation: "meta charset='UTF-8' ٹیگ اس بات کو یقینی بناتا ہے کہ اردو حروف اور ایموجیز ہر موبائل اور کمپیوٹر پر بغیر کسی خرابی کے صاف نظر آئیں۔"
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -185,7 +237,28 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Let's explore typography power! Headings tell the browser what is most important. <h1> is your king headline. Notice formatting tags: <strong> turns words bold, <em> tilts them into italics, <mark> highlights them like a neon yellow marker, and <hr> draws a clean divider line. Let's create a Pakistan Super League cricket match report!",
           urduVoice: "اب ہم ہیڈنگز اور خوبصورت الفاظ کی طاقت دیکھتے ہیں۔ ہیڈنگز براؤزر کو بتاتی ہیں کہ سب سے اہم بات کون سی ہے۔ ایچ 1 سب سے بڑا عنوان ہے۔ اسٹرانگ سے الفاظ موٹے ہو جاتے ہیں، ای ایم سے ترچھے، مارک سے ہائی لائٹ اور ایچ آر سے خوبصورت لکیر بن جاتی ہے۔ آئیے پی ایس ایل کا ایک بریکنگ نیوز پیج بناتے ہیں!",
           pakistaniContext: "Create a match report for a thrilling Pakistan Super League (PSL) match between Lahore Qalandars and Karachi Kings.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: The 6 Heading Sizes Hierarchy',
+            urduTitle: 'مثال 1: ہیڈنگز کے چھ سائزز کی ترتیب',
+            code: `<h1>H1: Main Article Title</h1>
+<h2>H2: Major Section Heading</h2>
+<h3>H3: Sub-topic Heading</h3>`,
+            explanation: '<h1> is the largest and most important headline. <h2> is for major chapters or sections, and <h3> is for sub-points.',
+            urduExplanation: '<h1> سب سے بڑی اور اہم ہیڈنگ ہوتی ہے، <h2> بڑے سیکشن کے لیے اور <h3> ذیلی موضوعات کے لیے استعمال ہوتی ہے۔'
+          },
+          {
+            title: 'Example 2: Breaking News Report with strong, em & hr',
+            urduTitle: 'مثال 2: بریکنگ نیوز رپورٹ بمعہ بولڈ اور ترچھا ٹیکسٹ',
+            code: `<h2>PSL Live: Lahore vs Karachi</h2>
+<hr>
+<p>Shaheen Afridi bowled a <strong>145 km/h yorker</strong>!</p>
+<p><em>Match Attendance: 30,000 passionate fans.</em></p>`,
+            explanation: '<strong> gives bold visual weight to critical stats, <em> emphasizes quotes in italics, and <hr> draws a clean divider line.',
+            urduExplanation: 'strong ٹیگ اہم معلومات کو بولڈ کرتا ہے، em الفاظ کو ترچھا کر کے زور دیتا ہے، اور hr ایک صاف ستھری لکیر کھینچتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <body>
   <h1>PSL Championship Clash 🏏</h1>
@@ -287,7 +360,24 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Now you are learning one of the most powerful concepts in web development: Attributes! An attribute gives extra instructions to an HTML tag. The most famous attribute on the internet is href, which tells an anchor tag where to take the user when they click it. Let's write our first clickable link together!",
           urduVoice: "اب آپ ویب ڈویلپمنٹ کا سب سے طاقتور راز سیکھ رہے ہیں، جسے ایٹریبیوٹ کہتے ہیں! ایٹریبیوٹ کسی بھی ٹیگ کو اضافی ہدایات دیتا ہے۔ انٹرنیٹ کا سب سے مشہور ایٹریبیوٹ href ہے۔ یہ بتاتا ہے کہ جب یوزر کسی لفظ پر کلک کرے تو کون سی ویب سائٹ کھلے۔ آئیے پہلا کلک کے قابل لنک بناتے ہیں!",
           pakistaniContext: "Create a resource link card for Pakistani educational resources like D.TEN and the Pakistan IT Board.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Clickable Link with href Attribute',
+            urduTitle: 'مثال 1: ایچ ریف ایٹریبیوٹ کے ساتھ کلک ہونے والا لنک',
+            code: `<a href="https://dten.edu.pk">Visit D.TEN Network</a>`,
+            explanation: 'The <a> tag creates a hyperlink, and href="https://..." is the attribute specifying the exact website destination.',
+            urduExplanation: '<a> ٹیگ لنک بناتا ہے اور href="https://..." وہ ایٹریبیوٹ ہے جو بتاتا ہے کہ کلک کرنے پر کون سی ویب سائٹ کھلے گی۔'
+          },
+          {
+            title: 'Example 2: Contact Links with mailto: and tel:',
+            urduTitle: 'مثال 2: ای میل اور فون نمبر کے براہ راست لنکس',
+            code: `<p>Questions? <a href="mailto:info@dten.edu.pk">Email Support</a></p>
+<p>Helpline: <a href="tel:+92511234567">Call Islamabad Office</a></p>`,
+            explanation: "Using 'mailto:' opens the user's default email client, while 'tel:' lets mobile phone users dial a number with a single tap.",
+            urduExplanation: 'mailto لکھنے سے یوزر کی ای میل ایپ کھل جاتی ہے، اور tel لکھنے سے موبائل پر ایک کلک سے فون مل جاتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <body>
   <h2>🇵🇰 Pakistani Student Tech Resources</h2>
@@ -335,7 +425,23 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Notice what happens when you click a link normally: it replaces your current webpage! To keep users on your gaming portal while they check out YouTube or Twitch, we add target=\"_blank\". It is like magic: one attribute, and your link automatically pops up in a fresh new tab. Let's test it!",
           urduVoice: "غور کریں، جب آپ عام لنک پر کلک کرتے ہیں تو آپ کا اپنا پیج غائب ہو جاتا ہے اور نیا پیج کھل جاتا ہے۔ یوزر کو اپنی سائٹ پر برقرار رکھنے کے لیے ہم target=\"_blank\" لگاتے ہیں۔ اس سے نیا ٹیب الگ سے کھلتا ہے اور آپ کی ویب سائٹ کھلی رہتی ہے۔ آئیے اسے ٹیسٹ کرتے ہیں!",
           pakistaniContext: "Build a Pakistani Teen Gaming & Esports quick-launcher hub.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Opening External Links in a New Tab',
+            urduTitle: 'مثال 1: بیرونی لنک کو نئے براؤزر ٹیب میں کھولنا',
+            code: `<a href="https://store.steampowered.com" target="_blank">Open Steam Store</a>`,
+            explanation: "The attribute target='_blank' tells the browser to spawn a fresh new tab so the visitor never loses their place on your website.",
+            urduExplanation: "target='_blank' براؤزر کو حکم دیتا ہے کہ آپ کی سائٹ بند کیے بغیر لنک کو ایک نئے الگ ٹیب میں کھولے۔"
+          },
+          {
+            title: 'Example 2: Button-Styled Safe Link',
+            urduTitle: 'مثال 2: بٹن اسٹائل محفوظ نیا ٹیب لنک',
+            code: `<a href="https://discord.com" target="_blank" style="background:#5865f2;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:bold;">Join Gaming Discord 🚀</a>`,
+            explanation: 'Anchor tags can be styled with CSS background colors, rounded corners, and padding to look like professional call-to-action buttons.',
+            urduExplanation: 'اینکر لنک پر سی ایس ایس لگا کر اسے کسی بھی پروفیشنل ایپلیکیشن کے ڈاؤن لوڈ یا جوائننگ بٹن جیسا بنایا جا سکتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -391,7 +497,32 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Let's build a real project! A complete Pakistani Teen Tech Hub. We will create jump links so visitors can click at the top and instantly teleport down to the AI Section or the Coding Section. Let's write the code!",
           urduVoice: "آئیے ایک مکمل پروجیکٹ تیار کرتے ہیں! پاکستانی نوجوانوں کے لیے ایک ٹیک پورٹل۔ اس میں ہم جمپ لنکس بنائیں گے تاکہ اوپر کلک کرنے سے یوزر خودکار طریقے سے نیچے کوڈنگ یا مصنوعی ذہانت کے سیکشن پر پہنچ جائے۔",
           pakistaniContext: "Build a youth tech resource directory connecting Pakistani students to AI, freelancing, and robotics.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Jumping Down to an On-Page Bookmark (#id)',
+            urduTitle: 'مثال 1: اسی پیج کے اندر نیچے موجود سیکشن تک جمپ کرنا',
+            code: `<a href="#contact-section">Jump to Contact Details ↓</a>
+
+<!-- Far down the page -->
+<div id="contact-section">
+  <h3>Contact Our Lahore Team</h3>
+</div>`,
+            explanation: "When the link href has '#contact-section', clicking it smoothly teleports the browser viewport straight down to the element with id='contact-section'.",
+            urduExplanation: 'جب لنک میں #contact-section ہو تو اس پر کلک کرنے سے اسکرین فوراً اسی پیج میں نیچے موجود متعلقہ آئی ڈی تک پہنچ جاتی ہے۔'
+          },
+          {
+            title: 'Example 2: Quick Jump Navigation Bar',
+            urduTitle: 'مثال 2: پیج کے ٹاپ پر کوئیک جمپ مینیو',
+            code: `<nav>
+  <a href="#ai">AI Club</a> | 
+  <a href="#gaming">Gaming League</a> | 
+  <a href="#coding">Web Courses</a>
+</nav>`,
+            explanation: 'This simple pattern creates a table of contents that allows visitors on mobile phones to jump to sections without endless scrolling.',
+            urduExplanation: 'یہ طریقہ موبائل فون صارفین کے لیے انتہائی مددگار ہے تاکہ وہ لمبی اسکرولنگ کے بغیر مطلوبہ سیکشن پر پہنچ سکیں۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -540,7 +671,25 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "A webpage without images is just black-and-white text. With the img tag, you can bring your website to life! Notice that img does not have a closing tag. It is a void tag. You provide src with the image url, and alt with a clear description. Let's render the majestic K2 mountain of Pakistan!",
           urduVoice: "تصویروں کے بغیر ویب سائٹ بالکل بے رنگ لگتی ہے۔ img ٹیگ کے ذریعے آپ اپنے پیج کو خوبصورت بنا سکتے ہیں۔ یاد رکھیں کہ img کا کوئی کلوزنگ ٹیگ نہیں ہوتا۔ اس میں src تصویر کا لنک بتاتا ہے اور alt اس کی تفصیل بتاتا ہے۔ آئیے پاکستان کے مشہور پہاڑ کے ٹو کی تصویر لگاتے ہیں!",
           pakistaniContext: "Showcase the breathtaking natural beauty of Northern Pakistan (Gilgit-Baltistan and Hunza Valley).",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Displaying an Image with Descriptive Alt Text',
+            urduTitle: 'مثال 1: تصویر لگانا اور آلٹ ٹیکسٹ کی وضاحت',
+            code: `<img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=600" alt="Snow covered peak of K2 in Pakistan">`,
+            explanation: "<img> is a self-closing void tag. 'src' points to the photo url, and 'alt' provides accessibility descriptions for screen readers.",
+            urduExplanation: '<img> سیلف کلوزنگ ٹیگ ہے۔ src تصویر کا ایڈریس دیتا ہے اور alt نابینا صارفین اور سرچ انجنز کے لیے تصویر کی وضاحت کرتا ہے۔'
+          },
+          {
+            title: 'Example 2: Clickable Picture Button with Dimensions',
+            urduTitle: 'مثال 2: کلک کے قابل تصویر اور سائز سیٹ کرنا',
+            code: `<a href="https://dten.edu.pk" target="_blank">
+  <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400" alt="Gaming Setup" width="300" style="border-radius:10px;">
+</a>`,
+            explanation: "Wrapping an <img> tag inside an <a> tag turns the entire image into a clickable button. Setting width='300' controls its rendered size.",
+            urduExplanation: 'تصویر کو <a> ٹیگ کے اندر بند کرنے سے پوری تصویر ایک بٹن بن جاتی ہے۔ width کے ذریعے اس کی چوڑائی کنٹرول ہوتی ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -611,7 +760,29 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Before HTML5, playing videos on the web was difficult and crashed browsers. Today, HTML5 gives us the video and audio tags with built-in controls! With one single word, controls, the browser automatically draws play buttons, time scrubbers, and volume controls. Let's build a media player for an esports tournament highlight!",
           urduVoice: "پرانے زمانے میں ویب سائٹ پر ویڈیو چلانا انتہائی مشکل کام تھا۔ لیکن اب ایچ ٹی ایم ایل 5 میں ویڈیو اور آڈیو ٹیگز موجود ہیں۔ صرف ایک لفظ controls لکھنے سے براؤزر خود بخود پلے اور والیوم کے بٹن بنا دیتا ہے۔ آئیے گیمنگ ٹورنامنٹ کے لیے اصلی ویڈیو پلیئر کوڈ کرتے ہیں!",
           pakistaniContext: "Build a video highlights stream for Pakistan's world champion Tekken player Arslan Ash.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Native HTML5 Video Player with Controls',
+            urduTitle: 'مثال 1: کنٹرولز کے ساتھ اصلی ویڈیو پلیئر',
+            code: `<video controls width="360">
+  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+  Your browser does not support video.
+</video>`,
+            explanation: "The 'controls' attribute instructs the browser to generate play, pause, seek, and volume buttons automatically.",
+            urduExplanation: "'controls' لکھنے سے براؤزر خودکار طریقے سے پلے، پاز اور والیوم کے بٹن مہیا کر دیتا ہے۔"
+          },
+          {
+            title: 'Example 2: Native HTML5 Audio Player',
+            urduTitle: 'مثال 2: ایچ ٹی ایم ایل کا اپنا آڈیو پلیئر',
+            code: `<audio controls>
+  <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+  Your browser does not support audio.
+</audio>`,
+            explanation: 'The <audio controls> tag streams podcasts, match commentary, or sound effects directly in the webpage without any external plugin.',
+            urduExplanation: '<audio controls> کے ذریعے پوڈکاسٹ، تلاوت یا کرکٹ کمنٹری کو براہ راست پیج پر سنا جا سکتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -679,7 +850,31 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Let's assemble a complete multimedia project! A responsive Esports Clan Highlights Card. We will integrate a poster thumbnail, audio player, social link button, and team badge. Let's make it look like a pro esports hub!",
           urduVoice: "آئیے ایک مکمل ملٹی میڈیا پروجیکٹ تیار کرتے ہیں۔ گیمنگ کلان ہائی لائٹس کارڈ۔ جس میں تھمب نیل پوسٹر، آڈیو کمنٹری، سوشل لنکس اور ٹیم کا بیج ایک ساتھ جگمگائیں گے!",
           pakistaniContext: "Celebrate Pakistan's rising esports stars in international competitions.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Video Player with Custom Poster Thumbnail',
+            urduTitle: 'مثال 1: ویڈیو شروع ہونے سے پہلے تھمب نیل پوسٹر لگانا',
+            code: `<video controls poster="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600" width="400">
+  <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+</video>`,
+            explanation: "The 'poster' attribute acts just like a YouTube thumbnail—displaying an exciting preview image until the visitor hits play.",
+            urduExplanation: 'poster ایٹریبیوٹ بالکل یوٹیوب تھمب نیل کی طرح کام کرتا ہے جو ویڈیو شروع ہونے سے پہلے دلکش تصویر دکھاتا ہے۔'
+          },
+          {
+            title: 'Example 2: Esports Clan Media Highlight Card',
+            urduTitle: 'مثال 2: گیمنگ کلان کا ملٹی میڈیا کارڈ',
+            code: `<div style="background:#1e293b;padding:16px;border-radius:12px;color:white;max-width:380px;">
+  <span style="background:#ef4444;padding:2px 8px;border-radius:4px;font-size:11px;">LIVE HIGHLIGHT</span>
+  <h3>Tekken 8 Tournament Final</h3>
+  <video controls width="100%">
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+  </video>
+</div>`,
+            explanation: 'Combining video with status badges and modern container styling creates professional social-ready gaming cards.',
+            urduExplanation: 'ویڈیو کے ساتھ بیجز اور خوبصورت بیک گراؤنڈ ملا کر ایک سوشل میڈیا جیسا جدید گیمنگ کارڈ بنتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -809,7 +1004,31 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Lists are the backbone of organized web content. Did you know that almost every navigation bar on the web is secretly an unordered list? In this lesson, we will build a Dream PC Gaming build guide, comparing bulleted lists with numbered rankings!",
           urduVoice: "فہرستیں کسی بھی ویب سائٹ کو منظم بناتی ہیں۔ کیا آپ جانتے ہیں کہ دنیا کی ہر بڑی نیویگیشن بار دراصل ایک لسٹ ہوتی ہے؟ آئیے پاکستان میں ایک خوابیدہ پی سی گیمنگ سسٹم کے پرزوں کی لسٹ تیار کرتے ہیں!",
           pakistaniContext: "Create a Matric/O-Level student's Dream PC Gaming Build specifications in PKR.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Unordered Bulleted List (ul + li)',
+            urduTitle: 'مثال 1: بلٹ پوائنٹس والی غیر ترتیبی لسٹ',
+            code: `<ul>
+  <li>Intel Core i5 Processor</li>
+  <li>Nvidia RTX 3060 GPU</li>
+  <li>16GB HyperX RAM</li>
+</ul>`,
+            explanation: '<ul> creates bullet points where item sequence is not critical. Each item must strictly be wrapped in an <li> tag.',
+            urduExplanation: '<ul> بلٹ پوائنٹس بناتا ہے جہاں ترتیب لازمی نہیں ہوتی۔ ہر شے کو لازماً <li> کے اندر بند کیا جاتا ہے۔'
+          },
+          {
+            title: 'Example 2: Ordered Sequential Ranking List (ol + li)',
+            urduTitle: 'مثال 2: نمبروں والی ترتیبی رینکنگ لسٹ',
+            code: `<ol>
+  <li>Babar Azam (Top Batter)</li>
+  <li>Shaheen Afridi (Lead Pacer)</li>
+  <li>Mohammad Rizwan (Wicketkeeper)</li>
+</ol>`,
+            explanation: '<ol> instructs the browser to number the items sequentially: 1, 2, 3... without you having to type numbers manually.',
+            urduExplanation: '<ol> براؤزر کو خودکار طور پر نمبر لگانے کا حکم دیتا ہے: 1، 2، 3 وغیرہ، آپ کو ہاتھ سے نمبر لکھنے کی ضرورت نہیں ہوتی۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -898,7 +1117,32 @@ export const HTML_TEENS_COURSE = {
           urduConcept: "سمینٹک ٹیگز استعمال کرنے سے نہ صرف کوڈ پڑھنا آسان ہوتا ہے بلکہ گوگل سرچ انجن آپ کی سائٹ کو ترجیح دیتا ہے اور معذور افراد کے لیے ویب سائٹ قابل رسائی بنتی ہے۔",
           englishVoice: "In the early days of the web, developers used the div tag for everything. It created what programmers call 'div soup'—a messy tangle of code! HTML5 introduced semantic tags: header for the top banner, nav for menus, main for the primary article, and footer for copyrights. Let's build a clean, modern Pakistani Tech News page!",
           urduVoice: "پرانے زمانے میں پروگرامرز ہر چیز کے لیے div ٹیگ استعمال کرتے تھے جس سے کوڈ کا کھچڑی بن جاتی تھی۔ ایچ ٹی ایم ایل 5 نے سمینٹک ٹیگز متعارف کرائے: ہیڈر اوپر کے بینر کے لیے، نیو مینیو کے لیے، مین اصل آرٹیکل کے لیے اور فوٹر کاپی رائٹ کے لیے۔ آئیے ایک جدید ٹیک نیوز پیج بناتے ہیں!",
-          pakistaniContext: "Build the semantic layout for 'PakTech Wire', an Islamabad tech journalism hub.",
+          pakistaniContext: "Build the semantic layout for 'PakTech Wire', a tech news portal for Pakistani students.",
+          examples: [
+          {
+            title: 'Example 1: The Core 4 Semantic Landmarks',
+            urduTitle: 'مثال 1: بنیادی چار سمینٹک ٹیگز',
+            code: `<header>Top Logo & Slogan</header>
+<nav><a href="#">Home</a></nav>
+<main><p>Primary article content goes here.</p></main>
+<footer>&copy; 2026 D.TEN Pakistan</footer>`,
+            explanation: 'These 4 tags replace generic divs, explicitly signaling the page header, navigation bar, main body, and footer.',
+            urduExplanation: 'یہ چاروں ٹیگز بے مقصد div کی جگہ لے کر براؤزر کو بتاتے ہیں کہ ہیڈر، مینیو، اصل مواد اور فوٹر کہاں ہیں۔'
+          },
+          {
+            title: 'Example 2: Article with Aside Fact Box',
+            urduTitle: 'مثال 2: آرٹیکل کے ساتھ سائیڈ انفارمیشن باکس',
+            code: `<article>
+  <h2>Pakistani AI Robotics Cup</h2>
+  <p>Young engineers designed autonomous drones.</p>
+  <aside style="background:#ecfdf5;padding:10px;border-left:4px solid #10b981;">
+    <small>💡 Fact: Over 40 school teams participated.</small>
+  </aside>
+</article>`,
+            explanation: '<article> wraps standalone publishable stories, and <aside> houses related side notes, quotes, or author callouts.',
+            urduExplanation: '<article> آزاد کہانی یا بلاگ کو سمیٹتا ہے اور <aside> ساتھ میں دلچسپ حقائق یا نوٹس کا باکس بناتا ہے۔'
+          },
+        ],
           starterCode: `<!DOCTYPE html>
 <html>
 <head>
@@ -987,7 +1231,30 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Every major website has a stunning header. In this lesson, we will construct a production-ready navigation bar with hover effects, an academy logo, and a prominent 'Join Academy' button for Babar Azam Cricket Academy Lahore!",
           urduVoice: "دنیا کی ہر پروفیشنل ویب سائٹ کی جان اس کا ہیڈر ہوتا ہے۔ آئیے لاہور میں بابر اعظم کرکٹ اکیڈمی کے لیے ایک مکمل نیویگیشن بار بناتے ہیں، جس میں لوگو، مینیو لنکس اور خوبصورت جوائننگ بٹن شامل ہوگا!",
           pakistaniContext: "Build the landing page header for Babar Azam Cricket Academy at Gaddafi Stadium Lahore.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Horizontal Navigation Bar with Flexbox',
+            urduTitle: 'مثال 1: فلیکس باکس کے ذریعے افقی نیویگیشن بار',
+            code: `<nav style="display:flex;gap:20px;background:#0f172a;padding:14px;border-radius:8px;">
+  <a href="#home" style="color:#38bdf8;font-weight:bold;text-decoration:none;">Home</a>
+  <a href="#courses" style="color:#cbd5e1;text-decoration:none;">Courses</a>
+  <a href="#contact" style="color:#cbd5e1;text-decoration:none;">Contact</a>
+</nav>`,
+            explanation: "'display:flex' aligns all links horizontally in a single row, and 'gap:20px' spaces them out evenly without messy margins.",
+            urduExplanation: 'display:flex تمام لنکس کو ایک سیدھی افقی لائن میں لاتا ہے اور gap ان کے درمیان خودکار یکساں فاصلہ دیتا ہے۔'
+          },
+          {
+            title: 'Example 2: Academy Header with Logo and Action Button',
+            urduTitle: 'مثال 2: اکیڈمی کا ہیڈر بمعہ لوگو اور جوائننگ بٹن',
+            code: `<nav style="display:flex;justify-content:space-between;align-items:center;background:#1e293b;padding:12px 24px;color:white;">
+  <span style="font-weight:bold;color:#38bdf8;">🏏 BACA LAHORE</span>
+  <a href="#join" style="background:#38bdf8;color:#0f172a;padding:6px 14px;border-radius:20px;font-weight:bold;text-decoration:none;">Join Academy</a>
+</nav>`,
+            explanation: "'justify-content: space-between' pushes the brand logo to the far left and the CTA button to the far right automatically.",
+            urduExplanation: 'justify-content: space-between لوگو کو بائیں جانب اور جوائننگ بٹن کو خود بخود دائیں کونے میں بھیج دیتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1128,7 +1395,41 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Whenever you have numbers, dates, or cricket scores, tables are the gold standard. In HTML, tables are constructed row by row using tr tags. Inside each row, th creates a bold header cell and td creates a normal data cell. Let's build your weekly Matric study and coding schedule!",
           urduVoice: "جب بھی آپ کے پاس نمبرز، تاریخیں یا کرکٹ کے اسکورز ہوں تو ٹیبل سے بہتر کوئی طریقہ نہیں۔ ایچ ٹی ایم ایل میں ٹیبل سطر بہ سطر بنتا ہے جس کے لیے tr لکھا جاتا ہے۔ اس کے اندر th ہیڈنگ بناتا ہے اور td ڈیٹا سیل۔ آئیے میٹرک کی پڑھائی اور کوڈنگ کا ہفتہ وار ٹائم ٹیبل بناتے ہیں!",
           pakistaniContext: "Create a balanced weekly study schedule for Pakistani students preparing for Federal Board (FBISE) exams.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Basic 2x2 Table Structure',
+            urduTitle: 'مثال 1: دو ضرب دو کی بنیادی ٹیبل ساخت',
+            code: `<table border="1">
+  <tr>
+    <th>Subject</th>
+    <th>Day</th>
+  </tr>
+  <tr>
+    <td>Computer Science</td>
+    <td>Monday</td>
+  </tr>
+</table>`,
+            explanation: '<tr> defines the horizontal row. <th> creates the bold column header, and <td> creates the data cell.',
+            urduExplanation: '<tr> افقی سطر بناتا ہے، <th> بولڈ ہیڈر سیل بناتا ہے، اور <td> عام ڈیٹا کا خانہ بناتا ہے۔'
+          },
+          {
+            title: 'Example 2: Clean Table with border-collapse',
+            urduTitle: 'مثال 2: بارڈر کولیپس کے ساتھ خوبصورت ٹیبل',
+            code: `<table style="border-collapse:collapse;width:100%;max-width:350px;">
+  <tr style="background:#0284c7;color:white;">
+    <th style="padding:8px;border:1px solid #cbd5e1;">Device</th>
+    <th style="padding:8px;border:1px solid #cbd5e1;">Price (PKR)</th>
+  </tr>
+  <tr>
+    <td style="padding:8px;border:1px solid #cbd5e1;">Gaming Mouse</td>
+    <td style="padding:8px;border:1px solid #cbd5e1;">2,500</td>
+  </tr>
+</table>`,
+            explanation: "'border-collapse: collapse;' eliminates the ugly double lines between cells, rendering crisp single borders like modern apps.",
+            urduExplanation: 'border-collapse: collapse بارڈرز کے درمیان کا ناپسندیدہ فاصلہ ختم کر کے ایک خوبصورت باریک لکیر بناتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1226,7 +1527,38 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Real-world tables have merged cells. With colspan, you can create summary banners like the team's total score. Let's recreate the official Pakistan T20 World Cup batting scorecard against England!",
           urduVoice: "اصلی زندگی کے ٹیبلز میں خانے ملے ہوئے ہوتے ہیں۔ کول اسپین کے ذریعے آپ ٹوٹل اسکور کی بینر لائن بنا سکتے ہیں۔ آئیے پاکستان ٹی 20 کرکٹ ٹیم کا آفیشل بیٹنگ اسکور کارڈ تیار کرتے ہیں!",
           pakistaniContext: "Create the Pakistan National Cricket Team batting scorecard celebrating Babar Azam and Mohammad Rizwan's masterclass partnership.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: "Example 1: Merging Columns with colspan='2'",
+            urduTitle: 'مثال 1: دو کالمز کو آپس میں جوڑنا',
+            code: `<table border="1" style="border-collapse:collapse;">
+  <tr>
+    <th>Item</th>
+    <th>Cost</th>
+  </tr>
+  <tr>
+    <td>Keyboard</td>
+    <td>3,000</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:center;font-weight:bold;">All Prices in PKR</td>
+  </tr>
+</table>`,
+            explanation: "colspan='2' stretches the cell across 2 columns. Notice the last row only has one <td> because it spans the width of two!",
+            urduExplanation: "colspan='2' ایک سیل کو دو کالمز جتنا چوڑا کر دیتا ہے۔ آخری سطر میں صرف ایک سیل ہے کیونکہ وہ دو کی جگہ لے رہا ہے۔"
+          },
+          {
+            title: 'Example 2: Cricket Scorecard Total Row',
+            urduTitle: 'مثال 2: کرکٹ اسکور کارڈ کی ٹوٹل اسکور سطر',
+            code: `<tr style="background:#065f46;color:#fde047;font-weight:bold;">
+  <td colspan="2">TOTAL (20 Overs)</td>
+  <td colspan="2">198/3 (RR: 9.90)</td>
+</tr>`,
+            explanation: 'Merging cells with colspan allows you to create high-impact score banners without misaligning other rows.',
+            urduExplanation: 'کول اسپین کے ذریعے آپ اسکور کارڈ میں بغیر ٹیبل خراب کیے واضح بینر بنا سکتے ہیں۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1335,7 +1667,34 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Let's assemble a complete, production-grade tournament standings table for the Pakistan Super League! We will feature team icons, matches played, won, lost, Net Run Rate, and qualification badges.",
           urduVoice: "آئیے پی ایس ایل کی 6 فرنچائزز کے لیے ایک شاندار پوائنٹس ٹیبل بناتے ہیں۔ جس میں میچز، فتوحات، نیٹ رن ریٹ اور پلے آف کوالیفکیشن کا خوبصورت ڈیٹا نظر آئے گا!",
           pakistaniContext: "Build the official Pakistan Super League (PSL) Season Points Table featuring Lahore Qalandars, Karachi Kings, Islamabad United, Multan Sultans, and Peshawar Zalmi.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Organizing with thead and tbody',
+            urduTitle: 'مثال 1: ٹیبل ہیڈ اور باڈی کو الگ الگ کرنا',
+            code: `<table style="border-collapse:collapse;width:100%;">
+  <thead style="background:#0f172a;color:white;">
+    <tr><th>Team</th><th>Points</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Lahore Qalandars</td><td>16</td></tr>
+    <tr><td>Karachi Kings</td><td>12</td></tr>
+  </tbody>
+</table>`,
+            explanation: '<thead> separates column titles from data rows in <tbody>, ensuring screen-readers and mobile layouts render cleanly.',
+            urduExplanation: 'thead عنوانات کو tbody کے اصل ریکارڈز سے الگ کرتا ہے تاکہ موبائل اور پرنٹ پر ڈیٹا بالکل صاف نظر آئے۔'
+          },
+          {
+            title: 'Example 2: Qualifying Zone Highlight Row',
+            urduTitle: 'مثال 2: پلے آف کوالیفائی کرنے والی ٹیم کی سطر کو رنگین کرنا',
+            code: `<tr style="background:rgba(34,197,94,0.15);border-left:4px solid #22c55e;">
+  <td style="padding:8px;">🦁 Lahore Qalandars (Q)</td>
+  <td style="padding:8px;font-weight:bold;color:#22c55e;">16 Pts</td>
+</tr>`,
+            explanation: 'Applying subtle background tints and colored left borders visually marks teams that have qualified for the PSL playoffs.',
+            urduExplanation: 'ہلکا سبز رنگ اور بائیں جانب سبز بارڈر لگانے سے پلے آف کوالیفائی کرنے والی ٹیمیں فوری نمایاں ہو جاتی ہیں۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1538,7 +1897,30 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Websites are not just digital books; they are interactive applications where users log in, search, and buy products! With forms, users can talk to your website. Always connect every label to its input with the 'for' and 'id' attributes. Let's build an esports clan application form!",
           urduVoice: "ویب سائٹس صرف پڑھنے کے لیے نہیں ہوتیں بلکہ ان پر یوزر لاگ ان کرتا ہے اور فارم بھرتا ہے۔ فارمز کے ذریعے یوزر اور ویب سائٹ میں رابطہ قائم ہوتا ہے۔ لیبل اور ان پٹ کو جوڑنا ایک اچھے کوڈر کا طریقہ ہے۔ آئیے ایک گیمنگ کلان کا رجسٹریشن فارم بناتے ہیں!",
           pakistaniContext: "Create a recruitment form for a Pakistani Esports Gaming Clan (Valorant / CS2).",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Connected Label and Text Input',
+            urduTitle: 'مثال 1: لیبل اور ان پٹ کو آپس میں جوڑنا',
+            code: `<form>
+  <label for="username">Gamer Username:</label><br>
+  <input type="text" id="username" placeholder="e.g. CyberNinja_PK">
+</form>`,
+            explanation: "The 'for' attribute on <label> matches the 'id' on <input>. Clicking the text label focuses the cursor straight into the box!",
+            urduExplanation: 'لیبل کا for اور ان پٹ کا id ایک جیسا ہے۔ جب یوزر تحریر پر کلک کرتا ہے تو کرسر خودکار طور پر ڈبے کے اندر پہنچ جاتا ہے۔'
+          },
+          {
+            title: 'Example 2: Required Email Field with Submit Button',
+            urduTitle: 'مثال 2: لازمی ای میل فیلڈ اور جمع کرانے کا بٹن',
+            code: `<form action="#" method="POST">
+  <label for="mail">Email Address (Required):</label><br>
+  <input type="email" id="mail" required placeholder="you@gmail.com"><br><br>
+  <button type="submit" style="background:#10b981;color:white;padding:8px 16px;border:none;border-radius:6px;">Sign Up Free</button>
+</form>`,
+            explanation: "'required' stops empty submissions, and type='email' checks for '@' symbols automatically before submitting.",
+            urduExplanation: "required فیلڈ کو خالی جمع ہونے سے روکتا ہے اور type='email' خودکار چیک کرتا ہے کہ @ کا نشان موجود ہے یا نہیں۔"
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1637,7 +2019,30 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "User authentication and preference choices are vital for real web applications. When users sign in, type='password' protects their credentials with secure dots. Radio buttons let gamers pick their primary role, and checkboxes confirm their agreement. Let's build a registration portal for the Pakistan AI Youth Hackathon!",
           urduVoice: "ویب سائٹ پر رجسٹریشن اور یوزر کی پسند جاننے کے لیے مختلف ان پٹس استعمال ہوتے ہیں۔ پاس ورڈ فیلڈ حروف کو چھپا دیتی ہے۔ ریڈیو بٹن سے صرف ایک رول منتخب ہوتا ہے اور چیک باکس سے شرائط منظور ہوتی ہیں۔ آئیے پاکستان یوتھ ہیکاتھون کا رجسٹریشن فارم بناتے ہیں!",
           pakistaniContext: "Create a registration form for the Pakistan National Young AI Hackathon 2026.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Password Input and Agreement Checkbox',
+            urduTitle: 'مثال 1: پاس ورڈ فیلڈ اور اقرار نامے کا چیک باکس',
+            code: `<form>
+  <label for="pass">Password:</label><br>
+  <input type="password" id="pass" placeholder="••••••••"><br><br>
+  <label><input type="checkbox" required> I agree to Fair Play rules</label>
+</form>`,
+            explanation: "type='password' masks characters into secure black dots. type='checkbox' allows simple on/off selection.",
+            urduExplanation: "type='password' خفیہ الفاظ کو نقطوں میں بدلتا ہے اور type='checkbox' ٹک لگانے کی سہولت دیتا ہے۔"
+          },
+          {
+            title: 'Example 2: Radio Button Group (Single Selection)',
+            urduTitle: 'مثال 2: ریڈیو بٹن گروپ (صرف ایک آپشن کا انتخاب)',
+            code: `<p>Select Your Gaming Role:</p>
+<label><input type="radio" name="role" value="sniper" checked> Sniper</label>
+<label><input type="radio" name="role" value="entry"> Entry Fragger</label>
+<label><input type="radio" name="role" value="support"> Support</label>`,
+            explanation: "Because all 3 radios share name='role', selecting one automatically unchecks the others!",
+            urduExplanation: "کیونکہ تینوں ریڈیو بٹنز کا name='role' ایک جیسا ہے، اس لیے کسی ایک کو منتخب کرنے سے باقی خودکار ہٹ جاتے ہیں۔"
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1755,7 +2160,33 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Let's build a real commercial e-commerce order form for a Pakistani custom PC building business! Customers can choose their graphics card from a dropdown, enter their delivery address in a textarea, and request an instant quote. Let's assemble the form!",
           urduVoice: "آئیے ایک اصلی کمرشل ای کامرس فارم بناتے ہیں جہاں کسٹمر ڈراپ ڈاؤن سے گرافکس کارڈ چن سکے، ٹیکسٹ ایریا میں ڈلیوری کا پتہ لکھ سکے اور فوری کوٹیشن مانگ سکے۔ آئیے مل کر کوڈ کرتے ہیں!",
           pakistaniContext: "Build a custom quote builder for a Hafeez Centre Lahore and Techno City Karachi PC builder.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Dropdown Selection Menu (<select> + <option>)',
+            urduTitle: 'مثال 1: ڈراپ ڈاؤن سلیکشن مینیو',
+            code: `<label for="city">Select Your City:</label><br>
+<select id="city">
+  <option value="lhr">Lahore</option>
+  <option value="khi">Karachi</option>
+  <option value="isb">Islamabad</option>
+</select>`,
+            explanation: '<select> creates the dropdown container, and each <option> represents a clickable choice.',
+            urduExplanation: '<select> ڈراپ ڈاؤن کنٹینر ہے اور <option> اس کے اندر موجود ایک ایک شہر کا نام ہے۔'
+          },
+          {
+            title: 'Example 2: Multi-line Message Textarea and Reset Button',
+            urduTitle: 'مثال 2: ملٹی لائن ٹیکسٹ ایریا اور ری سیٹ بٹن',
+            code: `<form>
+  <label for="msg">Custom PC Specifications / Address:</label><br>
+  <textarea id="msg" rows="3" cols="30" placeholder="Describe your build..."></textarea><br><br>
+  <button type="submit">Submit</button>
+  <button type="reset">Reset Form</button>
+</form>`,
+            explanation: "<textarea> accepts long paragraphs with multiple lines. <button type='reset'> restores all inputs to empty.",
+            urduExplanation: '<textarea> لمبی تحریر اور پتوں کے لیے ہوتا ہے۔ reset بٹن پورے فارم کو ایک کلک میں دوبارہ خالی کر دیتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -1930,7 +2361,29 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "The CSS Box Model is the foundation of professional web design. Once you understand the difference between padding and margin, you will never struggle with layout spacing again! Padding is inside the border, margin is outside the border. Let's create an interactive product pricing card to see the difference live!",
           urduVoice: "سی ایس ایس باکس ماڈل کو سمجھنا ہر پروفیشنل ویب ڈویلپر کے لیے لازمی ہے۔ پیڈنگ بارڈر کے اندر کی جگہ ہے اور مارجن بارڈر کے باہر کی جگہ۔ جب آپ یہ فرق سمجھ جائیں گے تو آپ کے ویب پیجز انتہائی خوبصورت لگیں گے۔ آئیے ایک شاندار پراڈکٹ کارڈ بنا کر باکس ماڈل کو لائیو دیکھتے ہیں!",
           pakistaniContext: "Style interactive tech product pricing cards for Pakistani stores.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: The CSS Box Model (Padding vs Border vs Margin)',
+            urduTitle: 'مثال 1: سی ایس ایس باکس ماڈل (پیڈنگ، بارڈر اور مارجن)',
+            code: `<div style="background:#312e81;padding:20px;border:3px solid #818cf8;margin:20px;color:white;border-radius:10px;">
+  <h3>Padding is inside the border.</h3>
+  <p>Margin is outside pushing neighbors away.</p>
+</div>`,
+            explanation: 'Padding (20px) creates breathing room inside the purple border. Margin (20px) creates empty room outside.',
+            urduExplanation: 'پیڈنگ بارڈر کے اندر 20 پکسل جگہ بناتی ہے، جبکہ مارجن بارڈر کے باہر فاصلہ دیتا ہے۔'
+          },
+          {
+            title: 'Example 2: Cyberpunk Neon Card with box-shadow',
+            urduTitle: 'مثال 2: نیون گلو اور شیڈو والا جدید کارڈ',
+            code: `<div style="background:#0f172a;border:2px solid #ec4899;box-shadow:0 0 20px #ec4899;padding:16px;border-radius:12px;color:white;max-width:300px;">
+  <h3 style="color:#f472b6;margin-top:0;">Neon Cyber Shield</h3>
+  <p>Status: Active Protection</p>
+</div>`,
+            explanation: "'box-shadow: 0 0 20px #ec4899;' gives the border a glowing pink neon aesthetic popular in gaming UI.",
+            urduExplanation: 'box-shadow بارڈر کے گرد چمکتا ہوا نیون گلو دیتا ہے جو گیمنگ انٹرفیس میں بہت مقبول ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -2011,7 +2464,32 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "For 20 years, centering an element on a webpage was a famous running joke among programmers because it was so hard. Flexbox solved it forever! With just display: flex and justify-content: center, anything centers perfectly. Let's build a trendy sneaker product card showcase!",
           urduVoice: "ماضی میں ویب سائٹ پر کسی چیز کو بالکل درمیان میں لانا اتنا مشکل تھا کہ اس پر لطیفے بنتے تھے۔ فلیکس باکس نے اسے ہمیشہ کے لیے آسان بنا دیا۔ صرف ڈسپلے فلیکس لکھنے سے تمام کارڈز ایک قطار میں سنٹر ہو جاتے ہیں۔ آئیے کراچی اسٹریٹ ویئر اسنیکرز کا شاندار پروڈکٹ گرڈ تیار کرتے ہیں!",
           pakistaniContext: "Build a responsive sneaker and streetwear showcase popular among Pakistani teenagers.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Perfect Horizontal Centering with Flexbox',
+            urduTitle: 'مثال 1: فلیکس باکس کے ذریعے بالکل درمیان میں لانا',
+            code: `<div style="display:flex;justify-content:center;align-items:center;height:120px;background:#18181b;border-radius:10px;">
+  <button style="background:#a855f7;color:white;padding:10px 20px;border:none;border-radius:6px;font-weight:bold;">Centered Button ⚡</button>
+</div>`,
+            explanation: "Combining 'display: flex' with 'justify-content: center' and 'align-items: center' centers any element in 3 lines.",
+            urduExplanation: 'ڈسپلے فلیکس اور دونوں سنٹر پراپرٹیز ملا کر کسی بھی بٹن کو باکس کے بالکل بیچوں بیچ لے آتی ہیں۔'
+          },
+          {
+            title: 'Example 2: Responsive Product Cards Grid',
+            urduTitle: 'مثال 2: ریسپانسیو پروڈکٹ کارڈز کی گرڈ',
+            code: `<div style="display:flex;gap:12px;flex-wrap:wrap;background:#18181b;padding:16px;">
+  <div style="background:#27272a;padding:12px;border-radius:8px;color:white;width:130px;text-align:center;">
+    <h4>Jordan 1</h4><p style="color:#a855f7;">PKR 14.5k</p>
+  </div>
+  <div style="background:#27272a;padding:12px;border-radius:8px;color:white;width:130px;text-align:center;">
+    <h4>Yeezy 350</h4><p style="color:#a855f7;">PKR 18.9k</p>
+  </div>
+</div>`,
+            explanation: "'flex-wrap: wrap' allows cards to automatically drop down to the next row when viewed on a narrow smartphone screen.",
+            urduExplanation: 'flex-wrap: wrap کارڈز کو موبائل اسکرین پر خودکار طریقے سے اگلی لائن پر منتقل ہونے کی لچک دیتا ہے۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -2130,7 +2608,32 @@ export const HTML_TEENS_COURSE = {
           englishVoice: "Congratulations young engineer! You have reached your graduation project. You started from absolute zero, and now you are writing complete HTML5 applications. In this capstone lesson, we will construct your official personal developer portfolio. Customize it with your name and city, take the final exam, and claim your verified D.TEN Web Developer Diploma!",
           urduVoice: "مبارک ہو نوجوان ویب انجینئر! آپ نے بالکل صفر سے آغاز کیا تھا، اور اب آپ ایک مکمل ایچ ٹی ایم ایل 5 ویب سائٹ بنا رہے ہیں۔ اس فائنل پروجیکٹ میں ہم آپ کی اپنی ذاتی پورٹ فولیو ویب سائٹ تیار کریں گے۔ اپنا نام اور شہر درج کریں، فائنل امتحان پاس کریں، اور ڈی ٹین کا آفیشل گولڈ سرٹیفکیٹ حاصل کریں!",
           pakistaniContext: "Create a world-class portfolio for a 15-year-old Pakistani coder aiming for international remote freelance clients.",
-          starterCode: `<!DOCTYPE html>
+          examples: [
+          {
+            title: 'Example 1: Essential SEO Meta Tags in <head>',
+            urduTitle: 'مثال 1: گوگل ایس ای او کے اہم میٹا ٹیگز',
+            code: `<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Junior Web Developer portfolio of Pakistani teen coder.">
+  <title>Ali Codes | Web Dev PK</title>
+</head>`,
+            explanation: 'The viewport tag optimizes mobile layout scaling, and the description meta tag provides Google with search snippets.',
+            urduExplanation: 'viewport ٹیگ موبائل پر ویب سائٹ کو فٹ کرتا ہے اور description ٹیگ گوگل سرچ میں پیج کا تعارف دکھاتا ہے۔'
+          },
+          {
+            title: 'Example 2: Tech Skills Badges Component',
+            urduTitle: 'مثال 2: مہارتوں کے بیجز کا ماڈرن کمپوننٹ',
+            code: `<div style="display:flex;gap:8px;flex-wrap:wrap;">
+  <span style="background:#1e293b;color:#38bdf8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;border:1px solid #334155;">⚡ HTML5</span>
+  <span style="background:#1e293b;color:#a855f7;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;border:1px solid #334155;">🎨 CSS Flexbox</span>
+  <span style="background:#1e293b;color:#34d399;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;border:1px solid #334155;">📊 Tables</span>
+</div>`,
+            explanation: 'Pill-style badges with contrasting borders and dark backgrounds communicate technical competence at a glance.',
+            urduExplanation: 'پِل اسٹائل کے بیجز پورٹ فولیو پر آپ کی مختلف مہارتوں کو ایک نظر میں شاندار طریقے سے دکھاتے ہیں۔'
+          },
+        ],
+starterCode: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
