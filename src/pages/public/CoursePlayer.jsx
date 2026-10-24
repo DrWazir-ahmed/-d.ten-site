@@ -16,7 +16,8 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  Lock
+  Lock,
+  Presentation
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { 
@@ -33,9 +34,17 @@ import { Badge } from '../../components/common/Badge';
 import { FormattedText } from '../../components/common/FormattedText';
 import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { StandardTestPlayer } from '../../components/course/StandardTestPlayer';
+import { CourseSlidePlayer } from '../../components/course/CourseSlidePlayer';
+import { PresentationRunner } from '../../components/common/PresentationRunner';
 import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
 import { PythonKidsStudio } from '../../components/pythonKids/PythonKidsStudio';
 import { HtmlTeensStudio } from '../../components/htmlTeens/HtmlTeensStudio';
+import { 
+  AI_PRESENTATION, 
+  ENGLISH_TENSES_PRESENTATION, 
+  COMPUTER_SKILLS_PRESENTATION, 
+  ACTIVE_PASSIVE_PRESENTATION 
+} from '../../data/presentationData';
 
 export const CoursePlayer = () => {
   const { id } = useParams();
@@ -60,6 +69,20 @@ export const CoursePlayer = () => {
   // Completion modal state
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [issuedCert, setIssuedCert] = useState(null);
+
+  // Masterclass Presentation Runner state
+  const [activeMasterDeck, setActiveMasterDeck] = useState(null);
+
+  // Associated Masterclass Deck for the active course
+  const masterDeck = useMemo(() => {
+    if (!course) return null;
+    if (course.id === 'course-8' || course.title?.includes('Artificial Intelligence')) return AI_PRESENTATION;
+    if (course.id === 'course-13' || course.title?.includes('English Tenses')) return ENGLISH_TENSES_PRESENTATION;
+    if (course.id === 'course-7' || course.title?.includes('Basic Computer Skills')) return COMPUTER_SKILLS_PRESENTATION;
+    if (course.id?.includes('active-passive') || course.title?.includes('Active & Passive')) return ACTIVE_PASSIVE_PRESENTATION;
+    if (course.presentationData) return course.presentationData;
+    return null;
+  }, [course]);
 
   useEffect(() => {
     const initPlayer = async () => {
@@ -394,6 +417,33 @@ export const CoursePlayer = () => {
               </>
             )}
 
+            {/* Masterclass Presentation Deck Banner if available for this course */}
+            {masterDeck && course.id !== 'course-html-teens-pakistan' && course.id !== 'course-python-kids-pakistan' && (
+              <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-brand-500/10 border border-amber-500/30 dark:border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-md shrink-0">
+                    <Presentation className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {masterDeck.title || 'Course Masterclass Slide Deck'}
+                    </h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Interactive PowerPoint (.PPTX) presentation with {masterDeck.slides?.length || 10} masterclass slides and presenter notes.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveMasterDeck(masterDeck)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-sm transition-all hover:scale-[1.02] shrink-0"
+                >
+                  <PlayCircle className="w-4 h-4" />
+                  <span>Run Masterclass Deck (.PPTX)</span>
+                </button>
+              </div>
+            )}
+
             {/* Read Aloud Audio Bar for Students */}
             {readableLessonText && (
               <ReadAloudPlayer 
@@ -421,18 +471,16 @@ export const CoursePlayer = () => {
                 )}
                 <LanguageLearningStudio />
               </div>
-            ) : currentLesson.type === 'video' ? (
+            ) : currentLesson.type === 'video' && currentLesson.videoUrl ? (
               <div className="space-y-6">
                 <div className="aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 shadow-inner flex items-center justify-center relative">
-                  <div className="text-center p-6 space-y-3">
-                    <div className="w-16 h-16 rounded-full bg-brand-600/30 text-brand-400 flex items-center justify-center mx-auto shadow-lg backdrop-blur-sm">
-                      <PlayCircle className="w-10 h-10 fill-brand-600 text-white" />
-                    </div>
-                    <p className="text-sm font-semibold text-white">Video Lecture Player</p>
-                    <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                      High definition multimedia lecture with synchronized transcript and practical code walkthrough.
-                    </p>
-                  </div>
+                  <iframe
+                    src={currentLesson.videoUrl}
+                    title={currentLesson.title}
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
 
                 {currentLesson.content && (
@@ -461,9 +509,26 @@ export const CoursePlayer = () => {
                 />
               </div>
             ) : (
-              /* Reading / Text Lesson */
-              <div className="max-w-none text-slate-800 dark:text-slate-200 text-sm sm:text-base leading-relaxed space-y-6">
-                <FormattedText content={currentLesson.content} />
+              /* Course Slide Deck Player for lessons with multi-slide structure / presentations / rich text */
+              <div className="space-y-6">
+                <CourseSlidePlayer
+                  content={currentLesson.content}
+                  lessonTitle={currentLesson.title}
+                  courseTitle={course.title}
+                  lessonIndex={activeLessonIndex}
+                  totalLessons={course.lessons?.length || 1}
+                  isCompleted={isCompleted}
+                  onComplete={() => handleToggleComplete(true)}
+                  hasPracticeQuestions={hasPracticeQuestions}
+                  onScrollToPractice={() => {
+                    const sec = document.getElementById('lesson-practice-section');
+                    if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  onNextLesson={activeLessonIndex < (course.lessons?.length || 1) - 1 ? handleNextLesson : null}
+                  onPreviousLesson={activeLessonIndex > 0 ? handlePrevLesson : null}
+                  hasMasterDeck={Boolean(masterDeck)}
+                  onOpenMasterDeck={() => setActiveMasterDeck(masterDeck)}
+                />
 
                 {/* Interactive End-of-Lesson Practice Questions (Required for completion) */}
                 {hasPracticeQuestions && (
@@ -892,6 +957,14 @@ export const CoursePlayer = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Masterclass Presentation Deck Live Runner */}
+      {activeMasterDeck && (
+        <PresentationRunner
+          presentation={activeMasterDeck}
+          onClose={() => setActiveMasterDeck(null)}
+        />
       )}
     </div>
   );

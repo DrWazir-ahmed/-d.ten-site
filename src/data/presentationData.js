@@ -590,3 +590,211 @@ Slide Deck Overview:
 
 Click 'Run Presentation' to start full-screen interactive slideshow mode with presenter notes and laser pointer.`
 };
+
+export const COMPUTER_SKILLS_PRESENTATION = {
+  id: "deck-computer-skills",
+  title: "Basic Computer Skills & Digital Literacy Masterclass",
+  subtitle: "Hardware, Operating Systems, File Management & Online Safety",
+  author: "Dr Wazir Ahmed",
+  format: "pptx",
+  slideCount: 10,
+  theme: "blue",
+  slides: [
+    {
+      id: 1,
+      slideNumber: 1,
+      layout: "title",
+      title: "Basic Computer Skills & Digital Literacy",
+      subtitle: "Foundations of Hardware, Operating Systems, File Architecture & Cybersecurity",
+      bullets: [
+        "Executive Digital Literacy Series by Dr Wazir Ahmed",
+        "Master the PC Architecture: Windows, macOS, File Systems & Clouds",
+        "Keyboard Shortcuts, Internet Safety Protocols & Troubleshooting"
+      ],
+      notes: "Welcome students to digital literacy. Emphasize that computer competence is the prerequisite multiplier for academic success, remote employment, and modern technological confidence.",
+      badge: "Orientation"
+    },
+    {
+      id: 2,
+      slideNumber: 2,
+      layout: "content",
+      title: "Hardware Fundamentals: The Physical Machine",
+      subtitle: "De-mystifying the internal organs of a modern computer",
+      bullets: [
+        "CPU (Central Processing Unit): The brain executing billions of calculations per second.",
+        "RAM (Random Access Memory): Super-fast temporary workspace cleared on reboot.",
+        "Storage (SSD vs. HDD): Solid State Drives offer 5x-10x faster boot and file load speeds than spinning disks.",
+        "Motherboard & Power: The central highway connecting components with regulated voltage.",
+        "Peripherals & Ports: USB-C/Thunderbolt, HDMI, DisplayPort, and wireless Bluetooth connectivity."
+      ],
+      notes: "Explain RAM vs SSD using the desk analogy: RAM is the desk surface where active papers lie; SSD is the filing cabinet where files are archived permanently.",
+      badge: "Hardware"
+    },
+    {
+      id: 3,
+      slideNumber: 3,
+      layout: "content",
+      title: "Operating System Navigation: Windows & macOS",
+      subtitle: "Navigating desktop environments with confidence and speed",
+      bullets: [
+        "The OS Bridge: Mediates between physical hardware and application software.",
+        "Taskbar & Dock: Quick launcher for pinned apps, notifications, and system trays.",
+        "Start Menu & Spotlight: Instant indexing search (tap Win key or Cmd+Space and type any app name).",
+        "Settings vs. Control Panel: Managing display resolutions, power sleep timers, and connected devices.",
+        "Task Manager (Ctrl+Shift+Esc): Identifying resource-heavy background processes and closing frozen apps."
+      ],
+      notes: "Encourage students to rely on typing to search rather than manually hunting through nested menus.",
+      badge: "Operating Systems"
+    },
+    {
+      id: 4,
+      slideNumber: 4,
+      layout: "content",
+      title: "File & Folder Architecture: Hierarchy & Organization",
+      subtitle: "Eliminating digital clutter with systematic directory structures",
+      bullets: [
+        "Hierarchical Tree: Root Drive (C:) ➔ Folders ➔ Sub-folders ➔ Files.",
+        "File Extensions: .docx (documents), .pdf (read-only), .xlsx (spreadsheets), .jpg/.png (images).",
+        "Naming Conventions: Use dates and clear slugs (e.g., '2026-03_Chemistry_Notes_v02.pdf').",
+        "Bulk Management: Shift+Click (consecutive selection), Ctrl+Click (selective picking).",
+        "Compression: Zipping folders to save bandwidth and bundle multiple attachments."
+      ],
+      notes: "Warn learners against saving everything on the Desktop, which slows down system rendering and leads to accidental file losses.",
+      badge: "File Management"
+    },
+    {
+      id: 5,
+      slideNumber: 5,
+      layout: "content",
+      title: "Cloud Storage & The 3-2-1 Backup Strategy",
+      subtitle: "Protecting critical documents against hardware failure and ransomware",
+      bullets: [
+        "Cloud Ecosystems: Google Drive, Microsoft OneDrive, and Dropbox for automatic synchronization.",
+        "Cross-Device Continuity: Access files seamlessly across desktop, tablet, and mobile smartphone.",
+        "The 3-2-1 Backup Golden Rule:",
+        "• 3 Copies of important data (1 primary + 2 backups).",
+        "• 2 Different media types (e.g. local SSD + external hard drive).",
+        "• 1 Offsite copy located in the secure cloud.",
+        "Version History: Restoring prior versions of corrupted or accidentally overwritten documents."
+      ],
+      notes: "Emphasize that hardware will inevitably fail at some point; proactive automated backups prevent catastrophic academic or professional loss.",
+      badge: "Cloud & Backups"
+    },
+    {
+      id: 6,
+      slideNumber: 6,
+      layout: "content",
+      title: "Internet Browsing & Search Engine Mastery",
+      subtitle: "Efficient web navigation and advanced search techniques",
+      bullets: [
+        "Web Architecture: Web Browser (Chrome, Edge, Firefox) connects to web servers via HTTP/HTTPS.",
+        "URL Anatomy: Protocol (https://) + Domain (dten.edu.pk) + Path (/learn/course-7).",
+        "Google Power Operators:",
+        "• \"Exact Phrase\": Searches for precise string matches.",
+        "• site:edu.pk: Restricts results solely to accredited Pakistani educational domains.",
+        "• filetype:pdf: Retrieves direct downloadable textbooks and reference sheets.",
+        "Cache & Cookies: Understanding browser memory, clearing site data, and private/incognito windows."
+      ],
+      notes: "Demonstrate live search operators so students understand how to find academic research in seconds rather than hours.",
+      badge: "Web Mastery"
+    },
+    {
+      id: 7,
+      slideNumber: 7,
+      layout: "content",
+      title: "Cybersecurity & Password Hygiene",
+      subtitle: "Defending identity, data, and credentials against cyber threats",
+      bullets: [
+        "Phishing Awareness: Verifying sender email addresses before clicking download links or entering passwords.",
+        "Password Strength: Minimum 14-16 characters blending letters, numbers, and symbols; never reuse passwords.",
+        "Password Managers (Bitwarden, 1Password): Generates and autofills encrypted complex passwords.",
+        "Multi-Factor Authentication (2FA / MFA): Requiring an authenticator app code alongside password.",
+        "Public Wi-Fi Safety: Avoid logging into bank portals on unsecured public hotspots without a VPN."
+      ],
+      notes: "Show real examples of phishing emails mimicking banking alerts and teach learners how to inspect actual domain names.",
+      badge: "Cybersecurity"
+    },
+    {
+      id: 8,
+      slideNumber: 8,
+      layout: "content",
+      title: "High-Yield Productivity Keyboard Shortcuts",
+      subtitle: "Doubling typing and navigation speed without touching the mouse",
+      bullets: [
+        "Universal Clipboard: Ctrl+C (Copy), Ctrl+X (Cut), Ctrl+V (Paste), Ctrl+Z (Undo), Ctrl+Y (Redo).",
+        "Fast Navigation: Alt+Tab (Switch open windows), Win+D (Show/hide desktop), Win+Left/Right (Split screens).",
+        "Text Precision: Ctrl+Left/Right (Jump whole words), Shift+Home/End (Select entire line), Ctrl+A (Select all).",
+        "Screenshot Arsenal: Win+Shift+S (Snipping tool for custom box, window, or full display capture).",
+        "Browser Shortcuts: Ctrl+T (New tab), Ctrl+Shift+T (Reopen closed tab), Ctrl+L (Focus URL bar)."
+      ],
+      notes: "Keyboard proficiency is the single highest-return habit students can build. Practice 5 shortcuts daily until muscle memory forms.",
+      badge: "Shortcuts"
+    },
+    {
+      id: 9,
+      slideNumber: 9,
+      layout: "content",
+      title: "Troubleshooting & Basic PC Maintenance",
+      subtitle: "Resolving common computer hiccups independently",
+      bullets: [
+        "The Power of Rebooting: Clears temporary RAM memory leaks and resets unresponsive hardware drivers.",
+        "Unresponsive Software: Press Ctrl+Shift+Esc, locate frozen application, and click 'End Task'.",
+        "Audio / Video Malfunctions: Verify default playback device in sound settings and test connection cables.",
+        "Slow System Performance: Check startup applications (Task Manager ➔ Startup) and free up drive space.",
+        "System Updates: Keep Windows Update and macOS current to patch known zero-day vulnerabilities."
+      ],
+      notes: "Teach the systematic isolation approach: test one variable at a time before assuming hardware is broken.",
+      badge: "Troubleshooting"
+    },
+    {
+      id: 10,
+      slideNumber: 10,
+      layout: "conclusion",
+      title: "Conclusion & Lifelong Digital Fluency",
+      subtitle: "Principles of continuous digital empowerment",
+      bullets: [
+        "1. Treat the computer as an extension of your mind and creative potential.",
+        "2. Automate backups and enforce 2FA security across all essential accounts.",
+        "3. Master keyboard shortcuts to minimize physical strain and maximize output speed.",
+        "4. Explore D.TEN courses in Programming, AI, and Languages on your newly mastered machine.",
+        "Congratulations on completing the Digital Literacy Foundation!"
+      ],
+      notes: "Congratulate learners. Direct them to the comprehensive quiz and practical exercises to earn their verified certificate.",
+      badge: "Certification"
+    }
+  ]
+};
+
+export const COMPUTER_SKILLS_PRESENTATION_ITEM = {
+  id: "content-presentation-computer-skills",
+  title: "Basic Computer Skills Masterclass (Presentation Deck)",
+  description: "Official 10-slide interactive PowerPoint (.PPTX) presentation deck covering computer hardware, Windows/macOS operating systems, folder organization, cloud backups, and cybersecurity.",
+  contentType: "Presentation",
+  category: "Computer Science",
+  thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80",
+  author: "Dr Wazir Ahmed",
+  membership: "free",
+  publishDate: "2025-03-08",
+  status: "published",
+  downloadUrl: "#",
+  isPresentation: true,
+  format: "pptx",
+  slideCount: 10,
+  presentationData: COMPUTER_SKILLS_PRESENTATION,
+  body: `Basic Computer Skills Masterclass (.PPTX Presentation)
+By Dr Wazir Ahmed | D.TEN Educational Network
+
+Slide Deck Overview:
+• Slide 1: Welcome & Course Objectives
+• Slide 2: Hardware Architecture (CPU, RAM, SSD)
+• Slide 3: Operating System Navigation (Windows & macOS)
+• Slide 4: File & Folder Organization Hierarchy
+• Slide 5: Cloud Storage & The 3-2-1 Backup Strategy
+• Slide 6: Web Browsing & Search Operators
+• Slide 7: Cybersecurity, Phishing & 2FA
+• Slide 8: Essential Keyboard Shortcuts
+• Slide 9: Troubleshooting & Maintenance
+• Slide 10: Conclusion & Digital Literacy Takeaways
+
+Click 'Run Presentation' to start full-screen interactive slideshow mode with presenter notes and laser pointer.`
+};

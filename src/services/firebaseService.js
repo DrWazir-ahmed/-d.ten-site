@@ -453,10 +453,21 @@ export const getCourseById = async (id) => {
 
     if (course.id === 'course-13' || course.title === 'English Tenses Orientation') {
       const seedTenses = INITIAL_COURSES.find(c => c.id === 'course-13');
-      if (seedTenses && (!course.lessons || course.lessons.length === 0)) {
+      if (seedTenses) {
         course = {
           ...course,
           ...seedTenses,
+          instructor: "Dr Wazir Ahmed"
+        };
+      }
+    }
+
+    if (course.id === 'course-7' || course.title === 'Basic Computer Skills') {
+      const seedComp = INITIAL_COURSES.find(c => c.id === 'course-7');
+      if (seedComp) {
+        course = {
+          ...course,
+          ...seedComp,
           instructor: "Dr Wazir Ahmed"
         };
       }

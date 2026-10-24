@@ -15,7 +15,8 @@ import { ACTIVE_PASSIVE_WORKSHEET_ITEM, TENSES_WORKSHEET_ITEM } from './workshee
 import { 
   ENGLISH_TENSES_PRESENTATION_ITEM, 
   AI_PRESENTATION_ITEM, 
-  ACTIVE_PASSIVE_PRESENTATION_ITEM 
+  ACTIVE_PASSIVE_PRESENTATION_ITEM,
+  COMPUTER_SKILLS_PRESENTATION_ITEM
 } from './presentationData';
 
 export const INITIAL_CATEGORIES = {
@@ -439,11 +440,363 @@ export const INITIAL_COURSES = [
     ],
     requirements: ["Access to any desktop computer or laptop"],
     lessons: [
-      { id: "les-7-1", title: "Hardware, Software, and OS Navigation", duration: "20 mins", type: "video", content: "Understanding CPU, RAM, storage, and desktop basics." },
-      { id: "les-7-2", title: "File Management, Folders, and Cloud Backups", duration: "25 mins", type: "text", content: "How to structure folders, rename files in bulk, and use Google Drive / OneDrive." },
-      { id: "les-7-3", title: "Internet Browsing and Cybersecurity Safety", duration: "30 mins", type: "video", content: "Safe browsing habits, 2FA setup, and password managers." },
-      { id: "les-7-4", title: "Essential Keyboard Shortcuts Every User Must Know", duration: "20 mins", type: "text", content: "Ctrl+C, Ctrl+V, Alt+Tab, Win+Shift+S, and task management." },
-      { id: "les-7-5", title: "Computer Literacy Quiz", duration: "15 mins", type: "quiz", quizId: "quiz-7" }
+      { 
+        id: "les-7-1", 
+        title: "Hardware, Software, and OS Navigation", 
+        duration: "25 mins", 
+        type: "text", 
+        content: `### Core Computer Hardware Essentials
+
+- **CPU (Central Processing Unit):** Often called the 'brain' of the PC. It executes program instructions and processes arithmetic computations billions of times per second.
+- **RAM (Random Access Memory):** Fast, volatile temporary workspace. All running programs and open browser tabs live here while your PC is powered on.
+- **Storage Drive (SSD vs. HDD):**
+  - **SSD (Solid State Drive):** Uses flash memory chips, 5x–10x faster than mechanical drives, silent and shock-resistant.
+  - **HDD (Hard Disk Drive):** Uses magnetic spinning platters, slower, but economical for massive cold storage archives.
+- **Motherboard:** The main circuit board connecting the processor, memory, storage, and graphics adapter into one unified system.
+- **Power Supply Unit (PSU):** Regulates AC mains electricity into clean, safe DC voltage for computer electronics.
+
+> **Analogy:** Think of your PC as an office desk. RAM is the surface of your desk where active files sit; the SSD is the filing cabinet where documents are permanently kept when the office closes.
+
+---
+
+### System Software vs. Application Software
+
+- **System Software (The Operating System):**
+  - Manages physical hardware resources, memory allocation, and user security permissions.
+  - Examples: Microsoft Windows 11, Apple macOS Sonoma, Ubuntu Linux.
+  - Device Drivers act as specialized translators between the OS and peripherals like printers or webcams.
+- **Application Software (End-User Tools):**
+  - Programs created to help you accomplish specific creative, academic, or computational tasks.
+  - Office Productivity: Microsoft Word, Excel, Google Docs, LibreOffice.
+  - Web Browsers: Google Chrome, Mozilla Firefox, Microsoft Edge, Safari.
+  - Media & Utility Players: VLC Media Player, Adobe Acrobat Reader.
+
+> **Key Takeaway:** An application cannot run directly on raw hardware; it always communicates through the Operating System layer.
+
+---
+
+### Navigating the Desktop & Taskbar
+
+- **The Desktop Workspace:** Your root graphical landing zone. Keep icons clean and categorized to prevent visual and mental clutter.
+- **The Taskbar / Dock:**
+  - Pinned applications for instant 1-click access.
+  - System Tray (Windows) or Menu Bar (macOS): Shows Wi-Fi status, volume controls, battery percentage, and clock.
+- **Start Menu & Search Indexing:**
+  - Press the **Windows Key** (or **Cmd + Space** on Mac) and begin typing immediately to search for files, settings, or applications instantly.
+  - Never spend time scrolling through long alphabetical lists when you can search in 1 second.
+- **Virtual Desktops:**
+  - Create separate desktop spaces for 'Study', 'Coding', and 'Personal Browsing' using **Win + Tab** or Mac Mission Control.
+
+> **Practical Tip:** Pin your 5 most frequently used tools (Browser, File Explorer, Terminal, Notes) to the taskbar for instant numeric access (Win + 1, Win + 2, etc.).
+
+---
+
+### System Settings, Display & Audio Configuration
+
+- **Display Settings:**
+  - Resolution: Always set to the 'Recommended' native panel resolution (e.g. 1920x1080 Full HD).
+  - Night Light / True Tone: Reduces blue light emission during late-night study sessions to prevent eye strain.
+  - Scaling: Set to 100% or 125% depending on monitor size for crisp text readability.
+- **Sound Output & Input:**
+  - Switching between headphones, external speakers, and built-in laptop audio.
+  - Testing microphone input levels before entering online classes or meetings.
+- **Power & Sleep Management:**
+  - Configuring screen timeout when running on battery to preserve laptop cycle life.
+
+> **Pro Tip:** If sound stops working suddenly, right-click the speaker icon on the taskbar and select 'Sound Settings' to verify the active Output Device.
+
+---
+
+### Task Manager & Resource Monitoring
+
+- **Launching Task Manager:** Press **Ctrl + Shift + Esc** directly on your keyboard.
+- **Processes Tab:**
+  - Displays real-time consumption of CPU, RAM, Disk, and Network bandwidth.
+  - Identifies frozen applications marked as *(Not Responding)*.
+- **Ending Unresponsive Tasks:**
+  - Select the rogue application and click **End Task** to recover control without rebooting your computer.
+- **Startup Apps Management:**
+  - Review applications that launch automatically when Windows boots.
+  - Disable unnecessary startup programs (e.g., game launchers, updater tools) to cut boot times in half.
+
+> **Safety Warning:** Only terminate software you recognize. Do not terminate Windows background processes like 'Windows Explorer' unless troubleshooting graphical glitches.`
+      },
+      { 
+        id: "les-7-2", 
+        title: "File Management, Folders, and Cloud Backups", 
+        duration: "25 mins", 
+        type: "text", 
+        content: `### The File System Hierarchy & Drive Architecture
+
+- **Drives & Partitions:**
+  - **Drive C: (Local Disk):** Contains the Operating System, program files, and system libraries.
+  - **Drive D: / E: (Data Partitions):** Best practice location for storing personal archives, projects, and media.
+- **User Directory Structure:**
+  - **Documents:** Standard folder for Word files, spreadsheets, and academic papers.
+  - **Downloads:** Temporary inbox for internet files. Needs regular weekly purging.
+  - **Desktop:** Visual shortcuts only; avoid storing gigabytes of loose raw files here.
+- **Understanding File Extensions:**
+  - Documents: \`.docx\`, \`.pdf\`, \`.txt\`, \`.pptx\`, \`.xlsx\`
+  - Imagery: \`.png\` (lossless transparent), \`.jpg\` (compressed photos), \`.svg\` (vector graphic)
+  - Audio/Video: \`.mp3\`, \`.wav\`, \`.mp4\`, \`.mkv\`
+  - Archives: \`.zip\`, \`.rar\`, \`.7z\`
+
+> **Rule of Thumb:** Never delete or alter a file's three-letter extension unless you intend to convert its format, or the operating system may fail to open it.
+
+---
+
+### Systematic Folder Organization & Naming Rules
+
+- **Hierarchical Depth:** Keep directories organized in 3 logical layers:
+  \`[Category] ➔ [Year or Subject] ➔ [Project or Topic]\`
+  - Example: \`D:\\D.TEN_Academy\\2026_Computer_Science\\Assignments\\\`
+- **Professional Naming Conventions:**
+  - Use ISO chronological date prefixes: \`YYYY-MM-DD\`
+  - Avoid special characters like \`/ \\ : * ? " < > |\` which are reserved by system kernels.
+  - Replace empty spaces with underscores or hyphens: \`Physics_Lab_Report_v01.pdf\`
+- **Version Control Discipline:**
+  - Replace vague names like *'Document_Final_Final_v2.docx'* with clear numbered increments: \`Project_Proposal_Draft_1.0.docx\`.
+
+> **Golden Rule:** If a file is worth keeping, spend 5 seconds assigning it a descriptive name and placing it into its appropriate folder immediately upon downloading.
+
+---
+
+### Managing Files: Copy, Move, Selection & Archiving
+
+- **Selecting Items Efficiently:**
+  - **Continuous Selection:** Click the first file, hold **Shift**, and click the last file to select everything in between.
+  - **Discontinuous Selection:** Hold **Ctrl** while clicking individual files to pick specific non-adjacent items.
+  - **Select All:** Press **Ctrl + A** to select every item in the current directory.
+- **Copying vs. Moving:**
+  - **Copy (Ctrl + C ➔ Ctrl + V):** Duplicates the item; original remains untouched.
+  - **Cut / Move (Ctrl + X ➔ Ctrl + V):** Transports the item to a new directory, freeing space in the original location.
+- **Archiving & Compressing Files (.ZIP):**
+  - Right-click selected files ➔ **Send to ➔ Compressed (zipped) folder** (or **Compress to ZIP** on Windows 11).
+  - Bundles dozens of files into a single small attachment ready for email or portal submission.
+
+> **Tip:** Double-click a ZIP file to inspect its contents, but always click 'Extract All' before running or editing files inside it.
+
+---
+
+### Cloud Storage Solutions: Google Drive & OneDrive
+
+- **What is Cloud Storage?**
+  - Secure remote servers hosted in enterprise data centers that synchronize with your local PC over the internet.
+- **Major Platforms:**
+  - **Google Drive:** 15 GB free storage; integrates natively with Google Docs, Sheets, and Gmail.
+  - **Microsoft OneDrive:** 5 GB free storage; built directly into Windows File Explorer.
+  - **Dropbox:** Fast delta-sync for large project files and collaborative folders.
+- **File Synchronization States:**
+  - ☁️ **Cloud Only:** File is saved online; takes up zero space on your local hard drive.
+  - 🔄 **Syncing:** Changes are currently uploading or downloading.
+  - 🟢 **Always Available Offline:** Downloaded locally to your SSD so you can work without internet access.
+- **Sharing Files Securely:**
+  - Always configure sharing access correctly: *'Viewer'* for read-only materials, *'Editor'* for active group collaboration.
+
+> **Security Reminder:** Never generate open 'Anyone with the link can edit' links for sensitive personal or financial documents.
+
+---
+
+### The 3-2-1 Data Backup Golden Rule
+
+- **Why Backups Are Mandatory:**
+  - Hard drive components wear out over time.
+  - Accidental deletion, liquid spills, theft, and ransomware viruses can erase unbacked data in seconds.
+- **The Universal 3-2-1 Rule:**
+  - **3 Copies:** Maintain three total copies of all vital data (1 original primary + 2 backups).
+  - **2 Media Types:** Store copies on at least two different storage types (e.g. your internal SSD + an external USB hard drive).
+  - **1 Offsite Location:** Keep at least one backup physically separate from your house/office (e.g. encrypted Cloud Storage).
+- **Automated Backup Routines:**
+  - Schedule an automated weekly backup so you never have to remember to copy files manually.
+
+> **Action Item:** Identify the three most important folders on your PC right now and upload a copy to Google Drive or OneDrive today.`
+      },
+      { 
+        id: "les-7-3", 
+        title: "Internet Browsing and Cybersecurity Safety", 
+        duration: "30 mins", 
+        type: "text", 
+        content: `### Web Architecture: Browsers, URLs & Protocols
+
+- **How Web Pages Reach Your Screen:**
+  - When you type an address into your browser, a DNS (Domain Name System) server translates human words into server IP numbers.
+  - The remote web server responds by sending HTML, CSS, JavaScript, and images back to your browser engine.
+- **Anatomy of a Uniform Resource Locator (URL):**
+  - \`https://\` ➔ Secure Transfer Protocol
+  - \`www.dten.edu.pk\` ➔ Domain Name & Top-Level Domain (.pk for Pakistan, .edu for education)
+  - \`/courses/basic-computer-skills\` ➔ Specific path to the webpage asset
+- **HTTP vs. HTTPS (The Padlock Indicator):**
+  - **HTTP (Hypertext Transfer Protocol):** Transmits data in plain text. Vulnerable to interception on public networks.
+  - **HTTPS (HTTP Secure):** Encrypts all communications with SSL/TLS encryption. Required for passwords and payment credentials.
+
+> **Caution:** Never type login passwords or credit card numbers into an HTTP website lacking the secure padlock icon.
+
+---
+
+### Advanced Search Engine Mastery
+
+- **Going Beyond Basic Search:** Use search operators to filter noise and locate academic resources in seconds.
+- **Essential Power Operators:**
+  - **Exact Phrase (" "):** \`"computer fundamentals" ppt\` returns only results containing that exact contiguous wording.
+  - **Site Filtering (site:):** \`physics syllabus site:edu.pk\` restricts results strictly to Pakistani educational portals.
+  - **Filetype Filtering (filetype:):** \`algebra formulas filetype:pdf\` directly retrieves downloadable PDF documents.
+  - **Exclusion (-):** \`python programming -snake\` removes biological snake results from coding queries.
+- **Evaluating Source Credibility:**
+  - Cross-check information across authoritative encyclopedias, peer-reviewed journals, and verified educational domains.
+
+> **Exercise:** Search \`"basic computer skills" filetype:pdf site:edu\` in Google to observe how accurate academic materials appear immediately.
+
+---
+
+### Phishing & Social Engineering Defense
+
+- **What is Phishing?**
+  - Deceptive communications designed by cyber criminals to manipulate you into revealing passwords, credit cards, or downloading malware.
+- **Classic Red Flags of Fraudulent Emails:**
+  - **Artificial Urgency:** *"Your account will be suspended in 24 hours unless you verify immediately!"*
+  - **Mismatched Sender Domains:** The email claims to be from 'HBL Bank' or 'Google', but the actual address is \`service@account-verify83.ru\`.
+  - **Unsolicited Attachments:** Files named \`Invoice_Overdue.exe\` or \`Order_Receipt.zip\`.
+  - **Generic Greetings:** *"Dear Customer"* instead of your registered student name.
+- **The Golden Defense Rule:**
+  - Never click links inside unsolicited security alerts. Navigate to the official website independently by typing the URL yourself.
+
+> **Golden Rule:** Reputable organizations, banks, and universities will never ask for your password via email or WhatsApp message.
+
+---
+
+### Password Hygiene & Password Managers
+
+- **Why Simple Passwords Fail:**
+  - Attackers use automated 'Brute-Force' dictionary software that tests billions of common password combinations per second.
+  - Passwords like *'admin123'*, *'pakistan@1'*, or *'password2026'* are cracked in less than 1 second.
+- **Characteristics of an Unbreakable Password:**
+  - Length is paramount: Minimum 14–16 characters long.
+  - Blend uppercase letters, lowercase letters, numbers, and symbols.
+  - Use memorable passphrases: \`Blue$ky-Mango#River94\`
+- **Using a Secure Password Manager:**
+  - Tools like **Bitwarden** (open-source & free) or **1Password** store all credentials in an end-to-end encrypted vault.
+  - You only memorize one single master password; the manager generates and auto-fills unique 20-character passwords for every account.
+
+> **Action Item:** Never reuse the same password across multiple websites. If one website suffers a data breach, all your accounts are compromised.
+
+---
+
+### Two-Factor Authentication (2FA) & Public Wi-Fi Safety
+
+- **What is Two-Factor Authentication (2FA / MFA)?**
+  - Requires two distinct verification factors to log into your account:
+    1. *Something you know* (your password).
+    2. *Something you have* (a time-sensitive 6-digit code on your mobile authenticator app).
+- **Authentication Methods Ranked:**
+  - 🏆 **Authenticator App (Google Authenticator, Microsoft Authenticator):** Generates rotating offline TOTP codes. Highly secure.
+  - 🥈 **SMS / Email Verification:** Good, but vulnerable to SIM-swapping attacks.
+- **Public Wi-Fi Hygiene:**
+  - Free public Wi-Fi networks in airports, cafes, and hotels are often unencrypted.
+  - Attackers on the same network can snoop on unprotected traffic.
+  - Use a trustworthy VPN (Virtual Private Network) when connecting to public networks.
+
+> **Checklist:** Enable 2FA on your Google Account, Microsoft Account, and student portal immediately.`
+      },
+      { 
+        id: "les-7-4", 
+        title: "Essential Keyboard Shortcuts Every User Must Know", 
+        duration: "25 mins", 
+        type: "text", 
+        content: `### Universal Clipboard & Editing Shortcuts
+
+- **The Big Five:**
+  - **Ctrl + C:** Copy selected text, image, or file to the invisible clipboard.
+  - **Ctrl + X:** Cut selected item (copies and prepares for moving).
+  - **Ctrl + V:** Paste the clipboard contents at the current cursor position.
+  - **Ctrl + Z:** Undo the last action (the lifesaver shortcut!).
+  - **Ctrl + Y:** Redo an undone action.
+- **Selection Mastery:**
+  - **Ctrl + A:** Select everything on the page, in the document, or inside the active folder.
+- **Clipboard History (Windows):**
+  - Press **Win + V** to open the Windows Clipboard History.
+  - Stores up to 25 recently copied text snippets and screenshots so you never lose prior clips!
+
+> **Practical Exercise:** Type a sentence, press Ctrl+A, press Ctrl+C, click at the end, and press Ctrl+V three times in rapid succession.
+
+---
+
+### Window Management & Multitasking Shortcuts
+
+- **Switching Between Open Programs:**
+  - **Alt + Tab:** Hold **Alt** and tap **Tab** to flip between active windows.
+  - **Win + Tab:** Opens Task View to see all open windows across virtual desktops.
+- **Desktop Visibility:**
+  - **Win + D:** Instantly minimizes all open windows to show the clean desktop; press again to restore them.
+- **Split-Screen Window Snapping:**
+  - **Win + Left Arrow / Right Arrow:** Snaps the active window perfectly to the left or right half of your monitor.
+  - **Win + Up Arrow:** Maximizes the window to fill the entire monitor.
+  - **Win + Down Arrow:** Restores or minimizes the window.
+- **Closing Windows:**
+  - **Ctrl + W:** Closes the current active tab or document window.
+  - **Alt + F4:** Closes the entire application or opens the shutdown dialog if on the desktop.
+
+> **Speed Tip:** Using Win + Left/Right arrows allows you to place lecture notes on the left half and a Word document on the right half with zero manual dragging.
+
+---
+
+### Text Precision & Cursor Navigation
+
+- **Word-by-Word Movement:**
+  - **Ctrl + Left Arrow:** Jump cursor back to the start of the previous word.
+  - **Ctrl + Right Arrow:** Jump cursor forward to the start of the next word.
+- **Rapid Text Selection:**
+  - **Ctrl + Shift + Arrow:** Highlight entire words at a time instead of single characters.
+  - **Shift + Home:** Highlight from current cursor position to the start of the line.
+  - **Shift + End:** Highlight from current cursor position to the end of the line.
+- **High-Speed Deletion:**
+  - **Ctrl + Backspace:** Delete the entire preceding word instead of tapping backspace 10 times.
+  - **Ctrl + Delete:** Delete the entire following word.
+
+> **Typing Fluency:** Once you master Ctrl+Backspace and Ctrl+Arrow keys, your editing speed in assignments and essays will double immediately.
+
+---
+
+### Web Browser Power Shortcuts
+
+- **Tab Management:**
+  - **Ctrl + T:** Open a brand new browser tab.
+  - **Ctrl + W:** Close the current browser tab.
+  - **Ctrl + Shift + T:** **The Ultimate Savior** — Reopens the tab you accidentally just closed!
+  - **Ctrl + 1 through 8:** Jump directly to tab number 1 through 8.
+- **Navigation & Search:**
+  - **Ctrl + L (or F6):** Instantly highlight the URL address bar ready for typing a search query.
+  - **Ctrl + F:** Find on page — searches for any word or phrase on the current article.
+  - **Ctrl + R (or F5):** Reload the webpage.
+  - **Ctrl + Shift + R:** Hard refresh (bypasses browser cache).
+- **Private Browsing:**
+  - **Ctrl + Shift + N (Chrome/Edge)** or **Ctrl + Shift + P (Firefox):** Launches an Incognito/Private window.
+
+> **Secret Shortcut:** Whenever you mistakenly close a tab containing research, immediately press Ctrl+Shift+T to resurrect it!
+
+---
+
+### Essential System Tools & Snipping Arsenal
+
+- **Precision Screen Capture:**
+  - **Win + Shift + S:** Activates the Windows Snipping Tool overlay.
+  - Allows you to draw a box around any formula, diagram, or error code to copy it directly to your clipboard.
+- **Instant System Locks & File Browsing:**
+  - **Win + L:** Instantly locks your PC screen when stepping away from your desk.
+  - **Win + E:** Opens a new File Explorer window immediately.
+- **Direct System Troubleshooting:**
+  - **Ctrl + Shift + Esc:** Launches Task Manager directly without going through the intermediate Ctrl+Alt+Del blue screen.
+- **Emoji & Special Character Panel:**
+  - **Win + . (Period):** Opens the native emoji, symbol, and mathematical character picker anywhere you can type.
+
+> **Summary:** Print out these core shortcuts or keep them pinned as a reference until they become instinctive muscle memory.`
+      },
+      { 
+        id: "les-7-5", 
+        title: "Computer Literacy Quiz", 
+        duration: "15 mins", 
+        type: "quiz", 
+        quizId: "quiz-7" 
+      }
     ],
     quiz: {
       id: "quiz-7",
@@ -461,6 +814,54 @@ export const INITIAL_COURSES = [
           ],
           correctAnswer: 1,
           explanation: "Long, random passphrases generated and stored in a password manager prevent brute-force attacks."
+        },
+        {
+          id: "q7-2",
+          question: "Which keyboard shortcut directly opens the Windows Task Manager without intermediate menus?",
+          options: [
+            "Ctrl + Alt + Del",
+            "Ctrl + Shift + Esc",
+            "Alt + F4",
+            "Win + Tab"
+          ],
+          correctAnswer: 1,
+          explanation: "Ctrl + Shift + Esc is the direct instant hotkey to launch Task Manager in Windows."
+        },
+        {
+          id: "q7-3",
+          question: "What does the 3-2-1 backup rule recommend for critical file safety?",
+          options: [
+            "3 backups on 1 USB drive taken 2 times a day",
+            "3 total copies of data, across 2 different media types, with 1 copy stored offsite/in the cloud",
+            "3 passwords for 2 accounts on 1 computer",
+            "Saving files 3 times in the Downloads folder"
+          ],
+          correctAnswer: 1,
+          explanation: "The 3-2-1 rule dictates 3 copies total, on 2 different media formats (e.g. SSD + external drive), and 1 safely stored offsite or in cloud storage."
+        },
+        {
+          id: "q7-4",
+          question: "Which browser shortcut immediately re-opens the tab that you accidentally closed?",
+          options: [
+            "Ctrl + T",
+            "Ctrl + W",
+            "Ctrl + Shift + T",
+            "Ctrl + H"
+          ],
+          correctAnswer: 2,
+          explanation: "Ctrl + Shift + T is the universal browser lifesaver shortcut that restores recently closed tabs."
+        },
+        {
+          id: "q7-5",
+          question: "Why should you look for 'HTTPS' and the padlock icon before entering personal credentials on a website?",
+          options: [
+            "It guarantees the website gives free downloads",
+            "It ensures traffic between your browser and the server is encrypted and protected against eavesdropping",
+            "It makes your computer run twice as fast",
+            "It prevents your monitor from turning off"
+          ],
+          correctAnswer: 1,
+          explanation: "HTTPS encrypts communications using SSL/TLS, preventing malicious actors on your network from intercepting passwords or sensitive data."
         }
       ]
     }
@@ -1183,7 +1584,8 @@ Adaptive learning algorithms can identify exactly where a learner encounters fri
   TENSES_WORKSHEET_ITEM,
   ENGLISH_TENSES_PRESENTATION_ITEM,
   AI_PRESENTATION_ITEM,
-  ACTIVE_PASSIVE_PRESENTATION_ITEM
+  ACTIVE_PASSIVE_PRESENTATION_ITEM,
+  COMPUTER_SKILLS_PRESENTATION_ITEM
 ];
 
 export const INITIAL_TESTS = [
