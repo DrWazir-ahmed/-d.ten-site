@@ -62,11 +62,22 @@ export const Tests = () => {
     'Other'
   ];
 
-  // Dynamic SEO when on standalone view
-  useSEO(activeViewTab === 'standalone' ? {
-    title: 'Standard Skill Tests & Assessments | D.TEN Academy',
-    description: 'Explore comprehensive standard skill tests with instant evaluation, passing threshold metrics, and detailed question breakdowns.'
-  } : {});
+  // Dynamic SEO with High-Intent Search Queries
+  useSEO({
+    title: activeViewTab === 'standalone' 
+      ? 'Standard Skill Tests & MCQs Assessments | D.TEN Academy'
+      : '41,900+ Standard Curriculum MCQs Tests | Cambridge, CBSE & US High School',
+    description: 'Practice timed chapter-wise MCQs tests with instant explanations across Cambridge O/A Level (Physics, Chemistry, Biology, Math, Economics), CBSE Class 9-10 & US High School curriculum standards.',
+    keywords: 'Cambridge O Level MCQs, Cambridge A Level past papers, CBSE Class 9 test series, CBSE Class 10 board exam MCQs, US High School AP exams, chapter wise MCQs with explanation, online standard test series, D.TEN Academy',
+    canonicalUrl: 'https://dten.deesu.org/tests',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'EducationalOccupationalCredential',
+      'name': 'Standardized Academic & Curriculum Testing System',
+      'description': 'Over 41,900+ chapter-wise standard multiple choice questions with detailed explanations and instant option feedback.',
+      'url': 'https://dten.deesu.org/tests'
+    }
+  });
 
   useEffect(() => {
     const load = async () => {

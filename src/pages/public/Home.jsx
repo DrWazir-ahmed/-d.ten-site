@@ -24,10 +24,30 @@ import { getCourses, getApps, getTests, getTools, getContent } from '../../servi
 import { Badge } from '../../components/common/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
+import { useSEO } from '../../hooks/useSEO';
 
 export const Home = () => {
   const navigate = useNavigate();
   const { isGuest, isPremium } = useAuth();
+
+  useSEO({
+    title: 'D.TEN Academy | 41,900+ Standard MCQs, Interactive LMS Courses & Educational Tools',
+    description: 'Master 41,900+ curriculum MCQs across Cambridge O/A Level, CBSE Class 9-10 & US High School with instant feedback. Free interactive courses, Python for kids, HTML for teens & academic tools by Dr. Wazir Ahmed.',
+    keywords: 'Cambridge O Level MCQs, Cambridge A Level past paper tests, CBSE Class 9 chapter test, CBSE Class 10 MCQs with answers, US High School quizzes, online test series, Artificial Intelligence course, English tenses Urdu, Python for kids, HTML for teens, Dr Wazir Ahmed, free online learning Pakistan',
+    canonicalUrl: 'https://dten.deesu.org',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      'name': 'D.TEN Academy',
+      'url': 'https://dten.deesu.org',
+      'description': 'Comprehensive online curriculum testing and learning platform with 41,900+ chapter-wise MCQs, interactive slide courses, and educational tools.',
+      'potentialAction': {
+        '@type': 'SearchAction',
+        'target': 'https://dten.deesu.org/tests?search={search_term_string}',
+        'query-input': 'required name=search_term_string'
+      }
+    }
+  });
   const [courses, setCourses] = useState([]);
   const [apps, setApps] = useState([]);
   const [tests, setTests] = useState([]);

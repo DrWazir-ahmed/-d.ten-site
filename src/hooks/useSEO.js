@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
+const BASE_ORIGIN = 'https://dten.deesu.org';
+
 /**
- * Custom hook to dynamically manage SEO tags (title, meta description, keywords, Open Graph, Twitter)
+ * Custom hook to dynamically manage SEO tags (title, meta description, keywords, Open Graph, Twitter, Canonical, Schema)
  */
 export const useSEO = ({
   title,
@@ -9,7 +11,8 @@ export const useSEO = ({
   keywords,
   ogType = 'website',
   ogImage = '/logo.png',
-  canonicalUrl
+  canonicalUrl,
+  schema = null
 }) => {
   useEffect(() => {
     // 1. Update Document Title
@@ -46,16 +49,19 @@ export const useSEO = ({
       setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', document.title);
     }
     setMetaTag('meta[property="og:type"]', 'property', 'og:type', ogType);
+    setMetaTag('meta[property="og:site_name"]', 'property', 'og:site_name', 'D.TEN Academy');
 
     if (ogImage) {
-      const fullImageUrl = ogImage.startsWith('http') ? ogImage : `${window.location.origin}${ogImage}`;
+      const fullImageUrl = ogImage.startsWith('http') ? ogImage : `${BASE_ORIGIN}${ogImage}`;
       setMetaTag('meta[property="og:image"]', 'property', 'og:image', fullImageUrl);
       setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', fullImageUrl);
     }
 
     // 5. Canonical URL
-    const url = canonicalUrl || window.location.href;
+    const pathname = window.location.pathname;
+    const url = canonicalUrl || `${BASE_ORIGIN}${pathname === '/' ? '' : pathname}`;
     setMetaTag('meta[property="og:url"]', 'property', 'og:url', url);
+    setMetaTag('meta[name="twitter:url"]', 'name', 'twitter:url', url);
 
     let canonicalEl = document.querySelector('link[rel="canonical"]');
     if (!canonicalEl) {
@@ -65,5 +71,26 @@ export const useSEO = ({
     }
     canonicalEl.setAttribute('href', url);
 
-  }, [title, description, keywords, ogType, ogImage, canonicalUrl]);
+    // 6. Dynamic JSON-LD Structured Data Schema
+    let schemaEl = document.getElementById('dynamic-seo-schema');
+    if (schema) {
+      if (!schemaEl) {
+        schemaEl = document.createElement('script');
+        schemaEl.id = 'dynamic-seo-schema';
+        schemaEl.type = 'application/ld+json';
+        document.head.appendChild(schemaEl);
+      }
+      schemaEl.textContent = JSON.stringify(schema);
+    } else if (schemaEl) {
+      schemaEl.remove();
+    }
+
+    return () => {
+      // Clean up dynamic schema when leaving the page
+      const currentSchemaEl = document.getElementById('dynamic-seo-schema');
+      if (currentSchemaEl) {
+        currentSchemaEl.remove();
+      }
+    };
+  }, [title, description, keywords, ogType, ogImage, canonicalUrl, schema]);
 };

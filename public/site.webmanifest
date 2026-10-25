@@ -1,0 +1,27 @@
+{
+  "name": "D.TEN Academy",
+  "short_name": "D.TEN",
+  "description": "Master 41,900+ curriculum MCQs, interactive programming courses, and academic tools.",
+  "start_url": "https://dten.deesu.org/",
+  "scope": "https://dten.deesu.org/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "categories": ["education", "books", "productivity"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -42,8 +42,15 @@ import { HTML_TEENS_COURSE } from '../../data/htmlTeensCourseData';
 import { validateHtmlCode, buildSandboxHtml } from './HtmlValidator';
 import { HtmlTeensCertificate } from './HtmlTeensCertificate';
 import { speakUrduFahad, stopUrduSpeech } from '../../services/urduVoiceService';
+import { useSEO } from '../../hooks/useSEO';
 
 export const HtmlTeensStudio = ({ standalone = false }) => {
+  useSEO(standalone ? {
+    title: 'HTML & Web Development for Teens - Interactive Code Editor | D.TEN Academy',
+    description: 'Learn HTML5 and modern web design tailored for teens ages 13-16. Interactive browser editor, real-time preview screen, coding challenges, Urdu audio commentary, and certificate.',
+    keywords: 'HTML for teens, web development for beginners, learn HTML CSS Pakistan, teen coding projects, interactive HTML editor, D.TEN web design studio',
+    canonicalUrl: 'https://dten.deesu.org/html-teens'
+  } : {});
   // Navigation State
   const [activeModuleId, setActiveModuleId] = useState(1);
   const [activeLessonIndex, setActiveLessonIndex] = useState(0);

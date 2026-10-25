@@ -1,9 +1,29 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { useSEO } from '../../hooks/useSEO';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+
+  useSEO({
+    title: 'Contact D.TEN Academy | Student Support & Academic Advisory',
+    description: 'Contact D.TEN Academy support and academic advisory. Inquire about school licensing, curriculum assessments, teacher accounts, and technical assistance.',
+    keywords: 'contact D.TEN academy, student support, academic partnerships Pakistan, institutional MCQs licensing, Dr Wazir Ahmed contact',
+    canonicalUrl: 'https://dten.deesu.org/contact',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      'name': 'Contact D.TEN Academy',
+      'url': 'https://dten.deesu.org/contact',
+      'mainEntity': {
+        '@type': 'EducationalOrganization',
+        'name': 'D.TEN Academy',
+        'email': 'support@dten.deesu.org',
+        'url': 'https://dten.deesu.org'
+      }
+    }
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();

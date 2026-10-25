@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const BASE_URL = 'https://dtenacademy.com';
+const BASE_URL = 'https://dten.deesu.org';
 
 const STATIC_ROUTES = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
@@ -41,6 +41,19 @@ const COURSE_IDS = [
   'course-active-passive-voice'
 ];
 
+const CURRICULUM_SYSTEMS = [
+  { path: '/tests?system=cambridge', priority: '0.85', changefreq: 'weekly' },
+  { path: '/tests?system=cbse', priority: '0.85', changefreq: 'weekly' },
+  { path: '/tests?system=us-high-school', priority: '0.85', changefreq: 'weekly' }
+];
+
+const CONTENT_SECTIONS = [
+  { path: '/content?tab=PDFs', priority: '0.75', changefreq: 'weekly' },
+  { path: '/content?tab=Worksheets', priority: '0.75', changefreq: 'weekly' },
+  { path: '/content?tab=Presentations', priority: '0.8', changefreq: 'weekly' },
+  { path: '/content?tab=Guides', priority: '0.75', changefreq: 'weekly' }
+];
+
 export const generateSitemap = () => {
   const today = new Date().toISOString().split('T')[0];
 
@@ -50,7 +63,12 @@ export const generateSitemap = () => {
     changefreq: 'weekly'
   }));
 
-  const allRoutes = [...STATIC_ROUTES, ...courseRoutes];
+  const allRoutes = [
+    ...STATIC_ROUTES, 
+    ...courseRoutes,
+    ...CURRICULUM_SYSTEMS,
+    ...CONTENT_SECTIONS
+  ];
 
   const xmlEntries = allRoutes.map(r => `  <url>
     <loc>${BASE_URL}${r.path}</loc>

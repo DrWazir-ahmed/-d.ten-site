@@ -1,12 +1,17 @@
 # D.TEN Academy Robots File
-# Crawlers and Search Engines Directory Guidance
+# Host: https://dten.deesu.org
 
 User-agent: *
 Allow: /
+Allow: /courses
 Allow: /courses/
+Allow: /tests
 Allow: /tests/
+Allow: /content
 Allow: /content/
+Allow: /tools
 Allow: /tools/
+Allow: /apps
 Allow: /apps/
 Allow: /python-kids
 Allow: /html-teens
@@ -14,7 +19,7 @@ Allow: /pricing
 Allow: /about
 Allow: /contact
 
-# Disallow private user states and administrative routes
+# Disallow private user states and authenticated player routes
 Disallow: /admin/
 Disallow: /admin
 Disallow: /dashboard/
@@ -25,4 +30,4 @@ Disallow: /notifications
 Disallow: /learn/
 
 # XML Sitemap Location
-Sitemap: https://dtenacademy.com/sitemap.xml
+Sitemap: https://dten.deesu.org/sitemap.xml

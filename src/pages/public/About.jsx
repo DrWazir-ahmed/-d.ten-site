@@ -12,8 +12,32 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PersonCard } from '../../components/about/PersonCard';
+import { useSEO } from '../../hooks/useSEO';
 
 export const About = () => {
+  useSEO({
+    title: 'About D.TEN Academy & Dr. Wazir Ahmed | Educational Mission & Team',
+    description: 'Learn about D.TEN Academy, founded by Dr. Wazir Ahmed (Ph.D. Educational Psychology). Discover our mission to provide world-class standard curriculum testing, interactive LMS courses, and technology-driven pedagogy.',
+    keywords: 'Dr Wazir Ahmed, D.TEN Academy founder, educational psychology Pakistan, aviation training expert, curriculum designer Pakistan, qualitative research education, D.TEN mission',
+    canonicalUrl: 'https://dten.deesu.org/about',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      'name': 'About D.TEN Academy',
+      'url': 'https://dten.deesu.org/about',
+      'mainEntity': {
+        '@type': 'Person',
+        'name': 'Dr. Wazir Ahmed',
+        'jobTitle': 'Founder & CEO',
+        'worksFor': {
+          '@type': 'Organization',
+          'name': 'D.TEN Academy'
+        },
+        'description': 'Accomplished educational psychologist, educator, and training manager with extensive experience in curriculum architecture and qualitative educational research.'
+      }
+    }
+  });
+
   const leadershipTeam = [
     {
       id: 'dr-wazir-ahmed',

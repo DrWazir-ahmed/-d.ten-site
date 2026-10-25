@@ -145,12 +145,15 @@ export const CoursePlayer = () => {
   
   // Reset quiz and practice state whenever active lesson changes
   useEffect(() => {
+    if (course?.title && currentLesson?.title) {
+      document.title = `${currentLesson.title} | ${course.title} - D.TEN Academy`;
+    }
     setQuizSubmitted(false);
     setQuizAnswers({});
     setPracticeAnswers({});
     setPracticeSubmitted(false);
     setPracticeFeedbackMsg('');
-  }, [activeLessonIndex]);
+  }, [activeLessonIndex, course?.title, currentLesson?.title]);
 
   // A lesson with practice questions cannot be marked complete manually until the questions are solved
   const isPracticeSolved = useMemo(() => {

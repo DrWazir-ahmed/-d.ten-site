@@ -17,10 +17,25 @@ import { Badge } from '../../components/common/Badge';
 import { ProgressBar } from '../../components/common/ProgressBar';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumGateModal } from '../../components/common/PremiumGateModal';
+import { useSEO } from '../../hooks/useSEO';
 
 export const Courses = () => {
   const navigate = useNavigate();
   const { currentUser, isPremium } = useAuth();
+
+  useSEO({
+    title: 'Free Online LMS Courses with Certificates & Slides | D.TEN Academy',
+    description: 'Explore comprehensive interactive courses in Artificial Intelligence, English Tenses, Python for kids, HTML & Web Development, Basic Computer Skills, and 20 World Languages taught by Dr. Wazir Ahmed.',
+    keywords: 'online courses Pakistan, free computer courses, learn AI for beginners, English grammar tenses course, Python programming kids, HTML course teens, computer literacy certificate, Dr Wazir Ahmed courses, D.TEN LMS',
+    canonicalUrl: 'https://dten.deesu.org/courses',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'name': 'D.TEN Academy Courses Directory',
+      'description': 'Interactive online courses with slide decks, hands-on practice, and verifiable completion certificates.',
+      'url': 'https://dten.deesu.org/courses'
+    }
+  });
 
   const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);

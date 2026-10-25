@@ -30,8 +30,16 @@ import { PYTHON_KIDS_COURSE } from '../../data/pythonKidsCourseData';
 import { PythonKidInterpreter } from './PythonInterpreter';
 import { PythonKidsCertificate } from './PythonKidsCertificate';
 import { speakUrduFahad, stopUrduSpeech, FAHAD_VOICE_CONFIG } from '../../services/urduVoiceService';
+import { useSEO } from '../../hooks/useSEO';
 
 export const PythonKidsStudio = ({ standalone = false }) => {
+  useSEO(standalone ? {
+    title: 'Python for Kids - Interactive Coding Studio & Challenges | D.TEN Academy',
+    description: 'Learn Python programming the fun way! Interactive in-browser Python terminal, live code challenges, Urdu voice-over commentary, and completion certificate.',
+    keywords: 'Python for kids, learn coding kids Pakistan, Python Urdu tutorial, beginner programming games, interactive Python editor online, D.TEN coding studio',
+    canonicalUrl: 'https://dten.deesu.org/python-kids'
+  } : {});
+
   // Navigation State
   const [activeModuleId, setActiveModuleId] = useState(1);
   const [activeLessonIndex, setActiveLessonIndex] = useState(0);

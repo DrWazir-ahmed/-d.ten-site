@@ -30,6 +30,7 @@ import { WordCounter } from '../../components/tools/WordCounter';
 import { LearningProgressCalculator } from '../../components/tools/LearningProgressCalculator';
 import { QuizGeneratorTool } from '../../components/tools/QuizGeneratorTool';
 import { McqGeneratorTool } from '../../components/tools/McqGeneratorTool';
+import { useSEO } from '../../hooks/useSEO';
 
 export const Tools = () => {
   const { isPremium } = useAuth();
@@ -39,6 +40,21 @@ export const Tools = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [gateOpen, setGateOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState('');
+
+  useSEO({
+    title: 'Free Educational Calculators & Academic Tools | D.TEN Academy',
+    description: 'Free student calculators and productivity tools: GPA Calculator, Percentage Calculator, Grade Calculator, Scientific Calculator, Unit Converter, Study Planner, Word Counter, and AI MCQ Generator.',
+    keywords: 'GPA calculator Pakistan, percentage calculator student, grade calculator university, scientific calculator online, unit converter, study planner timetable, word counter essay, MCQ generator, D.TEN tools',
+    canonicalUrl: 'https://dten.deesu.org/tools',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      'name': 'D.TEN Academy Educational Tools & Calculators',
+      'applicationCategory': 'EducationalApplication',
+      'operatingSystem': 'All',
+      'url': 'https://dten.deesu.org/tools'
+    }
+  });
 
   useEffect(() => {
     const load = async () => {

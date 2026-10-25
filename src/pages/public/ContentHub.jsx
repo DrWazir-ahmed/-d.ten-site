@@ -23,6 +23,7 @@ import { EnglishPdfViewer } from '../../components/common/EnglishPdfViewer';
 import { EnglishWorksheetViewer } from '../../components/common/EnglishWorksheetViewer';
 import { PresentationRunner } from '../../components/common/PresentationRunner';
 import { FBISE_ISLAMIAT_9_VOCAB } from '../../data/fbiseIslamiatVocab';
+import { useSEO } from '../../hooks/useSEO';
 
 export const ContentHub = () => {
   const { isPremium } = useAuth();
@@ -36,6 +37,20 @@ export const ContentHub = () => {
   const [activePresentation, setActivePresentation] = useState(null);
   const [gateOpen, setGateOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState('');
+
+  useSEO({
+    title: 'Educational Study Guides, Worksheets & Presentations | D.TEN Content Hub',
+    description: 'High-yield reference guides, formula charts, fillable A4 classroom worksheets, interactive .PPTX slide presentations, and academic notes authored by Dr. Wazir Ahmed.',
+    keywords: 'English tenses chart PDF, active passive voice worksheet A4, AI presentation PPTX, computer skills notes, FBISE Islamiat vocabulary Class 9, educational worksheets Pakistan, Dr Wazir Ahmed study materials',
+    canonicalUrl: 'https://dten.deesu.org/content',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      'name': 'D.TEN Academy Content Hub & Study Library',
+      'description': 'Curated educational resources including printable A4 worksheets, formula sheets, and interactive lecture presentations.',
+      'url': 'https://dten.deesu.org/content'
+    }
+  });
 
   useEffect(() => {
     const load = async () => {

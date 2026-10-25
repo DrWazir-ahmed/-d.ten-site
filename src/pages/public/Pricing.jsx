@@ -4,6 +4,7 @@ import { Sparkles, Check, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-rea
 import { useAuth } from '../../context/AuthContext';
 import { getPaymentConfig } from '../../services/firebaseService';
 import { PaymentCheckoutModal } from '../../components/common/PaymentCheckoutModal';
+import { useSEO } from '../../hooks/useSEO';
 
 export const Pricing = () => {
   const navigate = useNavigate();
@@ -11,6 +12,13 @@ export const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [paymentConfig, setPaymentConfig] = useState(null);
+
+  useSEO({
+    title: 'Affordable Student Membership & Lifetime Plans | D.TEN Academy',
+    description: 'Invest in your education with transparent, accessible pricing. Free tier access plus Premium unlock for 41,900+ chapter MCQs, full course certificates, and advanced study tools.',
+    keywords: 'D.TEN academy pricing, student subscription Pakistan, online education membership, cheap MCQs testing portal, LMS certificate cost',
+    canonicalUrl: 'https://dten.deesu.org/pricing'
+  });
 
   useEffect(() => {
     getPaymentConfig().then(cfg => setPaymentConfig(cfg));

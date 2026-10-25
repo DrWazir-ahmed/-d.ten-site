@@ -26,6 +26,7 @@ import { ReadAloudPlayer } from '../../components/common/ReadAloudPlayer';
 import { LanguageLearningStudio } from '../../components/language/LanguageLearningStudio';
 import { PythonKidsStudio } from '../../components/pythonKids/PythonKidsStudio';
 import { HtmlTeensStudio } from '../../components/htmlTeens/HtmlTeensStudio';
+import { useSEO } from '../../hooks/useSEO';
 
 export const CourseDetails = () => {
   const { id } = useParams();
@@ -37,6 +38,43 @@ export const CourseDetails = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [gateOpen, setGateOpen] = useState(false);
+
+  useSEO({
+    title: course 
+      ? `${course.title} - Online Course with Slides & Certificate` 
+      : 'Course Details | D.TEN Academy',
+    description: course?.description 
+      ? `${course.description} Complete with interactive slide decks, quizzes, and verified certification by Dr. Wazir Ahmed.`
+      : 'Comprehensive online course with structured slide presentations, real-world examples, and certification.',
+    keywords: course 
+      ? `${course.title}, learn ${course.title}, ${course.category} course, ${course.level} syllabus, Dr Wazir Ahmed, D.TEN Academy, online certificate`
+      : 'online course, D.TEN Academy',
+    ogImage: course?.thumbnail || '/logo.png',
+    canonicalUrl: `https://dten.deesu.org/courses/${id}`,
+    schema: course ? {
+      '@context': 'https://schema.org',
+      '@type': 'Course',
+      'name': course.title,
+      'description': course.description,
+      'provider': {
+        '@type': 'EducationalOrganization',
+        'name': 'D.TEN Academy',
+        'url': 'https://dten.deesu.org'
+      },
+      'instructor': {
+        '@type': 'Person',
+        'name': course.instructor || 'Dr. Wazir Ahmed'
+      },
+      'educationalLevel': course.level || 'Beginner',
+      'courseMode': 'online',
+      'offers': {
+        '@type': 'Offer',
+        'price': course.membership === 'free' ? '0' : '9.99',
+        'priceCurrency': 'USD',
+        'availability': 'https://schema.org/InStock'
+      }
+    } : null
+  });
 
   useEffect(() => {
     const loadCourse = async () => {
