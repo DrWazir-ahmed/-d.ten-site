@@ -190,6 +190,18 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://dten.deesu.org/tests?tab=standalone</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://dten.deesu.org/tests?category=Islamic%20Studies</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://dten.deesu.org/content?tab=PDFs</loc>
     <lastmod>2026-10-25</lastmod>
     <changefreq>weekly</changefreq>

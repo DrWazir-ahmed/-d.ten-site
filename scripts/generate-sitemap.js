@@ -44,7 +44,9 @@ const COURSE_IDS = [
 const CURRICULUM_SYSTEMS = [
   { path: '/tests?system=cambridge', priority: '0.85', changefreq: 'weekly' },
   { path: '/tests?system=cbse', priority: '0.85', changefreq: 'weekly' },
-  { path: '/tests?system=us-high-school', priority: '0.85', changefreq: 'weekly' }
+  { path: '/tests?system=us-high-school', priority: '0.85', changefreq: 'weekly' },
+  { path: '/tests?tab=standalone', priority: '0.85', changefreq: 'weekly' },
+  { path: '/tests?category=Islamic%20Studies', priority: '0.85', changefreq: 'weekly' }
 ];
 
 const CONTENT_SECTIONS = [

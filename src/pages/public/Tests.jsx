@@ -53,6 +53,7 @@ export const Tests = () => {
   // Primary categories requested by user
   const STANDARD_CATEGORIES = [
     'All',
+    'Islamic Studies',
     'Academic',
     'Life Skill',
     'Technical',
@@ -148,6 +149,7 @@ export const Tests = () => {
 
   const getCategoryIcon = (category) => {
     switch (category) {
+      case 'Islamic Studies': return <BookOpen className="w-5 h-5 text-emerald-500" />;
       case 'Academic': return <GraduationCap className="w-5 h-5 text-indigo-500" />;
       case 'Life Skill': return <HeartHandshake className="w-5 h-5 text-emerald-500" />;
       case 'Technical': return <Code2 className="w-5 h-5 text-blue-500" />;

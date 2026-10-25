@@ -18,6 +18,10 @@ import {
   ACTIVE_PASSIVE_PRESENTATION_ITEM,
   COMPUTER_SKILLS_PRESENTATION_ITEM
 } from './presentationData';
+import { 
+  TARJAMA_TUL_QURAN_TEST, 
+  ISLAMIAT_CLASS9_TEST 
+} from './islamicStudiesTestsData';
 
 export const INITIAL_CATEGORIES = {
   courses: [
@@ -41,6 +45,7 @@ export const INITIAL_CATEGORIES = {
     "Mathematics Apps"
   ],
   tests: [
+    "Islamic Studies",
     "Academic",
     "Life Skill",
     "Technical",
@@ -1589,6 +1594,8 @@ Adaptive learning algorithms can identify exactly where a learner encounters fri
 ];
 
 export const INITIAL_TESTS = [
+  TARJAMA_TUL_QURAN_TEST,
+  ISLAMIAT_CLASS9_TEST,
   {
     id: "test-academic-grammar",
     title: "English Grammar, Syntax & Vocabulary Mastery Test",

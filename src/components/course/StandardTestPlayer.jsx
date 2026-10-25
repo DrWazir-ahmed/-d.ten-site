@@ -18,7 +18,8 @@ import {
   Columns,
   Play,
   Bookmark,
-  FileText
+  FileText,
+  Filter
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { saveQuizResult } from '../../services/firebaseService';
@@ -61,6 +62,7 @@ export const StandardTestPlayer = ({
       shuffleOptions: false,
       showInstantFeedback: false,
       requirePassingToProceed: true,
+      retryUntil100: false,
       instructions: 'Answer all questions carefully before submitting. You need to meet the passing score to complete this assessment.',
       ...(testData.settings || {})
     };
@@ -69,6 +71,7 @@ export const StandardTestPlayer = ({
     if (testData.passingScore) settings.passingScore = Number(testData.passingScore);
     if (testData.timeLimit) settings.timeLimit = Number(testData.timeLimit);
     if (testData.attemptsAllowed) settings.attemptsAllowed = Number(testData.attemptsAllowed);
+    if (testData.retryUntil100 !== undefined) settings.retryUntil100 = Boolean(testData.retryUntil100);
 
     let rawQuestions = testData.questions || [];
 
@@ -91,7 +94,12 @@ export const StandardTestPlayer = ({
         pairs: q.pairs || [],
         items: q.items || [],
         explanation: q.explanation || '',
-        points: Number(q.points) || (type === 'matching' || type === 'ordering' || type === 'fill_blank' ? 2 : 1)
+        points: Number(q.points) || (type === 'matching' || type === 'ordering' || type === 'fill_blank' ? 2 : 1),
+        surah: q.surah || '',
+        qNum: q.qNum || '',
+        unit: q.unit || '',
+        topic: q.topic || '',
+        pageNumber: q.pageNumber || ''
       };
     });
 
@@ -115,6 +123,10 @@ export const StandardTestPlayer = ({
   const [timeSpent, setTimeSpent] = useState(0);
   const timerRef = useRef(null);
 
+  // 100% Mastery Challenge & Wrong-Answer Revision state
+  const [isFixingWrongMode, setIsFixingWrongMode] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState('all'); // 'all' | 'wrong' | 'correct'
+
   // Initialize initial randomized ordering / options when starting
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
 
@@ -127,6 +139,8 @@ export const StandardTestPlayer = ({
     setScore(0);
     setEarnedPoints(0);
     setPassed(false);
+    setIsFixingWrongMode(false);
+    setReviewFilter('all');
     if (timerRef.current) clearInterval(timerRef.current);
   }, [normalizedTest?.title]);
 
@@ -191,24 +205,83 @@ export const StandardTestPlayer = ({
     };
   }, []);
 
+  // Helper to determine question correctness
+  const getQuestionResult = (q, currentAnswers) => {
+    const userAns = currentAnswers[q.id];
+    if (userAns === undefined || userAns === null) return { status: 'unanswered', isCorrect: false };
+
+    if (q.type === 'mcq' || q.type === 'true_false') {
+      const isCorrect = userAns === q.correctAnswer;
+      return { status: isCorrect ? 'correct' : 'wrong', isCorrect };
+    }
+    if (q.type === 'fill_blank') {
+      const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
+        ? q.acceptedAnswers
+        : [String(q.correctAnswer || '')];
+      const trimmed = (userAns || '').toString().trim();
+      const isCorrect = acceptable.some(acc => {
+        if (q.caseSensitive) return acc.toString().trim() === trimmed;
+        return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
+      }) && trimmed.length > 0;
+      return { status: isCorrect ? 'correct' : 'wrong', isCorrect };
+    }
+    if (q.type === 'matching') {
+      let matchCount = 0;
+      (q.pairs || []).forEach(p => {
+        if (userAns?.[p.id] === p.right) matchCount++;
+      });
+      const isCorrect = matchCount === (q.pairs?.length || 0);
+      return { status: isCorrect ? 'correct' : (matchCount > 0 ? 'partial' : 'wrong'), isCorrect };
+    }
+    if (q.type === 'ordering') {
+      let orderCount = 0;
+      (q.items || []).forEach((expected, i) => {
+        if (userAns?.[i] === expected) orderCount++;
+      });
+      const isCorrect = orderCount === (q.items?.length || 0);
+      return { status: isCorrect ? 'correct' : (orderCount > 0 ? 'partial' : 'wrong'), isCorrect };
+    }
+    return { status: 'unknown', isCorrect: false };
+  };
+
   // Answer interaction handlers
   const handleSelectMCQ = (qId, optionIdx) => {
-    if (submitted) return;
+    if (submitted && !isFixingWrongMode) return;
+    if (submitted && isFixingWrongMode) {
+      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
+      const q = allQs.find(item => item.id === qId);
+      if (q && getQuestionResult(q, answers).isCorrect) return; // Locked correct
+    }
     setAnswers(prev => ({ ...prev, [qId]: optionIdx }));
   };
 
   const handleSelectTrueFalse = (qId, val) => {
-    if (submitted) return;
+    if (submitted && !isFixingWrongMode) return;
+    if (submitted && isFixingWrongMode) {
+      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
+      const q = allQs.find(item => item.id === qId);
+      if (q && getQuestionResult(q, answers).isCorrect) return; // Locked correct
+    }
     setAnswers(prev => ({ ...prev, [qId]: val }));
   };
 
   const handleFillBlank = (qId, val) => {
-    if (submitted) return;
+    if (submitted && !isFixingWrongMode) return;
+    if (submitted && isFixingWrongMode) {
+      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
+      const q = allQs.find(item => item.id === qId);
+      if (q && getQuestionResult(q, answers).isCorrect) return;
+    }
     setAnswers(prev => ({ ...prev, [qId]: val }));
   };
 
   const handleMatchPair = (qId, pairId, selectedRight) => {
-    if (submitted) return;
+    if (submitted && !isFixingWrongMode) return;
+    if (submitted && isFixingWrongMode) {
+      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
+      const q = allQs.find(item => item.id === qId);
+      if (q && getQuestionResult(q, answers).isCorrect) return;
+    }
     setAnswers(prev => ({
       ...prev,
       [qId]: {
@@ -219,7 +292,12 @@ export const StandardTestPlayer = ({
   };
 
   const handleMoveOrderItem = (qId, currentItems, fromIdx, direction) => {
-    if (submitted) return;
+    if (submitted && !isFixingWrongMode) return;
+    if (submitted && isFixingWrongMode) {
+      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
+      const q = allQs.find(item => item.id === qId);
+      if (q && getQuestionResult(q, answers).isCorrect) return;
+    }
     const toIdx = direction === 'up' ? fromIdx - 1 : fromIdx + 1;
     if (toIdx < 0 || toIdx >= currentItems.length) return;
 
@@ -301,7 +379,15 @@ export const StandardTestPlayer = ({
     setPassed(isPassing);
     setSubmitted(true);
 
-    if (isPassing) {
+    if (calculatedPct === 100) {
+      setIsFixingWrongMode(false);
+      setReviewFilter('all');
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    } else if (isPassing && !isFixingWrongMode) {
       confetti({
         particleCount: 100,
         spread: 70,
@@ -532,6 +618,38 @@ export const StandardTestPlayer = ({
 
   const progressPct = Math.round((answeredCount / qs.length) * 100);
 
+  // Compute question statuses & filtering
+  const questionsWithStatus = useMemo(() => {
+    return qs.map((q, idx) => {
+      const res = getQuestionResult(q, answers);
+      return {
+        ...q,
+        index: idx,
+        isCorrect: res.isCorrect,
+        status: res.status
+      };
+    });
+  }, [qs, answers]);
+
+  const correctCount = useMemo(() => {
+    return questionsWithStatus.filter(q => q.isCorrect).length;
+  }, [questionsWithStatus]);
+
+  const wrongCount = useMemo(() => {
+    return qs.length - correctCount;
+  }, [qs.length, correctCount]);
+
+  const displayQuestions = useMemo(() => {
+    if (!submitted) return questionsWithStatus;
+    if (reviewFilter === 'wrong') {
+      return questionsWithStatus.filter(q => !q.isCorrect);
+    }
+    if (reviewFilter === 'correct') {
+      return questionsWithStatus.filter(q => q.isCorrect);
+    }
+    return questionsWithStatus;
+  }, [questionsWithStatus, submitted, reviewFilter]);
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-fadeIn">
       
@@ -564,11 +682,13 @@ export const StandardTestPlayer = ({
           {submitted && (
             <div className="flex items-center gap-2">
               <span className={`px-3 py-1 rounded-xl text-xs font-black ${
-                passed 
+                score === 100
+                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 ring-2 ring-emerald-500/30'
+                  : passed 
                   ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                   : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
               }`}>
-                Score: {score}% {passed ? '🎉 Passed' : '⚠️ Need ' + normalizedTest.settings.passingScore + '%'}
+                Score: {score}% {score === 100 ? '👑 100% Mastered' : passed ? '🎉 Passed' : '⚠️ Need ' + normalizedTest.settings.passingScore + '%'}
               </span>
 
               <button
@@ -584,29 +704,33 @@ export const StandardTestPlayer = ({
 
       {/* Post-Submission Result Card */}
       {submitted && (
-        <div className={`p-6 sm:p-7 rounded-3xl border shadow-lg space-y-4 animate-fadeIn ${
-          passed
+        <div className={`p-6 sm:p-7 rounded-3xl border shadow-lg space-y-5 animate-fadeIn ${
+          score === 100
+            ? 'bg-gradient-to-r from-emerald-50 via-teal-50 to-green-50 dark:from-emerald-950/40 dark:via-teal-950/30 dark:to-green-950/20 border-emerald-400 dark:border-emerald-700'
+            : passed
             ? 'bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/20 border-emerald-300 dark:border-emerald-800'
             : 'bg-gradient-to-r from-rose-50 to-amber-50 dark:from-rose-950/40 dark:to-amber-950/20 border-rose-300 dark:border-rose-800'
         }`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-white shadow-md ${
-                passed ? 'bg-emerald-600' : 'bg-rose-600'
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-white shadow-md shrink-0 ${
+                score === 100 ? 'bg-gradient-to-tr from-emerald-500 to-teal-500' : passed ? 'bg-emerald-600' : 'bg-rose-600'
               }`}>
-                {passed ? <CheckCircle2 className="w-8 h-8" /> : <XCircle className="w-8 h-8" />}
+                {score === 100 ? <Sparkles className="w-8 h-8 animate-pulse" /> : passed ? <CheckCircle2 className="w-8 h-8" /> : <XCircle className="w-8 h-8" />}
               </div>
               <div>
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Assessment Outcome
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                  {passed ? 'Congratulations! You Passed' : 'Needs Review & Retake'}
+                  {score === 100 ? '🎉 100% Mastery Achieved!' : passed ? 'Congratulations! You Passed' : 'Needs Review & Retake'}
                 </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                  {passed 
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-urdu">
+                  {score === 100
+                    ? `ماشاءاللہ! آپ نے تمام ${qs.length} سوالات کے درست جوابات کے ساتھ 100% مکمل کامیابی حاصل کر لی ہے۔`
+                    : passed 
                     ? `You met the ${normalizedTest.settings.passingScore}% passing standard and earned credit for this module.`
-                    : `Your score of ${score}% fell short of the required ${normalizedTest.settings.passingScore}%. Review the feedback below and retake.`
+                    : `آپ کا اسکور ${score}% ہے۔ مطلوبہ معیار 100% ہے۔ نیچے دیے گئے بٹن سے غلط سوالات درست کریں!`
                   }
                 </p>
               </div>
@@ -617,13 +741,44 @@ export const StandardTestPlayer = ({
                 {score}%
               </span>
               <span className="text-xs text-slate-500 font-medium">
-                {earnedPoints} / {totalPoints} Points
+                {earnedPoints} / {totalPoints} Points ({correctCount}/{qs.length} Correct)
               </span>
             </div>
           </div>
 
+          {/* 100% Mastery Challenge Call-to-Action Banner */}
+          {score < 100 && (
+            <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-amber-300 dark:border-amber-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <RotateCcw className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-urdu">
+                    🎯 100% ہدف چیلنج (Mastery Challenge)
+                  </h4>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 font-urdu">
+                    آپ کے <span className="font-bold text-rose-600 dark:text-rose-400">{wrongCount} سوالات</span> غلط ہیں۔ 100% حاصل کرنے کے لیے غلط سوالات درست کریں!
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFixingWrongMode(true);
+                  setReviewFilter('wrong');
+                }}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-xs shadow-md transition flex items-center justify-center gap-2 shrink-0 font-urdu"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>غلط سوالات درست کریں ({wrongCount} غلط)</span>
+              </button>
+            </div>
+          )}
+
           {passed && onNextLesson && (
-            <div className="pt-2 flex justify-end">
+            <div className="pt-1 flex justify-end">
               <button
                 onClick={onNextLesson}
                 className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5"
@@ -636,24 +791,99 @@ export const StandardTestPlayer = ({
         </div>
       )}
 
+      {/* Review Filter Tabs (Active when submitted) */}
+      {submitted && (
+        <div className="p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <Filter className="w-4 h-4 text-brand-500" />
+            <span className="font-urdu">سوالات فلٹر کریں:</span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <button
+              type="button"
+              onClick={() => setReviewFilter('all')}
+              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
+                reviewFilter === 'all'
+                  ? 'bg-brand-600 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+              }`}
+            >
+              <span>تمام سوالات (All)</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-black/10 dark:bg-white/10">{qs.length}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setReviewFilter('wrong')}
+              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
+                reviewFilter === 'wrong'
+                  ? 'bg-rose-600 text-white shadow-xs'
+                  : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100'
+              }`}
+            >
+              <span>صرف غلط سوالات (Wrong)</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-rose-200 dark:bg-rose-900/80 text-rose-900 dark:text-rose-200 font-bold">{wrongCount}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setReviewFilter('correct')}
+              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
+                reviewFilter === 'correct'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100'
+              }`}
+            >
+              <span>درست سوالات (Correct)</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-emerald-200 dark:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200 font-bold">{correctCount}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Question Navigation Palette */}
       <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
           <span>Question Palette:</span>
           <div className="flex items-center gap-2 text-[11px] font-normal text-slate-400">
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Answered</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" /> Review</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700 inline-block" /> Pending</span>
+            {submitted ? (
+              <>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Correct ({correctCount})</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" /> Wrong ({wrongCount})</span>
+              </>
+            ) : (
+              <>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Answered</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" /> Review</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700 inline-block" /> Pending</span>
+              </>
+            )}
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          {qs.map((q, qIndex) => {
+        <div className="flex flex-wrap items-center gap-1.5 max-h-36 overflow-y-auto pr-1">
+          {questionsWithStatus.map((q, qIndex) => {
             const isAnswered = answers[q.id] !== undefined && answers[q.id] !== null && (
               q.type === 'fill_blank' ? answers[q.id].toString().trim().length > 0 :
               q.type === 'matching' ? Object.keys(answers[q.id] || {}).length > 0 : true
             );
             const isMarked = Boolean(markedForReview[q.id]);
+
+            let btnStyle = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200';
+            if (submitted) {
+              if (q.isCorrect) {
+                btnStyle = 'bg-emerald-600 text-white shadow-xs';
+              } else {
+                btnStyle = 'bg-rose-500 text-white shadow-xs ring-1 ring-rose-300';
+              }
+            } else {
+              if (isMarked) {
+                btnStyle = 'bg-amber-500 text-white shadow-xs ring-2 ring-amber-300';
+              } else if (isAnswered) {
+                btnStyle = 'bg-emerald-600 text-white shadow-xs';
+              }
+            }
 
             return (
               <button
@@ -663,14 +893,8 @@ export const StandardTestPlayer = ({
                   const el = document.getElementById(`question-card-${q.id}`);
                   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }}
-                className={`w-7 h-7 rounded-xl font-bold text-xs transition flex items-center justify-center ${
-                  isMarked
-                    ? 'bg-amber-500 text-white shadow-xs ring-2 ring-amber-300'
-                    : isAnswered
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
-                }`}
-                title={`Question ${qIndex + 1} (${isMarked ? 'Marked for Review' : isAnswered ? 'Answered' : 'Unanswered'})`}
+                className={`w-7 h-7 rounded-xl font-bold text-xs transition flex items-center justify-center ${btnStyle}`}
+                title={`Question ${qIndex + 1} (${submitted ? (q.isCorrect ? 'Correct' : 'Incorrect') : isMarked ? 'Marked for Review' : isAnswered ? 'Answered' : 'Unanswered'})`}
               >
                 {qIndex + 1}
               </button>
@@ -681,43 +905,23 @@ export const StandardTestPlayer = ({
 
       {/* List of Questions */}
       <div className="space-y-6">
-        {qs.map((q, idx) => {
+        {displayQuestions.length === 0 && (
+          <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+            <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
+            <h4 className="font-bold text-base text-slate-800 dark:text-white font-urdu">
+              {reviewFilter === 'wrong' ? 'ماشاءاللہ! کوئی غلط سوال باقی نہیں ہے۔' : 'کوئی سوال موجود نہیں ہے۔'}
+            </h4>
+            <p className="text-xs text-slate-400 mt-1 font-urdu">
+              تمام سوالات دیکھنے کے لیے فلٹر میں &apos;تمام سوالات&apos; منتخب کریں۔
+            </p>
+          </div>
+        )}
+
+        {displayQuestions.map((q) => {
+          const idx = q.index;
           const userAns = answers[q.id];
-
-          // Determine correctness if submitted
-          let isCorrect = false;
-          let isPartial = false;
-
-          if (submitted) {
-            if (q.type === 'mcq') {
-              isCorrect = userAns === q.correctAnswer;
-            } else if (q.type === 'true_false') {
-              isCorrect = userAns === q.correctAnswer;
-            } else if (q.type === 'fill_blank') {
-              const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
-                ? q.acceptedAnswers
-                : [String(q.correctAnswer || '')];
-              const trimmed = (userAns || '').toString().trim();
-              isCorrect = acceptable.some(acc => {
-                if (q.caseSensitive) return acc.toString().trim() === trimmed;
-                return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
-              }) && trimmed.length > 0;
-            } else if (q.type === 'matching') {
-              let matchCount = 0;
-              (q.pairs || []).forEach(p => {
-                if (userAns?.[p.id] === p.right) matchCount++;
-              });
-              if (matchCount === q.pairs?.length) isCorrect = true;
-              else if (matchCount > 0) isPartial = true;
-            } else if (q.type === 'ordering') {
-              let orderCount = 0;
-              (q.items || []).forEach((expected, i) => {
-                if (userAns?.[i] === expected) orderCount++;
-              });
-              if (orderCount === q.items?.length) isCorrect = true;
-              else if (orderCount > 0) isPartial = true;
-            }
-          }
+          const isCorrect = q.isCorrect;
+          const isPartial = q.status === 'partial';
 
           return (
             <div
@@ -734,53 +938,80 @@ export const StandardTestPlayer = ({
               }`}
             >
               {/* Question Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2.5">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="w-7 h-7 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 text-xs font-black flex items-center justify-center">
                     {idx + 1}
                   </span>
-                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                    q.type === 'mcq'
-                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'
-                      : q.type === 'true_false'
-                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-                      : q.type === 'fill_blank'
-                      ? 'bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300'
-                      : q.type === 'matching'
-                      ? 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300'
-                      : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
-                  }`}>
-                    {q.type === 'fill_blank' ? 'Fill in the Blank' : q.type.replace('_', ' ')}
-                  </span>
+
+                  {/* Surah / Topic / Unit Badges */}
+                  {q.surah && (
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 font-urdu">
+                      📖 {q.surah}
+                    </span>
+                  )}
+                  {q.unit && (
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      {q.unit}
+                    </span>
+                  )}
+                  {q.topic && (
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-800 font-urdu">
+                      🏷️ {q.topic}
+                    </span>
+                  )}
+                  {q.pageNumber && (
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 font-urdu">
+                      صفحہ {q.pageNumber}
+                    </span>
+                  )}
+
+                  {!q.surah && !q.topic && (
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      q.type === 'mcq'
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'
+                        : q.type === 'true_false'
+                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                        : q.type === 'fill_blank'
+                        ? 'bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300'
+                        : q.type === 'matching'
+                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300'
+                        : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
+                    }`}>
+                      {q.type === 'fill_blank' ? 'Fill in the Blank' : q.type.replace('_', ' ')}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    disabled={submitted}
-                    onClick={() => setMarkedForReview(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
-                    className={`p-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1 transition ${
-                      markedForReview[q.id]
-                        ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-500/40 text-amber-600 dark:text-amber-400'
-                        : 'border-slate-200 dark:border-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
-                    }`}
-                    title="Mark question to review later"
-                  >
-                    <Bookmark className={`w-3.5 h-3.5 ${markedForReview[q.id] ? 'fill-amber-500 text-amber-500' : ''}`} />
-                    <span className="hidden sm:inline">{markedForReview[q.id] ? 'Marked' : 'Review'}</span>
-                  </button>
+                  {!submitted && (
+                    <button
+                      type="button"
+                      onClick={() => setMarkedForReview(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                      className={`p-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1 transition ${
+                        markedForReview[q.id]
+                          ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-500/40 text-amber-600 dark:text-amber-400'
+                          : 'border-slate-200 dark:border-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
+                      }`}
+                      title="Mark question to review later"
+                    >
+                      <Bookmark className={`w-3.5 h-3.5 ${markedForReview[q.id] ? 'fill-amber-500 text-amber-500' : ''}`} />
+                      <span className="hidden sm:inline">{markedForReview[q.id] ? 'Marked' : 'Review'}</span>
+                    </button>
+                  )}
 
                   <span className="text-xs font-bold text-slate-400">{q.points || 1} pt</span>
+
                   {submitted && (
-                    <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold flex items-center gap-1 ${
+                    <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold flex items-center gap-1 font-urdu ${
                       isCorrect
                         ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                         : isPartial
                         ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
                         : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
                     }`}>
-                      {isCorrect ? <Check className="w-3 h-3" /> : isPartial ? 'Partial' : <X className="w-3 h-3" />}
-                      {isCorrect ? 'Correct' : isPartial ? 'Partial Credit' : 'Incorrect'}
+                      {isCorrect ? <Check className="w-3 h-3" /> : isPartial ? 'جزوی' : <X className="w-3 h-3" />}
+                      {isCorrect ? 'درست جواب' : isPartial ? 'جزوی درست' : 'غلط جواب'}
                     </span>
                   )}
                 </div>
@@ -805,15 +1036,33 @@ export const StandardTestPlayer = ({
                       <div className="space-y-2 pt-1" dir={isQUrdu ? 'rtl' : 'ltr'}>
                         {(q.options || []).map((opt, optIdx) => {
                           const isSelected = userAns === optIdx;
-                          let style = 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900';
-                          if (isSelected) {
-                            style = 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 text-brand-900 dark:text-brand-100 font-semibold shadow-xs';
-                          }
-                          if (submitted) {
+                          let style = 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900 cursor-pointer';
+
+                          if (!submitted) {
+                            if (isSelected) {
+                              style = 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 text-brand-900 dark:text-brand-100 font-semibold shadow-xs';
+                            }
+                          } else if (isFixingWrongMode) {
+                            if (isCorrect) {
+                              if (optIdx === q.correctAnswer) {
+                                style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-100 font-bold opacity-90 cursor-default';
+                              } else {
+                                style = 'border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/20 text-slate-400 opacity-60 cursor-default';
+                              }
+                            } else {
+                              if (isSelected) {
+                                style = 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/40 text-amber-900 dark:text-amber-100 font-bold ring-2 ring-amber-400/50 cursor-pointer';
+                              } else {
+                                style = 'border-slate-300 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 bg-white dark:bg-slate-900 cursor-pointer';
+                              }
+                            }
+                          } else {
                             if (optIdx === q.correctAnswer) {
-                              style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-100 font-bold';
+                              style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-100 font-bold cursor-default';
                             } else if (isSelected) {
-                              style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-100 line-through';
+                              style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-100 line-through cursor-default';
+                            } else {
+                              style = 'border-slate-200 dark:border-slate-800 opacity-60 cursor-default';
                             }
                           }
 
@@ -822,7 +1071,7 @@ export const StandardTestPlayer = ({
                               key={optIdx}
                               dir={isQUrdu ? 'rtl' : 'ltr'}
                               onClick={() => handleSelectMCQ(q.id, optIdx)}
-                              className={`p-3.5 rounded-2xl border ${isQUrdu ? 'text-right' : 'text-left'} text-xs sm:text-sm cursor-pointer transition flex items-center justify-between gap-3 ${style}`}
+                              className={`p-3.5 rounded-2xl border ${isQUrdu ? 'text-right' : 'text-left'} text-xs sm:text-sm transition flex items-center justify-between gap-3 ${style}`}
                             >
                               <div className="flex items-center gap-3">
                                 <span className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-500 flex items-center justify-center shrink-0">
@@ -830,8 +1079,18 @@ export const StandardTestPlayer = ({
                                 </span>
                                 <span className={isQUrdu ? 'font-urdu text-sm sm:text-base leading-relaxed' : ''}>{opt}</span>
                               </div>
-                              {submitted && optIdx === q.correctAnswer && (
+
+                              {/* Badges/Indicators */}
+                              {submitted && !isFixingWrongMode && optIdx === q.correctAnswer && (
                                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                              )}
+                              {submitted && isFixingWrongMode && isCorrect && optIdx === q.correctAnswer && (
+                                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                              )}
+                              {submitted && isFixingWrongMode && !isCorrect && isSelected && (
+                                <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-md shrink-0 font-urdu">
+                                  منتخب شدہ (Selected)
+                                </span>
                               )}
                             </div>
                           );
@@ -883,7 +1142,7 @@ export const StandardTestPlayer = ({
                   <div className="relative">
                     <input
                       type="text"
-                      disabled={submitted}
+                      disabled={submitted && !isFixingWrongMode}
                       value={userAns || ''}
                       onChange={(e) => handleFillBlank(q.id, e.target.value)}
                       placeholder="Type your answer here..."
@@ -946,7 +1205,7 @@ export const StandardTestPlayer = ({
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="text-slate-400">➔</span>
                             <select
-                              disabled={submitted}
+                              disabled={submitted && !isFixingWrongMode}
                               value={selectedVal}
                               onChange={(e) => handleMatchPair(q.id, pair.id, e.target.value)}
                               className={`px-3 py-2 rounded-xl border text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 ${
@@ -982,7 +1241,7 @@ export const StandardTestPlayer = ({
                 </div>
               )}
 
-              {/* 4. SEQUENTIAL ORDERING RENDERER */}
+              {/* 5. SEQUENTIAL ORDERING RENDERER */}
               {q.type === 'ordering' && (
                 <div className="space-y-3 pt-1 text-xs">
                   <p className="text-[11px] text-slate-400">
@@ -1052,21 +1311,68 @@ export const StandardTestPlayer = ({
               )}
 
               {/* Explanation & Rationale */}
-              {submitted && q.explanation && (
+              {submitted && q.explanation && (!isFixingWrongMode || isCorrect) && (
                 <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-900 dark:text-amber-200">
                   <div className="font-bold flex items-center gap-1.5 mb-0.5">
                     <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                     <span>Educational Explanation &amp; Key Learning Point:</span>
                   </div>
-                  <p className="mt-0.5 text-amber-800/90 dark:text-amber-300/90 leading-relaxed">
+                  <p className="mt-0.5 text-amber-800/90 dark:text-amber-300/90 leading-relaxed font-urdu">
                     {q.explanation}
                   </p>
+                </div>
+              )}
+
+              {submitted && isFixingWrongMode && !isCorrect && (
+                <div className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 text-xs text-rose-800 dark:text-rose-300 flex items-center gap-2 font-urdu">
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                  <span>یہ سوال پچھلی بار غلط تھا۔ درست آپشن منتخب کریں اور نیچے سے تصحیح جمع کروائیں۔</span>
                 </div>
               )}
             </div>
           );
         })}
       </div>
+
+      {/* Sticky Floating Action Bar during Wrong-Fixing Mastery Mode */}
+      {submitted && isFixingWrongMode && wrongCount > 0 && (
+        <div className="sticky bottom-4 z-30 p-4 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-2 border-amber-500 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-slideUp">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-sm shrink-0">
+              {wrongCount}
+            </div>
+            <div>
+              <span className="text-xs font-black text-slate-900 dark:text-white font-urdu block">
+                غلط سوالات کی تصحیح جاری ہے (100% ہدف)
+              </span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-urdu">
+                باقی غلط سوالات: {wrongCount} • اپنے نئے جوابات منتخب کریں اور چیک کریں۔
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => {
+                setIsFixingWrongMode(false);
+                setReviewFilter('all');
+              }}
+              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 font-urdu"
+            >
+              جائزہ موڈ
+            </button>
+            <button
+              type="button"
+              onClick={evaluateAndSubmit}
+              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-emerald-600 hover:from-amber-700 hover:to-emerald-700 text-white font-black text-xs shadow-lg shadow-amber-500/25 transition flex items-center justify-center gap-2 font-urdu"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>تصحیح جمع کروائیں اور اسکور چیک کریں</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Action Submit Bar */}
       {!submitted ? (

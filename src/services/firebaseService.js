@@ -717,8 +717,11 @@ export const getTests = async () => {
   });
 
   INITIAL_TESTS.forEach(seed => {
-    if (!existingIds.has(seed.id)) {
-      list.push(seed);
+    const idx = list.findIndex(item => item.id === seed.id);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...seed };
+    } else {
+      list.unshift(seed);
       existingIds.add(seed.id);
     }
   });
