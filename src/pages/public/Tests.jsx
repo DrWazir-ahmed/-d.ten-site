@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   ClipboardCheck, 
   Sparkles, 
@@ -34,6 +35,7 @@ import { useSEO } from '../../hooks/useSEO';
 
 export const Tests = () => {
   const { isPremium } = useAuth();
+  const [searchParams] = useSearchParams();
   const [activeViewTab, setActiveViewTab] = useState('curriculum'); // 'curriculum' (default) or 'standalone'
   const [tests, setTests] = useState([]);
   const [curriculumIndex, setCurriculumIndex] = useState({ systems: [] });
@@ -99,6 +101,18 @@ export const Tests = () => {
     load();
   }, []);
 
+  // Sync URL search params
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    const catParam = searchParams.get('category');
+    if (tabParam === 'standalone' || catParam) {
+      setActiveViewTab('standalone');
+    }
+    if (catParam) {
+      setSelectedCategory(catParam);
+    }
+  }, [searchParams]);
+
   // Close instant search dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -115,6 +129,23 @@ export const Tests = () => {
     if (!instantSearchQuery || instantSearchQuery.trim().length < 2) return [];
     return searchCurriculumTests(curriculumIndex.systems || [], instantSearchQuery, 50);
   }, [curriculumIndex.systems, instantSearchQuery]);
+
+  // Instant Standalone & Islamic Studies Search computation
+  const standaloneSearchResults = useMemo(() => {
+    if (!instantSearchQuery || instantSearchQuery.trim().length < 2) return [];
+    const q = instantSearchQuery.toLowerCase().trim();
+    return tests.filter(test => {
+      const matchTitle = (test.title || '').toLowerCase().includes(q);
+      const matchDesc = (test.description || '').toLowerCase().includes(q);
+      const matchCat = (test.category || '').toLowerCase().includes(q);
+      const matchQ = (test.questions || []).some(item => 
+        (item.question || '').toLowerCase().includes(q) ||
+        (item.surah || '').toLowerCase().includes(q) ||
+        (item.topic || '').toLowerCase().includes(q)
+      );
+      return matchTitle || matchDesc || matchCat || matchQ;
+    });
+  }, [tests, instantSearchQuery]);
 
   const filteredTests = useMemo(() => {
     return tests.filter(test => {
@@ -215,7 +246,7 @@ export const Tests = () => {
             {instantSearchQuery.trim().length >= 2 && (
               <div className="absolute right-0 left-0 md:left-auto md:w-[480px] mt-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 max-h-[420px] overflow-y-auto p-2.5 space-y-2 animate-fadeIn text-slate-900 dark:text-slate-100">
                 <div className="flex items-center justify-between px-2 py-1 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                  <span>Found {curriculumSearchResults.length} {curriculumSearchResults.length === 1 ? 'Test' : 'Tests'}</span>
+                  <span>Found {curriculumSearchResults.length + standaloneSearchResults.length} {curriculumSearchResults.length + standaloneSearchResults.length === 1 ? 'Test' : 'Tests'}</span>
                   <button 
                     onClick={() => setInstantSearchQuery('')}
                     className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-semibold"
@@ -224,10 +255,49 @@ export const Tests = () => {
                   </button>
                 </div>
 
-                {curriculumSearchResults.length === 0 ? (
+                {/* Standalone Tests matches (e.g. Tarjama-tul-Quran, Islamiat, etc.) */}
+                {standaloneSearchResults.length > 0 && (
+                  <div className="space-y-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] font-black uppercase text-brand-600 dark:text-brand-400 px-1">
+                      Islamic Studies & Standalone Assessments:
+                    </span>
+                    {standaloneSearchResults.map((test) => (
+                      <div
+                        key={test.id}
+                        className="group p-2.5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/30 hover:bg-emerald-100/60 dark:hover:bg-emerald-900/40 border border-emerald-200/80 dark:border-emerald-800/80 transition-all flex items-center justify-between gap-3"
+                      >
+                        <div className="min-w-0 flex-1 space-y-0.5">
+                          <div className="flex items-center gap-1.5 flex-wrap text-[10px] font-bold">
+                            <span className="px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
+                              {test.category}
+                            </span>
+                            <span className="text-slate-400">
+                              {test.questions?.length} MCQs • 100% Mastery
+                            </span>
+                          </div>
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate font-urdu">
+                            {test.title}
+                          </h4>
+                        </div>
+                        <button
+                          onClick={() => {
+                            handleLaunch(test);
+                            setInstantSearchQuery('');
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition shadow-sm hover:scale-105 shrink-0 flex items-center gap-1 cursor-pointer font-urdu"
+                        >
+                          <Play className="w-3 h-3 fill-white" />
+                          <span>ٹیسٹ شروع کریں</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {curriculumSearchResults.length === 0 && standaloneSearchResults.length === 0 ? (
                   <div className="p-6 text-center text-xs text-slate-400 space-y-1">
                     <p className="font-bold text-slate-700 dark:text-slate-300">No matching tests found</p>
-                    <p>Try searching for a subject like "Physics", "Math", "Tenses", "Biology" or a class like "Class 9".</p>
+                    <p>Try searching for a subject like "ترجمہ", "اسلامیات", "Physics", "Math", "Tenses", "Biology" or a class like "Class 9".</p>
                   </div>
                 ) : (
                   curriculumSearchResults.map((item) => (
@@ -287,32 +357,53 @@ export const Tests = () => {
 
         {/* Integrated View Tabs Row */}
         <div className="mt-3 pt-2.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 p-1 bg-black/20 rounded-xl border border-white/10">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-black/20 rounded-xl border border-white/10">
             <button
               onClick={() => setActiveViewTab('curriculum')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 activeViewTab === 'curriculum'
                   ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
               <Layers className="w-3.5 h-3.5 text-brand-600" />
-              <span>Curriculum & Universal Systems</span>
+              <span>Curriculum Systems</span>
               <span className="px-1.5 py-0.2 rounded-md bg-brand-500/10 text-brand-600 font-mono text-[10px]">
                 62,900+
               </span>
             </button>
 
             <button
-              onClick={() => setActiveViewTab('standalone')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
-                activeViewTab === 'standalone'
+              onClick={() => {
+                setActiveViewTab('standalone');
+                setSelectedCategory('All');
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeViewTab === 'standalone' && selectedCategory !== 'Islamic Studies'
                   ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>General & Standalone Tests</span>
+              <span>General &amp; Standalone</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveViewTab('standalone');
+                setSelectedCategory('Islamic Studies');
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeViewTab === 'standalone' && selectedCategory === 'Islamic Studies'
+                  ? 'bg-emerald-500 text-white shadow-md'
+                  : 'text-emerald-300 hover:text-white hover:bg-emerald-500/10 border border-emerald-500/30'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="font-urdu">ترجمہ القران و اسلامیات</span>
+              <span className="px-1.5 py-0.2 rounded-md bg-white/20 text-white font-mono text-[10px]">
+                221 MCQs
+              </span>
             </button>
           </div>
 

@@ -16,10 +16,12 @@ import {
   Layers, 
   ListOrdered, 
   Columns,
-  Play,
-  Bookmark,
-  FileText,
-  Filter
+  Play, 
+  Bookmark, 
+  FileText, 
+  Filter,
+  BookOpen,
+  ChevronRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { saveQuizResult } from '../../services/firebaseService';
@@ -38,6 +40,57 @@ const isUrduOrRTL = (text) => {
   return rtlChars.length > 2;
 };
 
+// Descriptive labels for Islamiat Class 9 Units
+const ISLAMIAT_UNIT_LABELS = {
+  'Unit 1': 'یونٹ 1: قرآن مجید اور حدیث نبوی ﷺ',
+  'Unit 2': 'یونٹ 2: ایمانیات و عبادات',
+  'Unit 3': 'یونٹ 3: سیرت النبی ﷺ',
+  'Unit 4': 'یونٹ 4: اخلاق و آداب',
+  'Unit 5': 'یونٹ 5: حسن معاملات و معاشرت',
+  'Unit 6': 'یونٹ 6: ہدایت کے سرچشمے اور مشاہیر اسلام',
+  'Unit 7': 'یونٹ 7: اسلامی تعلیمات اور عصر حاضر کے تقاضے'
+};
+
+// Pure Helper to determine question correctness (Top-level, safe for all hooks)
+const getQuestionResult = (q, currentAnswers) => {
+  if (!q) return { status: 'unanswered', isCorrect: false };
+  const userAns = currentAnswers[q.id];
+  if (userAns === undefined || userAns === null) return { status: 'unanswered', isCorrect: false };
+
+  if (q.type === 'mcq' || q.type === 'true_false') {
+    const isCorrect = userAns === q.correctAnswer;
+    return { status: isCorrect ? 'correct' : 'wrong', isCorrect };
+  }
+  if (q.type === 'fill_blank') {
+    const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
+      ? q.acceptedAnswers
+      : [String(q.correctAnswer || '')];
+    const trimmed = (userAns || '').toString().trim();
+    const isCorrect = acceptable.some(acc => {
+      if (q.caseSensitive) return acc.toString().trim() === trimmed;
+      return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
+    }) && trimmed.length > 0;
+    return { status: isCorrect ? 'correct' : 'wrong', isCorrect };
+  }
+  if (q.type === 'matching') {
+    let matchCount = 0;
+    (q.pairs || []).forEach(p => {
+      if (userAns?.[p.id] === p.right) matchCount++;
+    });
+    const isCorrect = matchCount === (q.pairs?.length || 0);
+    return { status: isCorrect ? 'correct' : (matchCount > 0 ? 'partial' : 'wrong'), isCorrect };
+  }
+  if (q.type === 'ordering') {
+    let orderCount = 0;
+    (q.items || []).forEach((expected, i) => {
+      if (userAns?.[i] === expected) orderCount++;
+    });
+    const isCorrect = orderCount === (q.items?.length || 0);
+    return { status: isCorrect ? 'correct' : (orderCount > 0 ? 'partial' : 'wrong'), isCorrect };
+  }
+  return { status: 'unknown', isCorrect: false };
+};
+
 export const StandardTestPlayer = ({
   testData,
   courseId,
@@ -45,11 +98,12 @@ export const StandardTestPlayer = ({
   lessonTitle = 'Assessment',
   onComplete,
   isCompleted = false,
-  onNextLesson
+  onNextLesson,
+  onClose
 }) => {
   const { currentUser } = useAuth();
 
-  // Normalize test data (supports modular testData, legacy quiz, or fallback)
+  // 1. Normalize test data (supports modular testData, legacy quiz, or fallback)
   const normalizedTest = useMemo(() => {
     if (!testData) return null;
 
@@ -67,15 +121,12 @@ export const StandardTestPlayer = ({
       ...(testData.settings || {})
     };
 
-    // If passingScore is specified at root
     if (testData.passingScore) settings.passingScore = Number(testData.passingScore);
     if (testData.timeLimit) settings.timeLimit = Number(testData.timeLimit);
     if (testData.attemptsAllowed) settings.attemptsAllowed = Number(testData.attemptsAllowed);
     if (testData.retryUntil100 !== undefined) settings.retryUntil100 = Boolean(testData.retryUntil100);
 
     let rawQuestions = testData.questions || [];
-
-    // Fallback if legacy course.quiz was passed
     if (rawQuestions.length === 0 && testData.questions) {
       rawQuestions = testData.questions;
     }
@@ -110,6 +161,7 @@ export const StandardTestPlayer = ({
     };
   }, [testData, lessonTitle]);
 
+  // 2. All States (Defined unconditionally at top)
   const [hasStarted, setHasStarted] = useState(false);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -119,7 +171,7 @@ export const StandardTestPlayer = ({
   const [passed, setPassed] = useState(false);
   const [attemptsCount, setAttemptsCount] = useState(0);
   const [markedForReview, setMarkedForReview] = useState({});
-  const [timeLeft, setTimeLeft] = useState(0); // in seconds
+  const [timeLeft, setTimeLeft] = useState(0);
   const [timeSpent, setTimeSpent] = useState(0);
   const timerRef = useRef(null);
 
@@ -127,10 +179,144 @@ export const StandardTestPlayer = ({
   const [isFixingWrongMode, setIsFixingWrongMode] = useState(false);
   const [reviewFilter, setReviewFilter] = useState('all'); // 'all' | 'wrong' | 'correct'
 
-  // Initialize initial randomized ordering / options when starting
+  // Surah / Unit / Topic selection scope state
+  const [selectedSurah, setSelectedSurah] = useState('ALL');
+  const [selectedUnit, setSelectedUnit] = useState('ALL');
+  const [selectedTopic, setSelectedTopic] = useState('ALL');
+
+  // Random shuffled questions when test starts
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
 
-  // Reset state on testData change
+  // 3. All useMemos (Unconditionally declared at top before ANY return)
+  const availableSurahs = useMemo(() => {
+    if (!normalizedTest) return [];
+    const list = [];
+    normalizedTest.questions.forEach(q => {
+      if (q.surah && !list.includes(q.surah)) {
+        list.push(q.surah);
+      }
+    });
+    return list;
+  }, [normalizedTest]);
+
+  const availableUnits = useMemo(() => {
+    if (!normalizedTest) return [];
+    const list = [];
+    normalizedTest.questions.forEach(q => {
+      if (q.unit && !list.includes(q.unit)) {
+        list.push(q.unit);
+      }
+    });
+    return list;
+  }, [normalizedTest]);
+
+  const availableTopics = useMemo(() => {
+    if (!normalizedTest) return [];
+    const list = [];
+    normalizedTest.questions.forEach(q => {
+      if (selectedUnit === 'ALL' || q.unit === selectedUnit) {
+        if (q.topic && !list.includes(q.topic)) {
+          list.push(q.topic);
+        }
+      }
+    });
+    return list;
+  }, [normalizedTest, selectedUnit]);
+
+  // Scoped question pool according to selected Surah or Unit/Topic
+  const scopedQuestions = useMemo(() => {
+    if (!normalizedTest) return [];
+    let list = normalizedTest.questions;
+
+    if (availableSurahs.length > 0 && selectedSurah !== 'ALL') {
+      list = list.filter(q => q.surah === selectedSurah);
+    } else if (availableUnits.length > 0) {
+      if (selectedUnit !== 'ALL') {
+        list = list.filter(q => q.unit === selectedUnit);
+      }
+      if (selectedTopic !== 'ALL') {
+        list = list.filter(q => q.topic === selectedTopic);
+      }
+    }
+
+    return list;
+  }, [normalizedTest, availableSurahs.length, availableUnits.length, selectedSurah, selectedUnit, selectedTopic]);
+
+  // Active question list (shuffled if started, else current scoped questions)
+  const activeQuestions = useMemo(() => {
+    if (hasStarted && shuffledQuestions.length > 0) {
+      return shuffledQuestions;
+    }
+    return scopedQuestions;
+  }, [hasStarted, shuffledQuestions, scopedQuestions]);
+
+  // Status mapping for active questions
+  const questionsWithStatus = useMemo(() => {
+    return activeQuestions.map((q, idx) => {
+      const res = getQuestionResult(q, answers);
+      return {
+        ...q,
+        index: idx,
+        isCorrect: res.isCorrect,
+        status: res.status
+      };
+    });
+  }, [activeQuestions, answers]);
+
+  const correctCount = useMemo(() => {
+    return questionsWithStatus.filter(q => q.isCorrect).length;
+  }, [questionsWithStatus]);
+
+  const wrongCount = useMemo(() => {
+    return activeQuestions.length - correctCount;
+  }, [activeQuestions.length, correctCount]);
+
+  const displayQuestions = useMemo(() => {
+    if (!submitted) return questionsWithStatus;
+    if (reviewFilter === 'wrong') {
+      return questionsWithStatus.filter(q => !q.isCorrect);
+    }
+    if (reviewFilter === 'correct') {
+      return questionsWithStatus.filter(q => q.isCorrect);
+    }
+    return questionsWithStatus;
+  }, [questionsWithStatus, submitted, reviewFilter]);
+
+  const typeCounts = useMemo(() => {
+    return {
+      mcq: activeQuestions.filter(q => q.type === 'mcq').length,
+      true_false: activeQuestions.filter(q => q.type === 'true_false').length,
+      fill_blank: activeQuestions.filter(q => q.type === 'fill_blank').length,
+      matching: activeQuestions.filter(q => q.type === 'matching').length,
+      ordering: activeQuestions.filter(q => q.type === 'ordering').length
+    };
+  }, [activeQuestions]);
+
+  const answeredCount = useMemo(() => {
+    return activeQuestions.reduce((cnt, q) => {
+      const a = answers[q.id];
+      if (q.type === 'mcq' || q.type === 'true_false') {
+        return a !== undefined && a !== null ? cnt + 1 : cnt;
+      }
+      if (q.type === 'fill_blank') {
+        return a !== undefined && a !== null && a.toString().trim().length > 0 ? cnt + 1 : cnt;
+      }
+      if (q.type === 'matching') {
+        const pairs = Object.keys(a || {}).length;
+        return pairs >= (q.pairs?.length || 1) ? cnt + 1 : cnt;
+      }
+      if (q.type === 'ordering') {
+        return Array.isArray(a) && a.length > 0 ? cnt + 1 : cnt;
+      }
+      return cnt;
+    }, 0);
+  }, [activeQuestions, answers]);
+
+  const progressPct = useMemo(() => {
+    return activeQuestions.length > 0 ? Math.round((answeredCount / activeQuestions.length) * 100) : 0;
+  }, [activeQuestions.length, answeredCount]);
+
+  // 4. Reset effects
   useEffect(() => {
     setHasStarted(false);
     setAnswers({});
@@ -141,23 +327,36 @@ export const StandardTestPlayer = ({
     setPassed(false);
     setIsFixingWrongMode(false);
     setReviewFilter('all');
+    setShuffledQuestions([]);
     if (timerRef.current) clearInterval(timerRef.current);
-  }, [normalizedTest?.title]);
+  }, [normalizedTest?.title, selectedSurah, selectedUnit, selectedTopic]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  // Format countdown
+  const formatTime = (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
 
   // Start assessment handler
   const handleStartTest = () => {
-    if (!normalizedTest) return;
+    if (!normalizedTest || scopedQuestions.length === 0) return;
 
-    let qs = [...normalizedTest.questions];
+    let qs = [...scopedQuestions];
     if (normalizedTest.settings.shuffleQuestions) {
       qs.sort(() => Math.random() - 0.5);
     }
 
-    // Initialize ordering questions with scrambled sequence
     const initialAnswers = {};
     qs.forEach(q => {
       if (q.type === 'ordering') {
-        const scrambled = [...q.items].sort(() => Math.random() - 0.5);
+        const scrambled = [...(q.items || [])].sort(() => Math.random() - 0.5);
         initialAnswers[q.id] = scrambled;
       } else if (q.type === 'matching') {
         initialAnswers[q.id] = {};
@@ -168,9 +367,10 @@ export const StandardTestPlayer = ({
     setAnswers(initialAnswers);
     setHasStarted(true);
     setSubmitted(false);
+    setIsFixingWrongMode(false);
+    setReviewFilter('all');
     setAttemptsCount(prev => prev + 1);
 
-    // Timer setup
     const limitMinutes = normalizedTest.settings.timeLimit || 0;
     if (limitMinutes > 0) {
       const totalSecs = limitMinutes * 60;
@@ -192,64 +392,16 @@ export const StandardTestPlayer = ({
     }
   };
 
-  // Auto-submit when timer expires
   const handleAutoSubmit = () => {
     alert('Time limit expired! Your test is being automatically evaluated.');
     evaluateAndSubmit();
-  };
-
-  // Clear timer on unmount
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
-
-  // Helper to determine question correctness
-  const getQuestionResult = (q, currentAnswers) => {
-    const userAns = currentAnswers[q.id];
-    if (userAns === undefined || userAns === null) return { status: 'unanswered', isCorrect: false };
-
-    if (q.type === 'mcq' || q.type === 'true_false') {
-      const isCorrect = userAns === q.correctAnswer;
-      return { status: isCorrect ? 'correct' : 'wrong', isCorrect };
-    }
-    if (q.type === 'fill_blank') {
-      const acceptable = q.acceptedAnswers && Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.length > 0
-        ? q.acceptedAnswers
-        : [String(q.correctAnswer || '')];
-      const trimmed = (userAns || '').toString().trim();
-      const isCorrect = acceptable.some(acc => {
-        if (q.caseSensitive) return acc.toString().trim() === trimmed;
-        return acc.toString().trim().toLowerCase() === trimmed.toLowerCase();
-      }) && trimmed.length > 0;
-      return { status: isCorrect ? 'correct' : 'wrong', isCorrect };
-    }
-    if (q.type === 'matching') {
-      let matchCount = 0;
-      (q.pairs || []).forEach(p => {
-        if (userAns?.[p.id] === p.right) matchCount++;
-      });
-      const isCorrect = matchCount === (q.pairs?.length || 0);
-      return { status: isCorrect ? 'correct' : (matchCount > 0 ? 'partial' : 'wrong'), isCorrect };
-    }
-    if (q.type === 'ordering') {
-      let orderCount = 0;
-      (q.items || []).forEach((expected, i) => {
-        if (userAns?.[i] === expected) orderCount++;
-      });
-      const isCorrect = orderCount === (q.items?.length || 0);
-      return { status: isCorrect ? 'correct' : (orderCount > 0 ? 'partial' : 'wrong'), isCorrect };
-    }
-    return { status: 'unknown', isCorrect: false };
   };
 
   // Answer interaction handlers
   const handleSelectMCQ = (qId, optionIdx) => {
     if (submitted && !isFixingWrongMode) return;
     if (submitted && isFixingWrongMode) {
-      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
-      const q = allQs.find(item => item.id === qId);
+      const q = activeQuestions.find(item => item.id === qId);
       if (q && getQuestionResult(q, answers).isCorrect) return; // Locked correct
     }
     setAnswers(prev => ({ ...prev, [qId]: optionIdx }));
@@ -258,9 +410,8 @@ export const StandardTestPlayer = ({
   const handleSelectTrueFalse = (qId, val) => {
     if (submitted && !isFixingWrongMode) return;
     if (submitted && isFixingWrongMode) {
-      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
-      const q = allQs.find(item => item.id === qId);
-      if (q && getQuestionResult(q, answers).isCorrect) return; // Locked correct
+      const q = activeQuestions.find(item => item.id === qId);
+      if (q && getQuestionResult(q, answers).isCorrect) return;
     }
     setAnswers(prev => ({ ...prev, [qId]: val }));
   };
@@ -268,8 +419,7 @@ export const StandardTestPlayer = ({
   const handleFillBlank = (qId, val) => {
     if (submitted && !isFixingWrongMode) return;
     if (submitted && isFixingWrongMode) {
-      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
-      const q = allQs.find(item => item.id === qId);
+      const q = activeQuestions.find(item => item.id === qId);
       if (q && getQuestionResult(q, answers).isCorrect) return;
     }
     setAnswers(prev => ({ ...prev, [qId]: val }));
@@ -278,8 +428,7 @@ export const StandardTestPlayer = ({
   const handleMatchPair = (qId, pairId, selectedRight) => {
     if (submitted && !isFixingWrongMode) return;
     if (submitted && isFixingWrongMode) {
-      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
-      const q = allQs.find(item => item.id === qId);
+      const q = activeQuestions.find(item => item.id === qId);
       if (q && getQuestionResult(q, answers).isCorrect) return;
     }
     setAnswers(prev => ({
@@ -294,8 +443,7 @@ export const StandardTestPlayer = ({
   const handleMoveOrderItem = (qId, currentItems, fromIdx, direction) => {
     if (submitted && !isFixingWrongMode) return;
     if (submitted && isFixingWrongMode) {
-      const allQs = shuffledQuestions.length > 0 ? shuffledQuestions : (normalizedTest?.questions || []);
-      const q = allQs.find(item => item.id === qId);
+      const q = activeQuestions.find(item => item.id === qId);
       if (q && getQuestionResult(q, answers).isCorrect) return;
     }
     const toIdx = direction === 'up' ? fromIdx - 1 : fromIdx + 1;
@@ -313,7 +461,7 @@ export const StandardTestPlayer = ({
   const evaluateAndSubmit = () => {
     if (timerRef.current) clearInterval(timerRef.current);
 
-    const qs = shuffledQuestions.length > 0 ? shuffledQuestions : normalizedTest.questions;
+    const qs = activeQuestions;
     let earned = 0;
     let total = 0;
 
@@ -350,11 +498,11 @@ export const StandardTestPlayer = ({
         }
       } else if (q.type === 'matching') {
         if (userAns && typeof userAns === 'object') {
-          let correctCount = 0;
+          let cCount = 0;
           q.pairs.forEach(p => {
-            if (userAns[p.id] === p.right) correctCount++;
+            if (userAns[p.id] === p.right) cCount++;
           });
-          const frac = (q.pairs.length > 0) ? (correctCount / q.pairs.length) : 0;
+          const frac = (q.pairs.length > 0) ? (cCount / q.pairs.length) : 0;
           earned += Math.round(frac * qPts * 10) / 10;
         }
       } else if (q.type === 'ordering') {
@@ -400,7 +548,7 @@ export const StandardTestPlayer = ({
         userId: currentUser?.uid || 'current-user',
         courseId: courseId || testData?.id || 'standard-test',
         courseTitle: courseTitle || normalizedTest.title,
-        quizTitle: normalizedTest.title,
+        quizTitle: `${normalizedTest.title}${selectedSurah !== 'ALL' ? ' - ' + selectedSurah : selectedUnit !== 'ALL' ? ' - ' + selectedUnit : ''}`,
         score: calculatedPct,
         passed: isPassing,
         earnedPoints: earned,
@@ -422,7 +570,7 @@ export const StandardTestPlayer = ({
   };
 
   const handleSubmitClick = () => {
-    const qs = shuffledQuestions.length > 0 ? shuffledQuestions : normalizedTest.questions;
+    const qs = activeQuestions;
     let unansweredCount = 0;
 
     qs.forEach(q => {
@@ -437,7 +585,7 @@ export const StandardTestPlayer = ({
 
     if (unansweredCount > 0) {
       const confirmSubmit = window.confirm(
-        `You have ${unansweredCount} unanswered or incomplete question(s). Do you still wish to submit now?`
+        `آپ کے ${unansweredCount} سوالات ابھی حل طلب ہیں۔ کیا آپ ابھی جمع کروانا چاہتے ہیں؟`
       );
       if (!confirmSubmit) return;
     }
@@ -454,6 +602,10 @@ export const StandardTestPlayer = ({
     handleStartTest();
   };
 
+  /* ──────────────────────────────────────────────────────────────────────────
+     CONDITIONAL RENDERS (Safe: All Hooks were executed above unconditionally)
+     ────────────────────────────────────────────────────────────────────────── */
+
   if (!normalizedTest || normalizedTest.questions.length === 0) {
     return (
       <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
@@ -464,50 +616,192 @@ export const StandardTestPlayer = ({
     );
   }
 
-  const qs = shuffledQuestions.length > 0 ? shuffledQuestions : normalizedTest.questions;
-
-  // Format countdown
-  const formatTime = (secs) => {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    return `${m}:${s < 10 ? '0' : ''}${s}`;
-  };
-
-  // Question counts by type
-  const typeCounts = {
-    mcq: qs.filter(q => q.type === 'mcq').length,
-    true_false: qs.filter(q => q.type === 'true_false').length,
-    fill_blank: qs.filter(q => q.type === 'fill_blank').length,
-    matching: qs.filter(q => q.type === 'matching').length,
-    ordering: qs.filter(q => q.type === 'ordering').length
-  };
-
   /* ──────────────────────────────────────────────────────────────────────────
-     1. PRE-TEST SPLASH SCREEN
+     1. PRE-TEST SPLASH SCREEN & SURAH/UNIT SELECTOR
      ────────────────────────────────────────────────────────────────────────── */
   if (!hasStarted && !submitted) {
     const maxAttempts = normalizedTest.settings.attemptsAllowed || 0;
     const attemptsLeft = maxAttempts > 0 ? maxAttempts - attemptsCount : null;
 
     return (
-      <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6">
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 text-center animate-fadeIn">
+      <div className="max-w-3xl mx-auto py-6 px-3 sm:px-6">
+        <div className="p-5 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 text-center animate-fadeIn">
           
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-brand-500/25">
-            <Award className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-emerald-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-brand-500/25">
+            {availableSurahs.length > 0 ? <BookOpen className="w-8 h-8" /> : <Award className="w-8 h-8" />}
           </div>
 
           <div>
-            <span className="text-[11px] font-black uppercase tracking-wider text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
-              Interactive Assessment Module
+            <span className="text-[11px] font-black uppercase tracking-wider text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800 font-urdu">
+              {availableSurahs.length > 0 ? 'ترجمۃ القرآن المجید • نہم جماعت' : availableUnits.length > 0 ? 'اسلامیات لازمی • نہم جماعت' : 'Interactive Assessment Module'}
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-3">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-3 font-urdu">
               {normalizedTest.title}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl mx-auto font-urdu leading-relaxed">
               {normalizedTest.settings.instructions}
             </p>
           </div>
+
+          {/* ───────────────────────────────────────────────────────────
+              INTERACTIVE SURAH SELECTOR (For Tarjama-tul-Quran)
+              ─────────────────────────────────────────────────────────── */}
+          {availableSurahs.length > 0 && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-right space-y-3" dir="rtl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-700/60 pb-2.5">
+                <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-urdu flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4 text-emerald-600" />
+                  امتحانی سورت کا انتخاب کریں:
+                </span>
+                <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 font-urdu">
+                  {selectedSurah === 'ALL' 
+                    ? `مکمل پرچہ (تمام 18 سورتیں • 90 سوالات)` 
+                    : `منتخب شدہ: ${selectedSurah} • (${scopedQuestions.length} سوالات)`}
+                </span>
+              </div>
+
+              {/* Surah Pills Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-60 overflow-y-auto pr-1">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSurah('ALL')}
+                  className={`p-2.5 rounded-xl text-xs font-urdu font-black transition flex items-center justify-between border cursor-pointer ${
+                    selectedSurah === 'ALL'
+                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-400/30'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-emerald-500 hover:bg-emerald-50/30'
+                  }`}
+                >
+                  <span>تمام 18 سورتیں</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-bold">
+                    {normalizedTest.questions.length}
+                  </span>
+                </button>
+
+                {availableSurahs.map((surah, sIdx) => {
+                  const sCount = normalizedTest.questions.filter(q => q.surah === surah).length;
+                  const isSel = selectedSurah === surah;
+                  return (
+                    <button
+                      key={surah}
+                      type="button"
+                      onClick={() => setSelectedSurah(surah)}
+                      className={`p-2.5 rounded-xl text-xs font-urdu font-bold transition flex items-center justify-between border cursor-pointer ${
+                        isSel
+                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-400/30'
+                          : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-emerald-500 hover:bg-emerald-50/30'
+                      }`}
+                    >
+                      <span className="truncate">📖 {surah}</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-bold shrink-0">
+                        {sCount}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ───────────────────────────────────────────────────────────
+              INTERACTIVE UNIT & TOPIC SELECTOR (For Islamiat)
+              ─────────────────────────────────────────────────────────── */}
+          {availableUnits.length > 0 && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-right space-y-3" dir="rtl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-700/60 pb-2.5">
+                <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-urdu flex items-center gap-1.5">
+                  <Layers className="w-4 h-4 text-blue-600" />
+                  امتحانی یونٹ کا انتخاب کریں:
+                </span>
+                <span className="text-[11px] font-bold text-blue-700 dark:text-blue-300 font-urdu">
+                  {selectedUnit === 'ALL' 
+                    ? `مکمل نصاب (تمام 7 یونٹس • 131 سوالات)` 
+                    : `منتخب شدہ: ${ISLAMIAT_UNIT_LABELS[selectedUnit] || selectedUnit} • (${scopedQuestions.length} سوالات)`}
+                </span>
+              </div>
+
+              {/* Units Buttons */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedUnit('ALL');
+                    setSelectedTopic('ALL');
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-urdu font-black transition flex items-center gap-1.5 border cursor-pointer ${
+                    selectedUnit === 'ALL'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm ring-2 ring-blue-400/30'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-500'
+                  }`}
+                >
+                  <span>تمام نصاب (مکمل 131 سوالات)</span>
+                </button>
+
+                {availableUnits.map((u) => {
+                  const uCount = normalizedTest.questions.filter(q => q.unit === u).length;
+                  const isSel = selectedUnit === u;
+                  const label = ISLAMIAT_UNIT_LABELS[u] || u;
+                  return (
+                    <button
+                      key={u}
+                      type="button"
+                      onClick={() => {
+                        setSelectedUnit(u);
+                        setSelectedTopic('ALL');
+                      }}
+                      className={`px-3 py-2 rounded-xl text-xs font-urdu font-bold transition flex items-center gap-1.5 border cursor-pointer ${
+                        isSel
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-sm ring-2 ring-blue-400/30'
+                          : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/30'
+                      }`}
+                    >
+                      <span>{label}</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-bold">
+                        {uCount}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Sub-Topics within the selected Unit */}
+              {selectedUnit !== 'ALL' && availableTopics.length > 1 && (
+                <div className="pt-2.5 border-t border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-urdu ml-1">
+                    سبق منتخب کریں:
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTopic('ALL')}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-urdu font-bold transition cursor-pointer ${
+                      selectedTopic === 'ALL'
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                        : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                    }`}
+                  >
+                    تمام اسباق ({normalizedTest.questions.filter(q => q.unit === selectedUnit).length})
+                  </button>
+                  {availableTopics.map(t => {
+                    const tCount = normalizedTest.questions.filter(q => q.unit === selectedUnit && q.topic === t).length;
+                    const isTSel = selectedTopic === t;
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setSelectedTopic(t)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-urdu font-bold transition cursor-pointer ${
+                          isTSel
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500'
+                        }`}
+                      >
+                        {t} ({tCount})
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Assessment Standards Summary Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
@@ -528,64 +822,28 @@ export const StandardTestPlayer = ({
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Questions</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selected Items</span>
               <span className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1 mt-0.5">
                 <HelpCircle className="w-4 h-4 text-purple-500" />
-                {qs.length} Items
+                {scopedQuestions.length} Questions
               </span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Attempts</span>
-              <span className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1 mt-0.5">
-                <RotateCcw className="w-4 h-4 text-brand-500" />
-                {maxAttempts > 0 ? `${maxAttempts} Max` : 'Unlimited'}
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">100% Mastery</span>
+              <span className="text-base font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+                <Sparkles className="w-4 h-4 text-emerald-500" />
+                Active
               </span>
             </div>
           </div>
-
-          {/* Question Breakdown Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
-            {typeCounts.mcq > 0 && (
-              <span className="px-2.5 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold border border-blue-200 dark:border-blue-800">
-                {typeCounts.mcq} Multiple Choice
-              </span>
-            )}
-            {typeCounts.true_false > 0 && (
-              <span className="px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">
-                {typeCounts.true_false} True / False
-              </span>
-            )}
-            {typeCounts.fill_blank > 0 && (
-              <span className="px-2.5 py-1 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 font-bold border border-teal-200 dark:border-teal-800">
-                {typeCounts.fill_blank} Fill in the Blank
-              </span>
-            )}
-            {typeCounts.matching > 0 && (
-              <span className="px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 font-bold border border-purple-200 dark:border-purple-800">
-                {typeCounts.matching} Matching Column
-              </span>
-            )}
-            {typeCounts.ordering > 0 && (
-              <span className="px-2.5 py-1 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-bold border border-amber-200 dark:border-amber-800">
-                {typeCounts.ordering} Sequential Ordering
-              </span>
-            )}
-          </div>
-
-          {isCompleted && (
-            <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 text-xs font-bold flex items-center justify-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>You have previously passed and completed this assessment.</span>
-            </div>
-          )}
 
           <div className="pt-2">
             <button
               onClick={handleStartTest}
-              className="w-full py-3.5 px-6 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-black text-sm sm:text-base shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-2 group"
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-black text-sm sm:text-base shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-2 group cursor-pointer font-urdu"
             >
-              <span>{isCompleted ? 'Retake Assessment' : 'Commence Assessment'}</span>
+              <span>ٹیسٹ شروع کریں ({scopedQuestions.length} سوالات)</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -598,73 +856,33 @@ export const StandardTestPlayer = ({
   /* ──────────────────────────────────────────────────────────────────────────
      2. ACTIVE ASSESSMENT OR COMPLETED REVIEW VIEW
      ────────────────────────────────────────────────────────────────────────── */
-  const answeredCount = qs.reduce((cnt, q) => {
-    const a = answers[q.id];
-    if (q.type === 'mcq' || q.type === 'true_false') {
-      return a !== undefined && a !== null ? cnt + 1 : cnt;
-    }
-    if (q.type === 'fill_blank') {
-      return a !== undefined && a !== null && a.toString().trim().length > 0 ? cnt + 1 : cnt;
-    }
-    if (q.type === 'matching') {
-      const pairs = Object.keys(a || {}).length;
-      return pairs >= (q.pairs?.length || 1) ? cnt + 1 : cnt;
-    }
-    if (q.type === 'ordering') {
-      return Array.isArray(a) && a.length > 0 ? cnt + 1 : cnt;
-    }
-    return cnt;
-  }, 0);
-
-  const progressPct = Math.round((answeredCount / qs.length) * 100);
-
-  // Compute question statuses & filtering
-  const questionsWithStatus = useMemo(() => {
-    return qs.map((q, idx) => {
-      const res = getQuestionResult(q, answers);
-      return {
-        ...q,
-        index: idx,
-        isCorrect: res.isCorrect,
-        status: res.status
-      };
-    });
-  }, [qs, answers]);
-
-  const correctCount = useMemo(() => {
-    return questionsWithStatus.filter(q => q.isCorrect).length;
-  }, [questionsWithStatus]);
-
-  const wrongCount = useMemo(() => {
-    return qs.length - correctCount;
-  }, [qs.length, correctCount]);
-
-  const displayQuestions = useMemo(() => {
-    if (!submitted) return questionsWithStatus;
-    if (reviewFilter === 'wrong') {
-      return questionsWithStatus.filter(q => !q.isCorrect);
-    }
-    if (reviewFilter === 'correct') {
-      return questionsWithStatus.filter(q => q.isCorrect);
-    }
-    return questionsWithStatus;
-  }, [questionsWithStatus, submitted, reviewFilter]);
-
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-fadeIn">
       
       {/* Test Sticky Banner */}
       <div className="sticky top-20 z-20 p-4 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-md flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="font-black text-base text-slate-900 dark:text-white truncate">
-            {normalizedTest.title}
-          </h3>
-          <p className="text-xs text-slate-400">
-            {answeredCount} of {qs.length} answered ({progressPct}%) • Target: {normalizedTest.settings.passingScore}%
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="font-black text-base text-slate-900 dark:text-white truncate font-urdu">
+              {normalizedTest.title}
+            </h3>
+            {selectedSurah !== 'ALL' && (
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-urdu border border-emerald-300 dark:border-emerald-800">
+                📖 {selectedSurah}
+              </span>
+            )}
+            {selectedUnit !== 'ALL' && (
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 font-urdu border border-blue-300 dark:border-blue-800">
+                🏷️ {ISLAMIAT_UNIT_LABELS[selectedUnit] || selectedUnit} {selectedTopic !== 'ALL' ? `• ${selectedTopic}` : ''}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-slate-400 mt-0.5 font-urdu">
+            {answeredCount} از {activeQuestions.length} حل شدہ ({progressPct}%) • مطلوبہ ہدف: {normalizedTest.settings.passingScore}%
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {/* Active Countdown */}
           {!submitted && normalizedTest.settings.timeLimit > 0 && (
             <div className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold flex items-center gap-1.5 ${
@@ -679,6 +897,27 @@ export const StandardTestPlayer = ({
             </div>
           )}
 
+          {/* Change Scope Button */}
+          {(availableSurahs.length > 0 || availableUnits.length > 0) && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!submitted && answeredCount > 0) {
+                  const c = window.confirm("کیا آپ سورت یا یونٹ تبدیل کرنا چاہتے ہیں؟ موجودہ جوابات صاف ہو جائیں گے۔");
+                  if (!c) return;
+                }
+                setHasStarted(false);
+                setSubmitted(false);
+                setAnswers({});
+                setIsFixingWrongMode(false);
+              }}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-urdu font-bold text-slate-600 dark:text-slate-300 transition"
+              title="سورت یا یونٹ کا انتخاب تبدیل کریں"
+            >
+              🔄 انتخاب تبدیل کریں
+            </button>
+          )}
+
           {submitted && (
             <div className="flex items-center gap-2">
               <span className={`px-3 py-1 rounded-xl text-xs font-black ${
@@ -688,14 +927,14 @@ export const StandardTestPlayer = ({
                   ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                   : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
               }`}>
-                Score: {score}% {score === 100 ? '👑 100% Mastered' : passed ? '🎉 Passed' : '⚠️ Need ' + normalizedTest.settings.passingScore + '%'}
+                اسکور: {score}% {score === 100 ? '👑 100% مکمل' : passed ? '🎉 پاس' : '⚠️ ضرورت ' + normalizedTest.settings.passingScore + '%'}
               </span>
 
               <button
                 onClick={handleRetake}
-                className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1"
+                className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 font-urdu"
               >
-                <RotateCcw className="w-3.5 h-3.5" /> Retake
+                <RotateCcw className="w-3.5 h-3.5" /> دوبارہ ٹیسٹ
               </button>
             </div>
           )}
@@ -722,15 +961,15 @@ export const StandardTestPlayer = ({
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Assessment Outcome
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                  {score === 100 ? '🎉 100% Mastery Achieved!' : passed ? 'Congratulations! You Passed' : 'Needs Review & Retake'}
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-urdu">
+                  {score === 100 ? '🎉 ماشاءاللہ! 100% مکمل کامیابی!' : passed ? 'مبارک ہو! آپ پاس ہیں' : 'دوبارہ کوشش کی ضرورت ہے'}
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-urdu">
                   {score === 100
-                    ? `ماشاءاللہ! آپ نے تمام ${qs.length} سوالات کے درست جوابات کے ساتھ 100% مکمل کامیابی حاصل کر لی ہے۔`
+                    ? `ماشاءاللہ! آپ نے اس سیکشن کے تمام ${activeQuestions.length} سوالات کے درست جوابات کے ساتھ 100% معیار مکمل کر لیا ہے۔`
                     : passed 
-                    ? `You met the ${normalizedTest.settings.passingScore}% passing standard and earned credit for this module.`
-                    : `آپ کا اسکور ${score}% ہے۔ مطلوبہ معیار 100% ہے۔ نیچے دیے گئے بٹن سے غلط سوالات درست کریں!`
+                    ? `آپ نے کامیابی سے پاسنگ معیار حاصل کر لیا ہے، لیکن 100% مکمل کرنے کے لیے نیچے غلط سوالات درست کریں۔`
+                    : `آپ کا اسکور ${score}% ہے۔ 100% حاصل کرنے تک نیچے دیے گئے بٹن سے غلط سوالات کو دوبارہ حل کریں۔`
                   }
                 </p>
               </div>
@@ -741,7 +980,7 @@ export const StandardTestPlayer = ({
                 {score}%
               </span>
               <span className="text-xs text-slate-500 font-medium">
-                {earnedPoints} / {totalPoints} Points ({correctCount}/{qs.length} Correct)
+                {earnedPoints} / {totalPoints} Points ({correctCount}/{activeQuestions.length} درست)
               </span>
             </div>
           </div>
@@ -758,7 +997,7 @@ export const StandardTestPlayer = ({
                     🎯 100% ہدف چیلنج (Mastery Challenge)
                   </h4>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300 font-urdu">
-                    آپ کے <span className="font-bold text-rose-600 dark:text-rose-400">{wrongCount} سوالات</span> غلط ہیں۔ 100% حاصل کرنے کے لیے غلط سوالات درست کریں!
+                    آپ کے <span className="font-bold text-rose-600 dark:text-rose-400">{wrongCount} سوالات</span> غلط ہیں۔ 100% اسکور کے لیے غلط سوالات درست کریں!
                   </p>
                 </div>
               </div>
@@ -769,7 +1008,7 @@ export const StandardTestPlayer = ({
                   setIsFixingWrongMode(true);
                   setReviewFilter('wrong');
                 }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-xs shadow-md transition flex items-center justify-center gap-2 shrink-0 font-urdu"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-xs shadow-md transition flex items-center justify-center gap-2 shrink-0 font-urdu cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>غلط سوالات درست کریں ({wrongCount} غلط)</span>
@@ -777,17 +1016,34 @@ export const StandardTestPlayer = ({
             </div>
           )}
 
-          {passed && onNextLesson && (
-            <div className="pt-1 flex justify-end">
+          {/* Buttons to Choose Another Surah or Unit */}
+          <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
+            {(availableSurahs.length > 0 || availableUnits.length > 0) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setHasStarted(false);
+                  setSubmitted(false);
+                  setAnswers({});
+                  setIsFixingWrongMode(false);
+                }}
+                className="px-4 py-2 rounded-xl bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 text-white text-xs font-bold font-urdu transition flex items-center gap-1.5"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>اگلی سورت یا یونٹ کا انتخاب کریں</span>
+              </button>
+            )}
+
+            {passed && onNextLesson && (
               <button
                 onClick={onNextLesson}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5"
+                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5"
               >
                 <span>Continue to Next Lesson</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
@@ -803,20 +1059,20 @@ export const StandardTestPlayer = ({
             <button
               type="button"
               onClick={() => setReviewFilter('all')}
-              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 reviewFilter === 'all'
                   ? 'bg-brand-600 text-white shadow-xs'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
               }`}
             >
               <span>تمام سوالات (All)</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-black/10 dark:bg-white/10">{qs.length}</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-black/10 dark:bg-white/10">{activeQuestions.length}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setReviewFilter('wrong')}
-              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 reviewFilter === 'wrong'
                   ? 'bg-rose-600 text-white shadow-xs'
                   : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100'
@@ -829,7 +1085,7 @@ export const StandardTestPlayer = ({
             <button
               type="button"
               onClick={() => setReviewFilter('correct')}
-              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 reviewFilter === 'correct'
                   ? 'bg-emerald-600 text-white shadow-xs'
                   : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100'
@@ -849,14 +1105,14 @@ export const StandardTestPlayer = ({
           <div className="flex items-center gap-2 text-[11px] font-normal text-slate-400">
             {submitted ? (
               <>
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Correct ({correctCount})</span>
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" /> Wrong ({wrongCount})</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> درست ({correctCount})</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" /> غلط ({wrongCount})</span>
               </>
             ) : (
               <>
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Answered</span>
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" /> Review</span>
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700 inline-block" /> Pending</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> حل شدہ</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" /> نشان زد</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700 inline-block" /> باقی</span>
               </>
             )}
           </div>
@@ -893,7 +1149,7 @@ export const StandardTestPlayer = ({
                   const el = document.getElementById(`question-card-${q.id}`);
                   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }}
-                className={`w-7 h-7 rounded-xl font-bold text-xs transition flex items-center justify-center ${btnStyle}`}
+                className={`w-7 h-7 rounded-xl font-bold text-xs transition flex items-center justify-center cursor-pointer ${btnStyle}`}
                 title={`Question ${qIndex + 1} (${submitted ? (q.isCorrect ? 'Correct' : 'Incorrect') : isMarked ? 'Marked for Review' : isAnswered ? 'Answered' : 'Unanswered'})`}
               >
                 {qIndex + 1}
@@ -988,7 +1244,7 @@ export const StandardTestPlayer = ({
                     <button
                       type="button"
                       onClick={() => setMarkedForReview(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
-                      className={`p-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1 transition ${
+                      className={`p-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1 transition cursor-pointer ${
                         markedForReview[q.id]
                           ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-500/40 text-amber-600 dark:text-amber-400'
                           : 'border-slate-200 dark:border-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
@@ -1123,7 +1379,7 @@ export const StandardTestPlayer = ({
                         key={String(val)}
                         type="button"
                         onClick={() => handleSelectTrueFalse(q.id, val)}
-                        className={`py-4 px-4 rounded-2xl border text-sm font-black transition flex items-center justify-center gap-2 ${style}`}
+                        className={`py-4 px-4 rounded-2xl border text-sm font-black transition flex items-center justify-center gap-2 cursor-pointer ${style}`}
                       >
                         {val ? <Check className="w-4 h-4 text-emerald-600" /> : <X className="w-4 h-4 text-rose-600" />}
                         <span>{val ? 'TRUE' : 'FALSE'}</span>
@@ -1208,7 +1464,7 @@ export const StandardTestPlayer = ({
                               disabled={submitted && !isFixingWrongMode}
                               value={selectedVal}
                               onChange={(e) => handleMatchPair(q.id, pair.id, e.target.value)}
-                              className={`px-3 py-2 rounded-xl border text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 ${
+                              className={`px-3 py-2 rounded-xl border text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer ${
                                 submitted
                                   ? isPairCorrect
                                     ? 'border-emerald-500 bg-emerald-50 text-emerald-900'
@@ -1278,7 +1534,7 @@ export const StandardTestPlayer = ({
                                   type="button"
                                   disabled={stepIdx === 0}
                                   onClick={() => handleMoveOrderItem(q.id, currentOrder, stepIdx, 'up')}
-                                  className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30"
+                                  className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 cursor-pointer"
                                   title="Move Earlier in Sequence"
                                 >
                                   <ArrowUp className="w-3.5 h-3.5" />
@@ -1287,7 +1543,7 @@ export const StandardTestPlayer = ({
                                   type="button"
                                   disabled={stepIdx === currentOrder.length - 1}
                                   onClick={() => handleMoveOrderItem(q.id, currentOrder, stepIdx, 'down')}
-                                  className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30"
+                                  className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 cursor-pointer"
                                   title="Move Later in Sequence"
                                 >
                                   <ArrowDown className="w-3.5 h-3.5" />
@@ -1358,14 +1614,14 @@ export const StandardTestPlayer = ({
                 setIsFixingWrongMode(false);
                 setReviewFilter('all');
               }}
-              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 font-urdu"
+              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 font-urdu cursor-pointer"
             >
               جائزہ موڈ
             </button>
             <button
               type="button"
               onClick={evaluateAndSubmit}
-              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-emerald-600 hover:from-amber-700 hover:to-emerald-700 text-white font-black text-xs shadow-lg shadow-amber-500/25 transition flex items-center justify-center gap-2 font-urdu"
+              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-emerald-600 hover:from-amber-700 hover:to-emerald-700 text-white font-black text-xs shadow-lg shadow-amber-500/25 transition flex items-center justify-center gap-2 font-urdu cursor-pointer"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>تصحیح جمع کروائیں اور اسکور چیک کریں</span>
@@ -1377,22 +1633,22 @@ export const StandardTestPlayer = ({
       {/* Action Submit Bar */}
       {!submitted ? (
         <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-slate-500">
-            {answeredCount} of {qs.length} questions completed. Review your responses before submitting.
+          <div className="text-xs text-slate-500 font-urdu">
+            {answeredCount} از {activeQuestions.length} سوالات مکمل ہوئے۔ جمع کروانے سے پہلے جائزہ لیں۔
           </div>
           <button
             onClick={handleSubmitClick}
             disabled={answeredCount === 0}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2 font-urdu cursor-pointer"
           >
             <Check className="w-4 h-4" />
-            <span>Submit Assessment Answers</span>
+            <span>ٹیسٹ کے جوابات جمع کروائیں</span>
           </button>
         </div>
       ) : (
         <div className="p-5 rounded-3xl bg-slate-100 dark:bg-slate-800 text-center space-y-2">
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Your assessment results have been recorded to your learning record.
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-urdu">
+            آپ کے ٹیسٹ کے نتائج آپ کے ڈیش بورڈ ریکارڈ میں محفوظ کر دیے گئے ہیں۔
           </p>
         </div>
       )}
