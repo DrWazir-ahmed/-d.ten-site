@@ -1,0 +1,28 @@
+# D.TEN Academy Robots File
+# Crawlers and Search Engines Directory Guidance
+
+User-agent: *
+Allow: /
+Allow: /courses/
+Allow: /tests/
+Allow: /content/
+Allow: /tools/
+Allow: /apps/
+Allow: /python-kids
+Allow: /html-teens
+Allow: /pricing
+Allow: /about
+Allow: /contact
+
+# Disallow private user states and administrative routes
+Disallow: /admin/
+Disallow: /admin
+Disallow: /dashboard/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /settings
+Disallow: /notifications
+Disallow: /learn/
+
+# XML Sitemap Location
+Sitemap: https://dtenacademy.com/sitemap.xml
